@@ -1,0 +1,7 @@
+node_modules/
+uploads/
+ngrok-debug.log
+.env
+*.log
+*.tmp
+Thumbs.db
