@@ -67,11 +67,24 @@ function current_auth_context()
     return $_SESSION["auth_context"] ?? "";
 }
 
+function app_root_path()
+{
+    $script = str_replace("\\", "/", $_SERVER["SCRIPT_NAME"] ?? "");
+    $marker = "/attendance-system";
+    $markerPosition = strpos($script, $marker);
+
+    if ($markerPosition !== false) {
+        return substr($script, 0, $markerPosition + strlen($marker));
+    }
+
+    return rtrim(str_replace("\\", "/", dirname($script)), "/");
+}
+
 function with_context($url)
 {
     $context = current_auth_context();
 
-    if ($context === "" || strpos($url, "ctx=") !== false || preg_match('/^(https?:|mailto:|tel:|#|javascript:)/i', $url)) {
+    if (strpos($url, "ctx=") !== false || preg_match('/^(https?:|mailto:|tel:|#|javascript:)/i', $url)) {
         return $url;
     }
 
@@ -80,6 +93,14 @@ function with_context($url)
     if ($hashPosition !== false) {
         $fragment = substr($url, $hashPosition);
         $url = substr($url, 0, $hashPosition);
+    }
+
+    if ($url !== "" && $url[0] !== "/") {
+        $url = rtrim(app_root_path(), "/") . "/" . ltrim($url, "/");
+    }
+
+    if ($context === "") {
+        return $url . $fragment;
     }
 
     $separator = strpos($url, "?") === false ? "?" : "&";
@@ -168,7 +189,7 @@ function require_role($role)
     sync_auth_context();
 
     if (!isset($_SESSION["user_id"]) || ($_SESSION["role"] ?? "") !== $role) {
-        redirect_with_context("login.php");
+        redirect_with_context("auth/login.php");
     }
 }
 
@@ -249,21 +270,21 @@ function render_department_options($selectedDepartment = "")
 function redirect_for_role($role)
 {
     if ($role === "admin") {
-        redirect_with_context("admin_dashboard.php");
+        redirect_with_context("admin/dashboard.php");
     }
 
     if ($role === "lecturer") {
-        redirect_with_context("lecturer_dashboard.php");
+        redirect_with_context("lecturer/dashboard.php");
     }
 
     if ($role === "student") {
         if (!empty($_SESSION['pending_attendance_token'])) {
             $pendingToken = $_SESSION['pending_attendance_token'];
             unset($_SESSION['pending_attendance_token']);
-            redirect_with_context("mark_attendance.php?token=" . urlencode($pendingToken));
+            redirect_with_context("attendance/mark_attendance.php?token=" . urlencode($pendingToken));
         }
 
-        redirect_with_context("student_dashboard.php");
+        redirect_with_context("student/dashboard.php");
     }
 }
 
@@ -314,7 +335,7 @@ function app_base_url()
     $https = (!empty($_SERVER["HTTPS"]) && $_SERVER["HTTPS"] !== "off");
     $scheme = $https ? "https" : "http";
     $host = $_SERVER["HTTP_HOST"] ?? "localhost";
-    $path = rtrim(str_replace("\\", "/", dirname($_SERVER["SCRIPT_NAME"] ?? "")), "/");
+    $path = app_root_path();
 
     if ($publicBaseUrl !== "") {
         return rtrim($publicBaseUrl, "/") . ($path ? $path : "");
