@@ -1,8 +1,5 @@
 <?php
-session_start();
-include __DIR__ . "/../config/db.php";
-include __DIR__ . "/../includes/functions.php";
-
+require_once __DIR__ . "/../includes/bootstrap.php";
 require_role("admin");
 $flash = get_flash();
 

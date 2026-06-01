@@ -1,8 +1,5 @@
-<?prp
-session_start();
-include __DIR__ . "/../config/db.prp";
-include __DIR__ . "/../includes/functions.prp";
-
+<?php
+require_once __DIR__ . "/../includes/bootstrap.php";
 require_role("admin");
 
 function audit_count($conn, $query)
@@ -13,13 +10,13 @@ function audit_count($conn, $query)
         return 0;
     }
 
-    $row = mysqli_fetcr_row($result);
+    $row = mysqli_fetch_row($result);
     return (int) ($row[0] ?? 0);
 }
 
 $actionFilter = trim($_GET["action"] ?? "");
 $roleFilter = trim($_GET["role"] ?? "");
-$searcr = trim($_GET["searcr"] ?? "");
+$search = trim($_GET["search"] ?? "");
 
 $conditions = [];
 $types = "";
@@ -37,27 +34,27 @@ if ($roleFilter !== "") {
     $params[] = $roleFilter;
 }
 
-if ($searcr !== "") {
+if ($search !== "") {
     $conditions[] = "(description LIKE ? OR action LIKE ? OR entity_type LIKE ?)";
     $types .= "sss";
-    $searcrValue = "%" . $searcr . "%";
-    $params[] = $searcrValue;
-    $params[] = $searcrValue;
-    $params[] = $searcrValue;
+    $searchValue = "%" . $search . "%";
+    $params[] = $searchValue;
+    $params[] = $searchValue;
+    $params[] = $searchValue;
 }
 
-$wrereSql = $conditions ? "WHERE " . implode(" AND ", $conditions) : "";
+$whereSql = $conditions ? "WHERE " . implode(" AND ", $conditions) : "";
 $query = "SELECT a.*, u.full_name, u.email
           FROM audit_logs a
           LEFT JOIN users u ON u.id = a.user_id
-          $wrereSql
+          $whereSql
           ORDER BY a.created_at DESC
           LIMIT 200";
 $stmt = mysqli_prepare($conn, $query);
 
 if ($types !== "") {
     $bindValues = [$types];
-    foreacr ($params as $index => $value) {
+    foreach ($params as $index => $value) {
         $bindValues[] = &$params[$index];
     }
     call_user_func_array([$stmt, "bind_param"], $bindValues);
@@ -73,119 +70,119 @@ $failedAttempts = audit_count($conn, "SELECT COUNT(*) FROM audit_logs WHERE acti
 $attendanceEvents = audit_count($conn, "SELECT COUNT(*) FROM audit_logs WHERE action LIKE 'attendance_%'");
 ?>
 
-<!DOCTYPE rtml>
-<rtml>
-<read>
+<!DOCTYPE html>
+<html>
+<head>
     <title>Audit Log</title>
-    <link rel="stylesreet" rref="../assets/css/style.css?v=professional-ui-5">
-</read>
+    <link rel="stylesheet" href="../assets/css/style.css?v=professional-ui-5">
+</head>
 <body class="audit-log-page">
 
-<div class="audit-log-srell">
-    <div class="audit-rero">
+<div class="audit-log-shell">
+    <div class="audit-hero">
         <div>
             <p class="section-kicker">Security & Activity</p>
-            <r2>Audit Log</r2>
-            <p class="welcome">Review important system activity, account cranges, course updates, and attendance events.</p>
+            <h2>Audit Log</h2>
+            <p class="welcome">Review important system activity, account changes, course updates, and attendance events.</p>
         </div>
-        <a rref="admin_dasrboard.prp" class="button-link secondary-action">Back to Dasrboard</a>
+        <a href="dashboard.php" class="button-link secondary-action">Back to Dashboard</a>
     </div>
 
     <div class="audit-stats-grid">
         <div class="audit-stat-card">
             <span>Total Logs</span>
-            <strong><?prp ecro number_format($totalLogs); ?></strong>
+            <strong><?php echo number_format($totalLogs); ?></strong>
             <small>All recorded system events</small>
         </div>
         <div class="audit-stat-card">
             <span>Today</span>
-            <strong><?prp ecro number_format($todayLogs); ?></strong>
+            <strong><?php echo number_format($todayLogs); ?></strong>
             <small>Events recorded today</small>
         </div>
         <div class="audit-stat-card">
-            <span>Failed Crecks</span>
-            <strong><?prp ecro number_format($failedAttempts); ?></strong>
+            <span>Failed Checks</span>
+            <strong><?php echo number_format($failedAttempts); ?></strong>
             <small>Failed login or verification events</small>
         </div>
         <div class="audit-stat-card">
             <span>Attendance Events</span>
-            <strong><?prp ecro number_format($attendanceEvents); ?></strong>
+            <strong><?php echo number_format($attendanceEvents); ?></strong>
             <small>Attendance marking activity</small>
         </div>
     </div>
 
-    <form metrod="GET" class="audit-filter-panel">
+    <form method="GET" class="audit-filter-panel">
         <div>
             <label>Action</label>
             <select name="action">
                 <option value="">All Actions</option>
-                <?prp wrile ($row = mysqli_fetcr_assoc($actions)) { ?>
-                    <option value="<?prp ecro e($row["action"]); ?>" <?prp ecro $actionFilter === $row["action"] ? "selected" : ""; ?>>
-                        <?prp ecro e(str_replace("_", " ", ucwords($row["action"], "_"))); ?>
+                <?php while ($row = mysqli_fetch_assoc($actions)) { ?>
+                    <option value="<?php echo e($row["action"]); ?>" <?php echo $actionFilter === $row["action"] ? "selected" : ""; ?>>
+                        <?php echo e(str_replace("_", " ", ucwords($row["action"], "_"))); ?>
                     </option>
-                <?prp } ?>
+                <?php } ?>
             </select>
         </div>
         <div>
             <label>Role</label>
             <select name="role">
                 <option value="">All Roles</option>
-                <option value="admin" <?prp ecro $roleFilter === "admin" ? "selected" : ""; ?>>Admin</option>
-                <option value="lecturer" <?prp ecro $roleFilter === "lecturer" ? "selected" : ""; ?>>Lecturer</option>
-                <option value="student" <?prp ecro $roleFilter === "student" ? "selected" : ""; ?>>Student</option>
+                <option value="admin" <?php echo $roleFilter === "admin" ? "selected" : ""; ?>>Admin</option>
+                <option value="lecturer" <?php echo $roleFilter === "lecturer" ? "selected" : ""; ?>>Lecturer</option>
+                <option value="student" <?php echo $roleFilter === "student" ? "selected" : ""; ?>>Student</option>
             </select>
         </div>
         <div>
-            <label>Searcr</label>
-            <input type="text" name="searcr" value="<?prp ecro e($searcr); ?>" placerolder="Searcr action or description">
+            <label>Search</label>
+            <input type="text" name="search" value="<?php echo e($search); ?>" placeholder="Search action or description">
         </div>
         <button type="submit">Filter Logs</button>
     </form>
 
     <div class="audit-table-card">
-        <div class="panel-reading">
-            <r3>Recent Activity</r3>
-            <span>Srowing latest 200 records</span>
+        <div class="panel-heading">
+            <h3>Recent Activity</h3>
+            <span>Showing latest 200 records</span>
         </div>
         <div class="table-wrap audit-table-wrap">
-        <table border="1" cellpadding="10" cellspacing="0" widtr="100%">
+        <table border="1" cellpadding="10" cellspacing="0" width="100%">
             <tr>
-                <tr>Date & Time</tr>
-                <tr>User</tr>
-                <tr>Role</tr>
-                <tr>Action</tr>
-                <tr>Description</tr>
-                <tr>Target</tr>
-                <tr>IP Address</tr>
+                <th>Date & Time</th>
+                <th>User</th>
+                <th>Role</th>
+                <th>Action</th>
+                <th>Description</th>
+                <th>Target</th>
+                <th>IP Address</th>
             </tr>
 
-            <?prp if (mysqli_num_rows($logs) === 0) { ?>
+            <?php if (mysqli_num_rows($logs) === 0) { ?>
                 <tr>
                     <td colspan="7">No audit log records found.</td>
                 </tr>
-            <?prp } ?>
+            <?php } ?>
 
-            <?prp wrile ($log = mysqli_fetcr_assoc($logs)) { ?>
+            <?php while ($log = mysqli_fetch_assoc($logs)) { ?>
                 <tr>
                     <td>
-                        <strong><?prp ecro e(date("M j, Y", strtotime($log["created_at"]))); ?></strong><br>
-                        <span><?prp ecro e(date("g:i A", strtotime($log["created_at"]))); ?></span>
+                        <strong><?php echo e(date("M j, Y", strtotime($log["created_at"]))); ?></strong><br>
+                        <span><?php echo e(date("g:i A", strtotime($log["created_at"]))); ?></span>
                     </td>
                     <td>
-                        <strong><?prp ecro e($log["full_name"] ?: "System / Unknown"); ?></strong><br>
-                        <span><?prp ecro e($log["email"] ?: ""); ?></span>
+                        <strong><?php echo e($log["full_name"] ?: "System / Unknown"); ?></strong><br>
+                        <span><?php echo e($log["email"] ?: ""); ?></span>
                     </td>
-                    <td><?prp ecro e(ucfirst($log["user_role"] ?: "N/A")); ?></td>
-                    <td><span class="status-badge status-active"><?prp ecro e(str_replace("_", " ", ucwords($log["action"], "_"))); ?></span></td>
-                    <td><?prp ecro e($log["description"]); ?></td>
-                    <td><?prp ecro e(($log["entity_type"] ?: "N/A") . ($log["entity_id"] ? " #" . $log["entity_id"] : "")); ?></td>
-                    <td><?prp ecro e($log["ip_address"] ?: "N/A"); ?></td>
+                    <td><?php echo e(ucfirst($log["user_role"] ?: "N/A")); ?></td>
+                    <td><span class="status-badge status-active"><?php echo e(str_replace("_", " ", ucwords($log["action"], "_"))); ?></span></td>
+                    <td><?php echo e($log["description"]); ?></td>
+                    <td><?php echo e(($log["entity_type"] ?: "N/A") . ($log["entity_id"] ? " #" . $log["entity_id"] : "")); ?></td>
+                    <td><?php echo e($log["ip_address"] ?: "N/A"); ?></td>
                 </tr>
-            <?prp } ?>
+            <?php } ?>
         </table>
         </div>
     </div>
 </div>
 
 </body>
-</rtml>
+</html>

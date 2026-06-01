@@ -1,8 +1,5 @@
 <?php
-session_start();
-include __DIR__ . "/../config/db.php";
-include __DIR__ . "/../includes/functions.php";
-
+require_once __DIR__ . "/../includes/bootstrap.php";
 $error = null;
 
 if (isset($_POST["register"])) {
@@ -11,10 +8,14 @@ if (isset($_POST["register"])) {
     $department = trim($_POST["department"] ?? "");
     $fullName = trim($_POST["full_name"] ?? "");
     $email = trim($_POST["email"] ?? "");
+    $inviteCode = trim($_POST["invite_code"] ?? "");
     $password = trim($_POST["password"] ?? "");
 
-    if ($title === "" || $position === "" || $department === "" || $fullName === "" || $email === "" || $password === "") {
+    if ($title === "" || $position === "" || $department === "" || $fullName === "" || $email === "" || $inviteCode === "" || $password === "") {
         $error = "Please fill in all fields.";
+    } elseif (!hash_equals($lecturerInviteCode, $inviteCode)) {
+        audit_log($conn, "lecturer_invite_failed", "Invalid lecturer invite code used for " . $email, "user", null, 0, "lecturer");
+        $error = "Invalid lecturer invite code. Please contact the administrator.";
     } elseif (!in_array($title, ["Mr", "Mrs", "Miss"], true)) {
         $error = "Please select a valid title.";
     } elseif (!in_array($position, ["Prof", "HOD", "Dr", "Normal"], true)) {
@@ -48,7 +49,7 @@ if (isset($_POST["register"])) {
                 "position" => $position,
                 "role" => "lecturer",
             ]);
-            audit_log($conn, "lecturer_registered", "Lecturer account created for " . $fullName, "user", $newUserId, $newUserId, "lecturer");
+            audit_log($conn, "lecturer_registered", "Lecturer account created with invite code for " . $fullName, "user", $newUserId, $newUserId, "lecturer");
             redirect_with_context("lecturer/dashboard.php");
         }
 
@@ -128,6 +129,7 @@ if (isset($_POST["register"])) {
             </select>
             <input type="text" name="full_name" placeholder="Full Name" required>
             <input type="email" name="email" placeholder="Email Address" required>
+            <input type="text" name="invite_code" placeholder="Lecturer Invite Code" required>
             <input type="password" name="password" placeholder="Password" required>
             <button type="submit" name="register">Create Lecturer Account</button>
         </form>
@@ -136,6 +138,7 @@ if (isset($_POST["register"])) {
     </div>
 </div>
 
+<script src="../assets/js/password-toggle.js?v=1"></script>
 </body>
 </html>
 

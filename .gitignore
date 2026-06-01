@@ -5,3 +5,4 @@ ngrok-debug.log
 *.log
 *.tmp
 Thumbs.db
+tools/

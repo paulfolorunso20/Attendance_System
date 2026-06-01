@@ -7,19 +7,23 @@ if ($data === "" || strlen($data) > 500) {
     exit("Invalid QR data.");
 }
 
-$node = "C:\\PROGRA~1\\nodejs\\node.exe";
+$node = getenv("NODE_BINARY") ?: "node";
 $script = __DIR__ . DIRECTORY_SEPARATOR . ".." . DIRECTORY_SEPARATOR . "scripts" . DIRECTORY_SEPARATOR . "qr_generate.js";
 
-function windows_arg($value)
+function command_arg($value)
 {
-    return '"' . str_replace('"', '\"', $value) . '"';
+    return escapeshellarg($value);
 }
 
-$command = windows_arg($node) . " " . windows_arg($script) . " " . windows_arg($data) . " 2>&1";
+$command = command_arg($node) . " " . command_arg($script) . " " . command_arg($data) . " 2>&1";
 $svg = shell_exec($command);
 
 if ($svg === null || strlen($svg) < 100 || strpos($svg, "<svg") === false) {
-    file_put_contents(__DIR__ . DIRECTORY_SEPARATOR . ".." . DIRECTORY_SEPARATOR . "qr_error.log", "Command: " . $command . PHP_EOL . "Output: " . (string) $svg . PHP_EOL);
+    $logDir = getenv("APP_LOG_DIR") ?: sys_get_temp_dir();
+    if (!is_dir($logDir)) {
+        mkdir($logDir, 0775, true);
+    }
+    file_put_contents($logDir . DIRECTORY_SEPARATOR . "qr_error.log", "Command: " . $command . PHP_EOL . "Output: " . (string) $svg . PHP_EOL);
     http_response_code(500);
     exit("Could not generate QR code.");
 }

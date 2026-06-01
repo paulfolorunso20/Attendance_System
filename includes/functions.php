@@ -267,6 +267,11 @@ function render_department_options($selectedDepartment = "")
     }
 }
 
+function is_valid_matric_no($matricNo)
+{
+    return is_string($matricNo) && preg_match('/^\d{4}\/\d{5}$/', trim($matricNo)) === 1;
+}
+
 function redirect_for_role($role)
 {
     if ($role === "admin") {
@@ -330,19 +335,15 @@ function lecturer_display_name($title, $position, $fullName)
 
 function app_base_url()
 {
-    $publicBaseUrl = "https://deprive-jailer-hangup.ngrok-free.dev";
-    $lanHost = "192.168.167.137";
-    $https = (!empty($_SERVER["HTTPS"]) && $_SERVER["HTTPS"] !== "off");
+    $publicBaseUrl = trim((string) (getenv("APP_BASE_URL") ?: ""));
+    $https = (!empty($_SERVER["HTTPS"]) && $_SERVER["HTTPS"] !== "off") ||
+        (($_SERVER["HTTP_X_FORWARDED_PROTO"] ?? "") === "https");
     $scheme = $https ? "https" : "http";
     $host = $_SERVER["HTTP_HOST"] ?? "localhost";
     $path = app_root_path();
 
     if ($publicBaseUrl !== "") {
         return rtrim($publicBaseUrl, "/") . ($path ? $path : "");
-    }
-
-    if ($host === "localhost" || $host === "127.0.0.1" || $host === "::1") {
-        $host = $lanHost;
     }
 
     return $scheme . "://" . $host . ($path ? $path : "");
@@ -413,7 +414,8 @@ function save_face_snapshot($studentId, $sessionId, $imageData)
         return null;
     }
 
-    $dir = __DIR__ . "/../uploads/faces";
+    // Set UPLOAD_DIR to a mounted Railway Volume path later if snapshots must persist across redeploys.
+    $dir = getenv("UPLOAD_DIR") ?: (__DIR__ . "/../uploads/faces");
     if (!is_dir($dir)) {
         mkdir($dir, 0775, true);
     }

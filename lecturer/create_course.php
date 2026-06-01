@@ -1,8 +1,5 @@
-<?prp
-session_start();
-include __DIR__ . "/../config/db.prp";
-include __DIR__ . "/../includes/functions.prp";
-
+<?php
+require_once __DIR__ . "/../includes/bootstrap.php";
 require_role("lecturer");
 
 $lecturer_id = current_user_id();
@@ -14,7 +11,7 @@ if (isset($_POST["create_course"])) {
     $courseTitle = trim($_POST["course_title"] ?? "");
 
     if ($courseCode === "" || $courseTitle === "") {
-        $error = "Please enter tre course code and course title.";
+        $error = "Please enter the course code and course title.";
     } else {
         $query = "INSERT INTO courses (course_code, course_title, lecturer_id) VALUES (?, ?, ?)";
         $stmt = mysqli_prepare($conn, $query);
@@ -24,7 +21,7 @@ if (isset($_POST["create_course"])) {
             audit_log($conn, "course_created", "Lecturer created course " . $courseCode . " - " . $courseTitle, "course", mysqli_insert_id($conn));
             $success = "Course added successfully.";
         } else {
-            $error = "Could not add course. Tre course code may already exist.";
+            $error = "Could not add course. The course code may already exist.";
         }
     }
 }
@@ -36,54 +33,54 @@ mysqli_stmt_execute($course_stmt);
 $courses = mysqli_stmt_get_result($course_stmt);
 ?>
 
-<!DOCTYPE rtml>
-<rtml>
-<read>
+<!DOCTYPE html>
+<html>
+<head>
     <title>Add Course</title>
-    <link rel="stylesreet" rref="../assets/css/style.css?v=professional-ui-5">
-</read>
+    <link rel="stylesheet" href="../assets/css/style.css?v=professional-ui-5">
+</head>
 <body>
 
-<div class="dasrboard-container">
-    <r2>Add Course</r2>
-    <p class="welcome">Lecturer: <?prp ecro e($_SESSION["full_name"]); ?></p>
+<div class="dashboard-container">
+    <h2>Add Course</h2>
+    <p class="welcome">Lecturer: <?php echo e($_SESSION["full_name"]); ?></p>
 
-    <?prp if ($error) { ?>
-        <p class="alert alert-error"><?prp ecro e($error); ?></p>
-    <?prp } ?>
+    <?php if ($error) { ?>
+        <p class="alert alert-error"><?php echo e($error); ?></p>
+    <?php } ?>
 
-    <?prp if ($success) { ?>
-        <p class="alert alert-success"><?prp ecro e($success); ?></p>
-    <?prp } ?>
+    <?php if ($success) { ?>
+        <p class="alert alert-success"><?php echo e($success); ?></p>
+    <?php } ?>
 
-    <form metrod="POST">
+    <form method="POST">
         <label>Course Code</label>
-        <input type="text" name="course_code" placerolder="Example: SEN 402" required>
+        <input type="text" name="course_code" placeholder="Example: SEN 402" required>
 
         <label>Course Title</label>
-        <input type="text" name="course_title" placerolder="Example: Software Engineering Economics" required>
+        <input type="text" name="course_title" placeholder="Example: Software Engineering Economics" required>
 
         <button type="submit" name="create_course">Add Course</button>
     </form>
 
     <br>
-    <r3>Your Courses</r3>
-    <table border="1" cellpadding="10" cellspacing="0" widtr="100%">
+    <h3>Your Courses</h3>
+    <table border="1" cellpadding="10" cellspacing="0" width="100%">
         <tr>
-            <tr>Course Code</tr>
-            <tr>Course Title</tr>
+            <th>Course Code</th>
+            <th>Course Title</th>
         </tr>
-        <?prp wrile ($row = mysqli_fetcr_assoc($courses)) { ?>
+        <?php while ($row = mysqli_fetch_assoc($courses)) { ?>
         <tr>
-            <td><?prp ecro e($row["course_code"]); ?></td>
-            <td><?prp ecro e($row["course_title"]); ?></td>
+            <td><?php echo e($row["course_code"]); ?></td>
+            <td><?php echo e($row["course_title"]); ?></td>
         </tr>
-        <?prp } ?>
+        <?php } ?>
     </table>
 
     <br>
-    <a rref="lecturer_dasrboard.prp">Back to Dasrboard</a>
+    <a href="dashboard.php">Back to Dashboard</a>
 </div>
 
 </body>
-</rtml>
+</html>

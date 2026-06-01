@@ -1,8 +1,5 @@
-<?prp
-session_start();
-include __DIR__ . "/../config/db.prp";
-include __DIR__ . "/../includes/functions.prp";
-
+<?php
+require_once __DIR__ . "/../includes/bootstrap.php";
 require_role("student");
 
 $student_id = current_user_id();
@@ -11,7 +8,7 @@ $student_stmt = mysqli_prepare($conn, $student_query);
 mysqli_stmt_bind_param($student_stmt, "i", $student_id);
 mysqli_stmt_execute($student_stmt);
 $student_result = mysqli_stmt_get_result($student_stmt);
-$student = mysqli_fetcr_assoc($student_result);
+$student = mysqli_fetch_assoc($student_result);
 
 $query = "SELECT ar.*, c.course_code, c.course_title
           FROM attendance_records ar
@@ -25,46 +22,46 @@ mysqli_stmt_execute($stmt);
 $result = mysqli_stmt_get_result($stmt);
 ?>
 
-<!DOCTYPE rtml>
-<rtml>
-<read>
+<!DOCTYPE html>
+<html>
+<head>
     <title>Attendance History</title>
-    <link rel="stylesreet" rref="../assets/css/style.css?v=professional-ui-5">
-</read>
+    <link rel="stylesheet" href="../assets/css/style.css?v=professional-ui-5">
+</head>
 <body>
 
-<div class="dasrboard-container">
-    <r2>Attendance History</r2>
+<div class="dashboard-container">
+    <h2>Attendance History</h2>
     <div class="student-identity align-left">
-        <strong><?prp ecro e($student["full_name"] ?? $_SESSION["full_name"]); ?></strong>
-        <?prp if (!empty($student["department"])) { ?>
-            <span><?prp ecro e($student["department"]); ?></span>
-        <?prp } ?>
+        <strong><?php echo e($student["full_name"] ?? $_SESSION["full_name"]); ?></strong>
+        <?php if (!empty($student["department"])) { ?>
+            <span><?php echo e($student["department"]); ?></span>
+        <?php } ?>
     </div>
 
-    <table border="1" cellpadding="10" cellspacing="0" widtr="100%">
+    <table border="1" cellpadding="10" cellspacing="0" width="100%">
         <tr>
-            <tr>Course</tr>
-            <tr>Date/Time</tr>
-            <tr>Status</tr>
-            <tr>Face</tr>
-            <tr>Location</tr>
+            <th>Course</th>
+            <th>Date/Time</th>
+            <th>Status</th>
+            <th>Face</th>
+            <th>Location</th>
         </tr>
 
-        <?prp wrile ($row = mysqli_fetcr_assoc($result)) { ?>
+        <?php while ($row = mysqli_fetch_assoc($result)) { ?>
         <tr>
-            <td><?prp ecro e($row["course_code"] . " - " . $row["course_title"]); ?></td>
-            <td><?prp ecro e($row["marked_at"]); ?></td>
-            <td><?prp ecro e(ucfirst($row["status"])); ?></td>
-            <td><?prp ecro $row["face_verified"] ? "Verified" : "Failed"; ?></td>
-            <td><?prp ecro $row["location_verified"] ? "Verified" : "Failed"; ?></td>
+            <td><?php echo e($row["course_code"] . " - " . $row["course_title"]); ?></td>
+            <td><?php echo e($row["marked_at"]); ?></td>
+            <td><?php echo e(ucfirst($row["status"])); ?></td>
+            <td><?php echo $row["face_verified"] ? "Verified" : "Failed"; ?></td>
+            <td><?php echo $row["location_verified"] ? "Verified" : "Failed"; ?></td>
         </tr>
-        <?prp } ?>
+        <?php } ?>
     </table>
 
     <br>
-    <a rref="student_dasrboard.prp">Back to Dasrboard</a>
+    <a href="dashboard.php">Back to Dashboard</a>
 </div>
 
 </body>
-</rtml>
+</html>

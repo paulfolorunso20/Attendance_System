@@ -1,8 +1,5 @@
 <?php
-session_start();
-include __DIR__ . "/../config/db.php";
-include __DIR__ . "/../includes/functions.php";
-
+require_once __DIR__ . "/../includes/bootstrap.php";
 $context = current_auth_context();
 audit_log($conn, "logout", "User logged out.");
 

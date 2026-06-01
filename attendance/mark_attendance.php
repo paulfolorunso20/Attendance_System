@@ -1,8 +1,5 @@
 <?php
-session_start();
-include __DIR__ . "/../config/db.php";
-include __DIR__ . "/../includes/functions.php";
-
+require_once __DIR__ . "/../includes/bootstrap.php";
 if (!isset($_SESSION["user_id"]) && isset($_GET["token"])) {
     $_SESSION["pending_attendance_token"] = $_GET["token"];
     redirect_with_context("auth/login.php");
@@ -36,6 +33,8 @@ if (isset($_POST["save_profile"])) {
 
     if ($fullName === "" || $matricNo === "" || $department === "" || $email === "") {
         $profileError = "Please enter your full name, matric number, department, and email address.";
+    } elseif (!is_valid_matric_no($matricNo)) {
+        $profileError = "Matric number must follow this format: 2022/42335.";
     } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $profileError = "Please enter a valid email address.";
     } else {
@@ -210,7 +209,7 @@ if (isset($_POST['mark']) && $profileComplete && $faceEnrolled) {
         <input type="text" name="full_name" value="<?php echo e($student["full_name"] ?? ""); ?>" required>
 
         <label>Matric Number</label>
-        <input type="text" name="matric_no" value="<?php echo e($student["matric_no"] ?? ""); ?>" required>
+        <input type="text" name="matric_no" value="<?php echo e($student["matric_no"] ?? ""); ?>" pattern="\d{4}/\d{5}" maxlength="10" inputmode="numeric" data-matric-format title="Use four digits, slash, then five digits. Example: 2022/42335" required>
 
         <label>Department</label>
         <select name="department" required>
@@ -647,6 +646,7 @@ if (retryLocation) {
 
 getLocation();
 </script>
+<script src="../assets/js/matric-format.js?v=1"></script>
 
 </body>
 </html>

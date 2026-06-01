@@ -1,8 +1,5 @@
 <?php
-session_start();
-include __DIR__ . "/../config/db.php";
-include __DIR__ . "/../includes/functions.php";
-
+require_once __DIR__ . "/../includes/bootstrap.php";
 $error = null;
 
 if (isset($_POST["register"])) {
@@ -14,6 +11,8 @@ if (isset($_POST["register"])) {
 
     if ($fullName === "" || $matricNo === "" || $department === "" || $email === "" || $password === "") {
         $error = "Please fill in all fields.";
+    } elseif (!is_valid_matric_no($matricNo)) {
+        $error = "Matric number must follow this format: 2022/42335.";
     } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $error = "Please enter a valid email address.";
     } elseif (strlen($password) < 6) {
@@ -109,7 +108,7 @@ if (isset($_POST["register"])) {
         <form method="POST">
             <?php render_context_input(); ?>
             <input type="text" name="full_name" placeholder="Full Name" required>
-            <input type="text" name="matric_no" placeholder="Matric Number" required>
+            <input type="text" name="matric_no" placeholder="Matric Number e.g. 2022/42335" pattern="\d{4}/\d{5}" maxlength="10" inputmode="numeric" data-matric-format title="Use four digits, slash, then five digits. Example: 2022/42335" required>
             <select name="department" required>
                 <option value="">Select Department</option>
                 <?php render_department_options(); ?>
@@ -123,5 +122,7 @@ if (isset($_POST["register"])) {
     </div>
 </div>
 
+<script src="../assets/js/password-toggle.js?v=1"></script>
+<script src="../assets/js/matric-format.js?v=1"></script>
 </body>
 </html>

@@ -1,8 +1,5 @@
 <?php
-session_start();
-include __DIR__ . "/../config/db.php";
-include __DIR__ . "/../includes/functions.php";
-
+require_once __DIR__ . "/../includes/bootstrap.php";
 require_role("admin");
 
 $error = null;
@@ -21,6 +18,10 @@ if (isset($_POST["update_user"])) {
         $error = "Please enter a valid name and email.";
     } elseif (!in_array($role, ["student", "lecturer", "admin"], true)) {
         $error = "Invalid user role selected.";
+    } elseif ($role === "student" && $matricNo === "") {
+        $error = "Student matric number is required.";
+    } elseif ($role === "student" && !is_valid_matric_no($matricNo)) {
+        $error = "Student matric number must follow this format: 2022/42335.";
     } else {
         $matricValue = $matricNo === "" ? null : $matricNo;
         $departmentValue = $department === "" ? null : $department;
@@ -96,7 +97,7 @@ $flash = get_flash();
                             <option value="admin" <?php echo $row["role"] === "admin" ? "selected" : ""; ?>>Admin</option>
                         </select>
                     </td>
-                    <td><input type="text" name="matric_no" value="<?php echo e($row["matric_no"]); ?>"></td>
+                    <td><input type="text" name="matric_no" value="<?php echo e($row["matric_no"]); ?>" pattern="\d{4}/\d{5}" maxlength="10" inputmode="numeric" data-matric-format title="Use four digits, slash, then five digits. Example: 2022/42335"></td>
                     <td>
                         <select name="department">
                             <option value="">None</option>
@@ -132,5 +133,6 @@ $flash = get_flash();
     <a href="dashboard.php">Back to Admin Dashboard</a>
 </div>
 
+<script src="../assets/js/matric-format.js?v=1"></script>
 </body>
 </html>
