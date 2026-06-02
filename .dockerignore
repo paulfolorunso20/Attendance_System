@@ -10,6 +10,7 @@ ngrok-debug.log
 *.tmp
 .env
 .env.*
+!.env.example
 Dockerfile
 .dockerignore
 Thumbs.db

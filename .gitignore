@@ -2,6 +2,8 @@ node_modules/
 uploads/
 ngrok-debug.log
 .env
+.env.*
+!.env.example
 *.log
 *.tmp
 Thumbs.db

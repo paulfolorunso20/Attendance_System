@@ -10,4 +10,8 @@ define("APP_INCLUDES_PATH", APP_ROOT . DIRECTORY_SEPARATOR . "includes");
 
 require_once APP_CONFIG_PATH . DIRECTORY_SEPARATOR . "db.php";
 require_once APP_CONFIG_PATH . DIRECTORY_SEPARATOR . "app.php";
+require_once APP_INCLUDES_PATH . DIRECTORY_SEPARATOR . "migrations.php";
+
+run_database_migrations($conn);
+
 require_once APP_INCLUDES_PATH . DIRECTORY_SEPARATOR . "functions.php";
