@@ -5,6 +5,8 @@ WORKDIR /var/www/html
 RUN apt-get update \
     && apt-get install -y --no-install-recommends nodejs npm \
     && docker-php-ext-install mysqli pdo_mysql \
+    && (a2dismod mpm_event mpm_worker || true) \
+    && a2enmod mpm_prefork \
     && rm -rf /var/lib/apt/lists/*
 
 COPY package*.json ./
