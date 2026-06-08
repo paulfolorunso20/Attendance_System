@@ -3,8 +3,8 @@ FROM php:8.2-cli
 WORKDIR /var/www/html
 
 RUN apt-get update \
-    && apt-get install -y --no-install-recommends nodejs npm \
-    && docker-php-ext-install mysqli pdo_mysql \
+    && apt-get install -y --no-install-recommends nodejs npm libcurl4-openssl-dev \
+    && docker-php-ext-install mysqli pdo_mysql curl \
     && rm -rf /var/lib/apt/lists/*
 
 COPY package*.json ./

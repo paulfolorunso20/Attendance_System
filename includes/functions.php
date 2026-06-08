@@ -404,6 +404,90 @@ function face_descriptor_matches($registeredDescriptor, $capturedDescriptor)
     return descriptor_distance($registeredDescriptor, $capturedDescriptor) <= 95;
 }
 
+function cloudinary_configured()
+{
+    return trim((string) getenv("CLOUDINARY_CLOUD_NAME")) !== "" &&
+        trim((string) getenv("CLOUDINARY_API_KEY")) !== "" &&
+        trim((string) getenv("CLOUDINARY_API_SECRET")) !== "";
+}
+
+function upload_face_snapshot_to_cloud($bytes, $fileName)
+{
+    if (!cloudinary_configured() || !function_exists("curl_init")) {
+        return null;
+    }
+
+    $cloudName = trim((string) getenv("CLOUDINARY_CLOUD_NAME"));
+    $apiKey = trim((string) getenv("CLOUDINARY_API_KEY"));
+    $apiSecret = trim((string) getenv("CLOUDINARY_API_SECRET"));
+    $folder = trim((string) (getenv("CLOUDINARY_FOLDER") ?: "smartattend/faces"));
+    $timestamp = time();
+    $publicId = pathinfo($fileName, PATHINFO_FILENAME);
+
+    $signaturePayload = [
+        "folder" => $folder,
+        "public_id" => $publicId,
+        "timestamp" => $timestamp,
+    ];
+    ksort($signaturePayload);
+
+    $signatureBase = [];
+    foreach ($signaturePayload as $key => $value) {
+        $signatureBase[] = $key . "=" . $value;
+    }
+    $signature = sha1(implode("&", $signatureBase) . $apiSecret);
+
+    $temporaryFile = tempnam(sys_get_temp_dir(), "face_");
+    if ($temporaryFile === false || file_put_contents($temporaryFile, $bytes) === false) {
+        return null;
+    }
+
+    $curl = curl_init("https://api.cloudinary.com/v1_1/" . rawurlencode($cloudName) . "/image/upload");
+    curl_setopt_array($curl, [
+        CURLOPT_POST => true,
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_TIMEOUT => 30,
+        CURLOPT_POSTFIELDS => [
+            "file" => curl_file_create($temporaryFile, "image/jpeg", $fileName),
+            "api_key" => $apiKey,
+            "timestamp" => $timestamp,
+            "folder" => $folder,
+            "public_id" => $publicId,
+            "signature" => $signature,
+        ],
+    ]);
+
+    $response = curl_exec($curl);
+    $statusCode = (int) curl_getinfo($curl, CURLINFO_HTTP_CODE);
+    curl_close($curl);
+    unlink($temporaryFile);
+
+    if ($response === false || $statusCode < 200 || $statusCode >= 300) {
+        return null;
+    }
+
+    $payload = json_decode($response, true);
+
+    return is_array($payload) && !empty($payload["secure_url"]) ? $payload["secure_url"] : null;
+}
+
+function save_face_snapshot_locally($bytes, $fileName)
+{
+    // Set UPLOAD_DIR to a mounted Railway Volume path later if snapshots must persist across redeploys.
+    $dir = getenv("UPLOAD_DIR") ?: (__DIR__ . "/../uploads/faces");
+    if (!is_dir($dir)) {
+        mkdir($dir, 0775, true);
+    }
+
+    $path = $dir . "/" . $fileName;
+
+    if (file_put_contents($path, $bytes) === false) {
+        return null;
+    }
+
+    return "uploads/faces/" . $fileName;
+}
+
 function save_face_snapshot($studentId, $sessionId, $imageData)
 {
     if (!preg_match('/^data:image\/(png|jpeg|jpg);base64,/', $imageData)) {
@@ -420,20 +504,13 @@ function save_face_snapshot($studentId, $sessionId, $imageData)
         return null;
     }
 
-    // Set UPLOAD_DIR to a mounted Railway Volume path later if snapshots must persist across redeploys.
-    $dir = getenv("UPLOAD_DIR") ?: (__DIR__ . "/../uploads/faces");
-    if (!is_dir($dir)) {
-        mkdir($dir, 0775, true);
-    }
-
     $fileName = "student_" . (int) $studentId . "_session_" . (int) $sessionId . "_" . time() . ".jpg";
-    $path = $dir . "/" . $fileName;
 
-    if (file_put_contents($path, $bytes) === false) {
-        return null;
+    if (cloudinary_configured()) {
+        return upload_face_snapshot_to_cloud($bytes, $fileName);
     }
 
-    return "uploads/faces/" . $fileName;
+    return save_face_snapshot_locally($bytes, $fileName);
 }
 
 sync_auth_context();
