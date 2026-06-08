@@ -69,6 +69,12 @@ function current_auth_context()
 
 function app_root_path()
 {
+    $configuredPath = trim((string) (getenv("APP_BASE_PATH") ?: ""));
+
+    if ($configuredPath !== "") {
+        return "/" . trim($configuredPath, "/");
+    }
+
     $script = str_replace("\\", "/", $_SERVER["SCRIPT_NAME"] ?? "");
     $marker = "/attendance-system";
     $markerPosition = strpos($script, $marker);
@@ -77,7 +83,7 @@ function app_root_path()
         return substr($script, 0, $markerPosition + strlen($marker));
     }
 
-    return rtrim(str_replace("\\", "/", dirname($script)), "/");
+    return "";
 }
 
 function with_context($url)
@@ -95,7 +101,7 @@ function with_context($url)
         $url = substr($url, 0, $hashPosition);
     }
 
-    if ($url !== "" && $url[0] !== "/") {
+    if ($url !== "" && $url[0] !== "/" && strpos($url, "/") !== false) {
         $url = rtrim(app_root_path(), "/") . "/" . ltrim($url, "/");
     }
 
