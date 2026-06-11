@@ -5304,6 +5304,40 @@ a:focus-visible {
     transform: translateY(-6px);
 }
 
+.recovery-code-input {
+    font-size: 24px;
+    font-weight: 700;
+    letter-spacing: 8px;
+    text-align: center;
+}
+
+.inline-reset-action {
+    background: transparent;
+    border: 0;
+    box-shadow: none;
+    margin: 12px 0 0;
+    max-width: none;
+    padding: 0;
+}
+
+.inline-reset-action button {
+    width: 100%;
+}
+
+.link-button {
+    background: transparent;
+    box-shadow: none;
+    color: #006b2d;
+    font-weight: 700;
+    padding: 0;
+}
+
+.link-button:hover {
+    background: transparent;
+    color: #004b20;
+    text-decoration: underline;
+}
+
 .status-badge {
     border: 1px solid transparent;
     line-height: 1.2;

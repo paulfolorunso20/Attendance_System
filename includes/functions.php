@@ -624,5 +624,157 @@ function save_profile_image_upload($userId, $file)
     return save_profile_image_bytes($userId, $bytes, $imageInfo["mime"]);
 }
 
+function mail_configured()
+{
+    return trim((string) getenv("MAIL_HOST")) !== "" &&
+        trim((string) getenv("MAIL_USERNAME")) !== "" &&
+        trim((string) getenv("MAIL_PASSWORD")) !== "" &&
+        trim((string) getenv("MAIL_FROM_EMAIL")) !== "";
+}
+
+function smtp_read_response($socket)
+{
+    $response = "";
+
+    while (($line = fgets($socket, 515)) !== false) {
+        $response .= $line;
+        if (isset($line[3]) && $line[3] === " ") {
+            break;
+        }
+    }
+
+    return $response;
+}
+
+function smtp_expect($socket, $codes)
+{
+    $response = smtp_read_response($socket);
+    $code = (int) substr($response, 0, 3);
+
+    return in_array($code, (array) $codes, true);
+}
+
+function smtp_command($socket, $command, $codes)
+{
+    fwrite($socket, $command . "\r\n");
+
+    return smtp_expect($socket, $codes);
+}
+
+function smtp_escape_message($message)
+{
+    $message = str_replace(["\r\n", "\r"], "\n", $message);
+    $lines = explode("\n", $message);
+
+    foreach ($lines as &$line) {
+        if (str_starts_with($line, ".")) {
+            $line = "." . $line;
+        }
+    }
+
+    return implode("\r\n", $lines);
+}
+
+function send_app_email($toEmail, $toName, $subject, $htmlBody, $textBody = "")
+{
+    if (!mail_configured()) {
+        return false;
+    }
+
+    $host = trim((string) getenv("MAIL_HOST"));
+    $port = (int) (getenv("MAIL_PORT") ?: 587);
+    $username = trim((string) getenv("MAIL_USERNAME"));
+    $password = (string) getenv("MAIL_PASSWORD");
+    $fromEmail = trim((string) getenv("MAIL_FROM_EMAIL"));
+    $fromName = trim((string) (getenv("MAIL_FROM_NAME") ?: "SmartAttend"));
+    $toName = trim((string) $toName);
+    $secure = strtolower(trim((string) (getenv("MAIL_ENCRYPTION") ?: "tls")));
+    $transportHost = $secure === "ssl" ? "ssl://" . $host : $host;
+
+    $socket = @fsockopen($transportHost, $port, $errno, $errstr, 20);
+    if (!$socket) {
+        return false;
+    }
+
+    stream_set_timeout($socket, 20);
+
+    $serverName = $_SERVER["SERVER_NAME"] ?? "smartattend.local";
+    $boundary = "smartattend_" . bin2hex(random_bytes(12));
+    $safeSubject = str_replace(["\r", "\n"], "", $subject);
+    $fromHeader = sprintf('"%s" <%s>', addcslashes($fromName, '"\\'), $fromEmail);
+    $toHeader = $toName !== ""
+        ? sprintf('"%s" <%s>', addcslashes($toName, '"\\'), $toEmail)
+        : $toEmail;
+
+    $headers = [
+        "From: " . $fromHeader,
+        "To: " . $toHeader,
+        "Subject: " . $safeSubject,
+        "MIME-Version: 1.0",
+        "Content-Type: multipart/alternative; boundary=\"" . $boundary . "\"",
+    ];
+
+    if ($textBody === "") {
+        $textBody = trim(strip_tags(str_replace(["<br>", "<br/>", "<br />"], "\n", $htmlBody)));
+    }
+
+    $message = implode("\r\n", $headers) . "\r\n\r\n";
+    $message .= "--" . $boundary . "\r\n";
+    $message .= "Content-Type: text/plain; charset=UTF-8\r\n";
+    $message .= "Content-Transfer-Encoding: 8bit\r\n\r\n";
+    $message .= $textBody . "\r\n\r\n";
+    $message .= "--" . $boundary . "\r\n";
+    $message .= "Content-Type: text/html; charset=UTF-8\r\n";
+    $message .= "Content-Transfer-Encoding: 8bit\r\n\r\n";
+    $message .= $htmlBody . "\r\n\r\n";
+    $message .= "--" . $boundary . "--";
+
+    $ok = smtp_expect($socket, 220) &&
+        smtp_command($socket, "EHLO " . $serverName, 250);
+
+    if ($ok && $secure === "tls") {
+        $ok = smtp_command($socket, "STARTTLS", 220) &&
+            stream_socket_enable_crypto($socket, true, STREAM_CRYPTO_METHOD_TLS_CLIENT) &&
+            smtp_command($socket, "EHLO " . $serverName, 250);
+    }
+
+    $ok = $ok &&
+        smtp_command($socket, "AUTH LOGIN", 334) &&
+        smtp_command($socket, base64_encode($username), 334) &&
+        smtp_command($socket, base64_encode($password), 235) &&
+        smtp_command($socket, "MAIL FROM:<" . $fromEmail . ">", 250) &&
+        smtp_command($socket, "RCPT TO:<" . $toEmail . ">", [250, 251]) &&
+        smtp_command($socket, "DATA", 354);
+
+    if ($ok) {
+        fwrite($socket, smtp_escape_message($message) . "\r\n.\r\n");
+        $ok = smtp_expect($socket, 250);
+    }
+
+    smtp_command($socket, "QUIT", 221);
+    fclose($socket);
+
+    return (bool) $ok;
+}
+
+function send_password_reset_code_email($email, $name, $code)
+{
+    $safeCode = e($code);
+    $safeName = e($name ?: "SmartAttend user");
+    $subject = "Your SmartAttend password recovery code";
+    $html = '<div style="font-family:Arial,sans-serif;line-height:1.6;color:#17202a">'
+        . '<h2 style="color:#003366">SmartAttend password recovery</h2>'
+        . '<p>Hello ' . $safeName . ',</p>'
+        . '<p>Use this verification code to reset your SmartAttend password:</p>'
+        . '<p style="font-size:28px;font-weight:bold;letter-spacing:6px;color:#003366">' . $safeCode . '</p>'
+        . '<p>This code expires in 10 minutes. If you did not request it, please ignore this email.</p>'
+        . '</div>';
+    $text = "Hello " . ($name ?: "SmartAttend user") . ",\n\n"
+        . "Your SmartAttend password recovery code is: " . $code . "\n\n"
+        . "This code expires in 10 minutes. If you did not request it, please ignore this email.";
+
+    return send_app_email($email, $name, $subject, $html, $text);
+}
+
 sync_auth_context();
 register_shutdown_function("render_tab_context_script");
