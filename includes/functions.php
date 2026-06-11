@@ -626,15 +626,36 @@ function save_profile_image_upload($userId, $file)
 
 function mail_configured()
 {
+    return brevo_api_configured() || smtp_mail_configured();
+}
+
+function smtp_mail_configured()
+{
     return trim((string) getenv("MAIL_HOST")) !== "" &&
         trim((string) getenv("MAIL_USERNAME")) !== "" &&
         trim((string) getenv("MAIL_PASSWORD")) !== "" &&
         trim((string) getenv("MAIL_FROM_EMAIL")) !== "";
 }
 
-function missing_mail_variables()
+function brevo_api_configured()
 {
-    $required = ["MAIL_HOST", "MAIL_USERNAME", "MAIL_PASSWORD", "MAIL_FROM_EMAIL"];
+    return trim((string) getenv("BREVO_API_KEY")) !== "" &&
+        trim((string) getenv("MAIL_FROM_EMAIL")) !== "";
+}
+
+function missing_mail_variables($mode = "auto")
+{
+    if ($mode === "brevo_api") {
+        $required = ["BREVO_API_KEY", "MAIL_FROM_EMAIL"];
+    } elseif ($mode === "smtp") {
+        $required = ["MAIL_HOST", "MAIL_USERNAME", "MAIL_PASSWORD", "MAIL_FROM_EMAIL"];
+    } else {
+        $required = ["BREVO_API_KEY", "MAIL_FROM_EMAIL"];
+        if (!brevo_api_configured()) {
+            $required = ["MAIL_HOST", "MAIL_USERNAME", "MAIL_PASSWORD", "MAIL_FROM_EMAIL"];
+        }
+    }
+
     $missing = [];
 
     foreach ($required as $key) {
@@ -708,8 +729,91 @@ function send_app_email($toEmail, $toName, $subject, $htmlBody, $textBody = "")
 {
     set_last_mail_error("");
 
-    if (!mail_configured()) {
-        set_last_mail_error("Missing mail variables: " . implode(", ", missing_mail_variables()));
+    if (brevo_api_configured()) {
+        return send_app_email_with_brevo_api($toEmail, $toName, $subject, $htmlBody, $textBody);
+    }
+
+    return send_app_email_with_smtp($toEmail, $toName, $subject, $htmlBody, $textBody);
+}
+
+function send_app_email_with_brevo_api($toEmail, $toName, $subject, $htmlBody, $textBody = "")
+{
+    set_last_mail_error("");
+
+    if (!brevo_api_configured()) {
+        set_last_mail_error("Missing Brevo API variables: " . implode(", ", missing_mail_variables("brevo_api")));
+        return false;
+    }
+
+    if (!function_exists("curl_init")) {
+        set_last_mail_error("PHP cURL extension is not available.");
+        return false;
+    }
+
+    $fromEmail = trim((string) getenv("MAIL_FROM_EMAIL"));
+    $fromName = trim((string) (getenv("MAIL_FROM_NAME") ?: "SmartAttend"));
+    $apiKey = trim((string) getenv("BREVO_API_KEY"));
+
+    if ($textBody === "") {
+        $textBody = trim(strip_tags(str_replace(["<br>", "<br/>", "<br />"], "\n", $htmlBody)));
+    }
+
+    $payload = [
+        "sender" => [
+            "name" => $fromName,
+            "email" => $fromEmail,
+        ],
+        "to" => [[
+            "email" => $toEmail,
+            "name" => trim((string) $toName) ?: $toEmail,
+        ]],
+        "subject" => $subject,
+        "htmlContent" => $htmlBody,
+        "textContent" => $textBody,
+    ];
+
+    $curl = curl_init("https://api.brevo.com/v3/smtp/email");
+    curl_setopt_array($curl, [
+        CURLOPT_POST => true,
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_TIMEOUT => 30,
+        CURLOPT_HTTPHEADER => [
+            "accept: application/json",
+            "api-key: " . $apiKey,
+            "content-type: application/json",
+        ],
+        CURLOPT_POSTFIELDS => json_encode($payload),
+    ]);
+
+    $response = curl_exec($curl);
+    $statusCode = (int) curl_getinfo($curl, CURLINFO_HTTP_CODE);
+    $curlError = curl_error($curl);
+    curl_close($curl);
+
+    if ($response === false) {
+        set_last_mail_error("Brevo API request failed. " . $curlError);
+        return false;
+    }
+
+    if ($statusCode < 200 || $statusCode >= 300) {
+        $message = "Brevo API rejected the email with HTTP " . $statusCode . ".";
+        $payload = json_decode($response, true);
+        if (is_array($payload) && !empty($payload["message"])) {
+            $message .= " " . $payload["message"];
+        }
+        set_last_mail_error($message);
+        return false;
+    }
+
+    return true;
+}
+
+function send_app_email_with_smtp($toEmail, $toName, $subject, $htmlBody, $textBody = "")
+{
+    set_last_mail_error("");
+
+    if (!smtp_mail_configured()) {
+        set_last_mail_error("Missing SMTP mail variables: " . implode(", ", missing_mail_variables("smtp")));
         return false;
     }
 
