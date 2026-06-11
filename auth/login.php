@@ -121,11 +121,11 @@ if (isset($_POST['login'])) {
 
             <?php if ($showLoginChoice) { ?>
                 <div class="auth-choice-grid">
-                    <a href="login.php?login_as=student" class="auth-choice-option">
+                    <a href="<?php echo e(with_context("auth/login.php?login_as=student")); ?>" class="auth-choice-option">
                         <strong>Student Login</strong>
                         <span>Use matric no. and password</span>
                     </a>
-                    <a href="login.php?login_as=staff" class="auth-choice-option">
+                    <a href="<?php echo e(with_context("auth/login.php?login_as=staff")); ?>" class="auth-choice-option">
                         <strong>Lecturer Portal</strong>
                         <span>Use email and password</span>
                     </a>

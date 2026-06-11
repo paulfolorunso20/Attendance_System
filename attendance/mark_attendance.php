@@ -2,7 +2,7 @@
 require_once __DIR__ . "/../includes/bootstrap.php";
 if (!isset($_SESSION["user_id"]) && isset($_GET["token"])) {
     $_SESSION["pending_attendance_token"] = $_GET["token"];
-    redirect_with_context("auth/login.php");
+    redirect_with_context("auth/login.php?login_as=student");
     exit();
 }
 
