@@ -8,6 +8,13 @@ $loginSubtitle = $loginMode === "staff" ? "Enter your email and password." : "En
 $identifierPlaceholder = $loginMode === "staff" ? "Email Address" : "Matric No.";
 $identifierType = $loginMode === "staff" ? "email" : "text";
 $identifierAttributes = $loginMode === "staff" ? "" : ' maxlength="10" inputmode="numeric" data-matric-format';
+$attendanceToken = trim((string) ($_POST["attendance_token"] ?? $_GET["attendance_token"] ?? ""));
+
+if ($attendanceToken !== "" && preg_match('/^[a-f0-9]{48}$/', $attendanceToken)) {
+    $_SESSION["pending_attendance_token"] = $attendanceToken;
+} else {
+    $attendanceToken = $_SESSION["pending_attendance_token"] ?? "";
+}
 
 if (isset($_POST['login'])) {
 
@@ -121,11 +128,11 @@ if (isset($_POST['login'])) {
 
             <?php if ($showLoginChoice) { ?>
                 <div class="auth-choice-grid">
-                    <a href="<?php echo e(with_context("auth/login.php?login_as=student")); ?>" class="auth-choice-option">
+                    <a href="<?php echo e(with_context("auth/login.php?login_as=student" . ($attendanceToken !== "" ? "&attendance_token=" . urlencode($attendanceToken) : ""))); ?>" class="auth-choice-option">
                         <strong>Student Login</strong>
                         <span>Use matric no. and password</span>
                     </a>
-                    <a href="<?php echo e(with_context("auth/login.php?login_as=staff")); ?>" class="auth-choice-option">
+                    <a href="<?php echo e(with_context("auth/login.php?login_as=staff" . ($attendanceToken !== "" ? "&attendance_token=" . urlencode($attendanceToken) : ""))); ?>" class="auth-choice-option">
                         <strong>Lecturer Portal</strong>
                         <span>Use email and password</span>
                     </a>
@@ -135,6 +142,9 @@ if (isset($_POST['login'])) {
 
                     <?php render_context_input(); ?>
                     <input type="hidden" name="login_as" value="<?php echo e($loginMode); ?>">
+                    <?php if ($attendanceToken !== "") { ?>
+                        <input type="hidden" name="attendance_token" value="<?php echo e($attendanceToken); ?>">
+                    <?php } ?>
                 
                     <input type="<?php echo e($identifierType); ?>" name="identifier" placeholder="<?php echo e($identifierPlaceholder); ?>"<?php echo $identifierAttributes; ?> required>
 
