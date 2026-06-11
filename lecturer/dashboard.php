@@ -54,7 +54,7 @@ $activeSession = mysqli_fetch_assoc($active_result);
     <div class="role-dashboard-header">
         <div class="dashboard-user-avatar">
             <?php if (!empty($lecturer["profile_image"])) { ?>
-                <img src="<?php echo e($lecturer["profile_image"]); ?>" alt="<?php echo e($displayName); ?> profile picture">
+                <img src="<?php echo e(media_url($lecturer["profile_image"])); ?>" alt="<?php echo e($displayName); ?> profile picture">
             <?php } else { ?>
                 <?php echo e(strtoupper(substr($lecturer["full_name"] ?? $_SESSION["full_name"], 0, 1))); ?>
             <?php } ?>

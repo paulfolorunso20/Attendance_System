@@ -3099,12 +3099,13 @@ input:focus {
     border-radius: 50%;
     color: #003366;
     display: flex;
-    flex: 0 0 72px;
-    font-size: 30px;
+    flex: 0 0 104px;
+    font-size: 38px;
     font-weight: bold;
-    height: 72px;
+    height: 104px;
     justify-content: center;
-    width: 72px;
+    overflow: hidden;
+    width: 104px;
 }
 
 .profile-avatar img {
@@ -3204,6 +3205,44 @@ input:focus {
     border: 1px solid #ccd6e2;
     border-radius: 8px;
     padding: 10px;
+}
+
+.profile-cropper {
+    background: #f8fafc;
+    border: 1px solid #d8dee8;
+    border-radius: 8px;
+    display: grid;
+    gap: 12px;
+    padding: 14px;
+}
+
+.profile-cropper[hidden] {
+    display: none;
+}
+
+.profile-cropper canvas {
+    aspect-ratio: 1;
+    border: 4px solid #ffffff;
+    border-radius: 50%;
+    box-shadow: 0 8px 20px rgba(0, 51, 102, 0.16);
+    justify-self: center;
+    max-width: 180px;
+    width: 100%;
+}
+
+.crop-control {
+    display: grid;
+    gap: 6px;
+}
+
+.crop-control label {
+    color: #41566d;
+    font-size: 13px;
+}
+
+.crop-control input[type="range"] {
+    accent-color: #003366;
+    width: 100%;
 }
 
 .profile-settings-stack {
@@ -3640,13 +3679,13 @@ input:focus {
     border-radius: 50%;
     color: #ffffff;
     display: flex;
-    flex: 0 0 62px;
-    font-size: 24px;
+    flex: 0 0 74px;
+    font-size: 28px;
     font-weight: bold;
-    height: 62px;
+    height: 74px;
     justify-content: center;
     overflow: hidden;
-    width: 62px;
+    width: 74px;
 }
 
 .dashboard-user-avatar img {
@@ -5257,6 +5296,12 @@ a:focus-visible {
     border-radius: 8px;
     font-weight: 600;
     line-height: 1.45;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.alert.is-dismissing {
+    opacity: 0;
+    transform: translateY(-6px);
 }
 
 .status-badge {

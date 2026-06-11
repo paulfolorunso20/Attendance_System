@@ -24,7 +24,10 @@ if (!$user) {
 }
 
 if (isset($_POST["upload_profile_image"])) {
-    $profileImage = save_profile_image_upload($user_id, $_FILES["profile_image"] ?? null);
+    $profileImageData = trim($_POST["profile_image_data"] ?? "");
+    $profileImage = $profileImageData !== ""
+        ? save_profile_image_data($user_id, $profileImageData)
+        : save_profile_image_upload($user_id, $_FILES["profile_image"] ?? null);
 
     if ($profileImage === null) {
         $error = "Please upload a clear JPG, PNG, or WebP image below 3MB.";
@@ -162,7 +165,7 @@ if ($role === "lecturer") {
         <div class="profile-hero">
             <div class="profile-avatar">
                 <?php if (!empty($user["profile_image"])) { ?>
-                    <img src="<?php echo e($user["profile_image"]); ?>" alt="<?php echo e($user["full_name"]); ?> profile picture">
+                    <img src="<?php echo e(media_url($user["profile_image"])); ?>" alt="<?php echo e($user["full_name"]); ?> profile picture">
                 <?php } else { ?>
                     <?php echo e(strtoupper(substr($user["full_name"], 0, 1))); ?>
                 <?php } ?>
@@ -179,7 +182,7 @@ if ($role === "lecturer") {
         <?php } ?>
 
         <?php if ($success) { ?>
-            <p class="alert alert-success"><?php echo e($success); ?></p>
+            <p class="alert alert-success" data-auto-dismiss><?php echo e($success); ?></p>
         <?php } ?>
 
         <div class="profile-layout">
@@ -219,9 +222,25 @@ if ($role === "lecturer") {
                 <div class="profile-summary-note">
                     Changes made here update what appears across dashboards, reports, and attendance records.
                 </div>
-                <form method="POST" enctype="multipart/form-data" class="profile-photo-form">
+                <form method="POST" enctype="multipart/form-data" class="profile-photo-form" id="profilePhotoForm">
                     <label>Profile Picture</label>
-                    <input type="file" name="profile_image" accept="image/jpeg,image/png,image/webp" required>
+                    <input type="file" name="profile_image" id="profileImageInput" accept="image/jpeg,image/png,image/webp" required>
+                    <input type="hidden" name="profile_image_data" id="profileImageData">
+                    <div class="profile-cropper" id="profileCropper" hidden>
+                        <canvas id="profileCropCanvas" width="280" height="280"></canvas>
+                        <div class="crop-control">
+                            <label for="profileZoom">Zoom</label>
+                            <input type="range" id="profileZoom" min="1" max="2.4" step="0.05" value="1">
+                        </div>
+                        <div class="crop-control">
+                            <label for="profileOffsetX">Move Sideways</label>
+                            <input type="range" id="profileOffsetX" min="-90" max="90" step="1" value="0">
+                        </div>
+                        <div class="crop-control">
+                            <label for="profileOffsetY">Move Up/Down</label>
+                            <input type="range" id="profileOffsetY" min="-90" max="90" step="1" value="0">
+                        </div>
+                    </div>
                     <button type="submit" name="upload_profile_image" class="secondary-action">Upload Picture</button>
                 </form>
             </aside>
@@ -320,6 +339,93 @@ if ($role === "lecturer") {
 
     <script src="../assets/js/password-toggle.js?v=1"></script>
     <script src="../assets/js/matric-format.js?v=1"></script>
+    <script>
+        (function () {
+            var form = document.getElementById("profilePhotoForm");
+            var input = document.getElementById("profileImageInput");
+            var hidden = document.getElementById("profileImageData");
+            var cropper = document.getElementById("profileCropper");
+            var canvas = document.getElementById("profileCropCanvas");
+            var zoom = document.getElementById("profileZoom");
+            var offsetX = document.getElementById("profileOffsetX");
+            var offsetY = document.getElementById("profileOffsetY");
+            var ctx = canvas ? canvas.getContext("2d") : null;
+            var image = new Image();
+            var imageReady = false;
+
+            function drawCrop() {
+                if (!ctx || !imageReady) {
+                    return;
+                }
+
+                var size = canvas.width;
+                var scale = Math.max(size / image.width, size / image.height) * Number(zoom.value || 1);
+                var width = image.width * scale;
+                var height = image.height * scale;
+                var x = (size - width) / 2 + Number(offsetX.value || 0);
+                var y = (size - height) / 2 + Number(offsetY.value || 0);
+
+                ctx.clearRect(0, 0, size, size);
+                ctx.save();
+                ctx.beginPath();
+                ctx.arc(size / 2, size / 2, size / 2, 0, Math.PI * 2);
+                ctx.clip();
+                ctx.fillStyle = "#eef3f8";
+                ctx.fillRect(0, 0, size, size);
+                ctx.drawImage(image, x, y, width, height);
+                ctx.restore();
+            }
+
+            if (input && cropper && canvas) {
+                input.addEventListener("change", function () {
+                    var file = input.files && input.files[0];
+                    hidden.value = "";
+                    imageReady = false;
+
+                    if (!file) {
+                        cropper.hidden = true;
+                        return;
+                    }
+
+                    var reader = new FileReader();
+                    reader.onload = function (event) {
+                        image.onload = function () {
+                            imageReady = true;
+                            zoom.value = "1";
+                            offsetX.value = "0";
+                            offsetY.value = "0";
+                            cropper.hidden = false;
+                            drawCrop();
+                        };
+                        image.src = event.target.result;
+                    };
+                    reader.readAsDataURL(file);
+                });
+
+                [zoom, offsetX, offsetY].forEach(function (control) {
+                    control.addEventListener("input", drawCrop);
+                });
+            }
+
+            if (form && canvas && hidden) {
+                form.addEventListener("submit", function () {
+                    if (imageReady) {
+                        drawCrop();
+                        hidden.value = canvas.toDataURL("image/jpeg", 0.9);
+                    }
+                });
+            }
+
+            document.querySelectorAll("[data-auto-dismiss]").forEach(function (alert) {
+                setTimeout(function () {
+                    alert.classList.add("is-dismissing");
+                    setTimeout(function () {
+                        alert.remove();
+                    }, 300);
+                }, 3500);
+            });
+        })();
+    </script>
 </body>
 
 </html>

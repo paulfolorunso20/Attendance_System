@@ -84,7 +84,7 @@ $recentAttendance = dashboard_fetch_all($conn, "
     <div class="admin-overview-header">
         <div class="dashboard-user-avatar">
             <?php if (!empty($adminProfile["profile_image"])) { ?>
-                <img src="<?php echo e($adminProfile["profile_image"]); ?>" alt="<?php echo e($_SESSION["full_name"]); ?> profile picture">
+                <img src="<?php echo e(media_url($adminProfile["profile_image"])); ?>" alt="<?php echo e($_SESSION["full_name"]); ?> profile picture">
             <?php } else { ?>
                 <?php echo e(strtoupper(substr($_SESSION["full_name"], 0, 1))); ?>
             <?php } ?>

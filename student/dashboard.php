@@ -59,7 +59,7 @@ $course_result = mysqli_stmt_get_result($course_stmt);
     <div class="role-dashboard-header">
         <div class="dashboard-user-avatar">
             <?php if (!empty($student["profile_image"])) { ?>
-                <img src="<?php echo e($student["profile_image"]); ?>" alt="<?php echo e($studentName); ?> profile picture">
+                <img src="<?php echo e(media_url($student["profile_image"])); ?>" alt="<?php echo e($studentName); ?> profile picture">
             <?php } else { ?>
                 <?php echo e(strtoupper(substr($studentName, 0, 1))); ?>
             <?php } ?>

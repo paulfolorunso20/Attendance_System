@@ -362,6 +362,21 @@ function app_base_url()
     return $scheme . "://" . $host . ($path ? $path : "");
 }
 
+function media_url($path)
+{
+    $path = trim((string) $path);
+
+    if ($path === "") {
+        return "";
+    }
+
+    if (preg_match('/^(https?:)?\/\//i', $path) || str_starts_with($path, "data:")) {
+        return $path;
+    }
+
+    return rtrim(app_root_path(), "/") . "/" . ltrim($path, "/");
+}
+
 function random_token($length = 32)
 {
     return bin2hex(random_bytes($length));
@@ -541,6 +556,54 @@ function save_profile_image_locally($bytes, $fileName)
     return "uploads/profiles/" . $fileName;
 }
 
+function save_profile_image_bytes($userId, $bytes, $mimeType)
+{
+    if (!in_array($mimeType, ["image/jpeg", "image/png", "image/webp"], true)) {
+        return null;
+    }
+
+    if (!is_string($bytes) || strlen($bytes) < 1024 || strlen($bytes) > 3 * 1024 * 1024) {
+        return null;
+    }
+
+    $extension = match ($mimeType) {
+        "image/png" => "png",
+        "image/webp" => "webp",
+        default => "jpg",
+    };
+    $fileName = "user_" . (int) $userId . "_profile_" . time() . "." . $extension;
+
+    if (cloudinary_configured()) {
+        $cloudPath = upload_image_to_cloud($bytes, $fileName, getenv("CLOUDINARY_PROFILE_FOLDER") ?: "smartattend/profiles", $mimeType);
+        if ($cloudPath !== null) {
+            return $cloudPath;
+        }
+    }
+
+    return save_profile_image_locally($bytes, $fileName);
+}
+
+function save_profile_image_data($userId, $imageData)
+{
+    if (!is_string($imageData) || !preg_match('/^data:image\/(png|jpeg|jpg|webp);base64,/', $imageData, $matches)) {
+        return null;
+    }
+
+    $parts = explode(",", $imageData, 2);
+    if (count($parts) !== 2) {
+        return null;
+    }
+
+    $bytes = base64_decode($parts[1], true);
+    if ($bytes === false) {
+        return null;
+    }
+
+    $mimeType = "image/" . ($matches[1] === "jpg" ? "jpeg" : $matches[1]);
+
+    return save_profile_image_bytes($userId, $bytes, $mimeType);
+}
+
 function save_profile_image_upload($userId, $file)
 {
     if (!is_array($file) || ($file["error"] ?? UPLOAD_ERR_NO_FILE) !== UPLOAD_ERR_OK) {
@@ -563,21 +626,7 @@ function save_profile_image_upload($userId, $file)
         return null;
     }
 
-    $extension = match ($imageInfo["mime"]) {
-        "image/png" => "png",
-        "image/webp" => "webp",
-        default => "jpg",
-    };
-    $fileName = "user_" . (int) $userId . "_profile_" . time() . "." . $extension;
-
-    if (cloudinary_configured()) {
-        $cloudPath = upload_image_to_cloud($bytes, $fileName, getenv("CLOUDINARY_PROFILE_FOLDER") ?: "smartattend/profiles", $imageInfo["mime"]);
-        if ($cloudPath !== null) {
-            return $cloudPath;
-        }
-    }
-
-    return save_profile_image_locally($bytes, $fileName);
+    return save_profile_image_bytes($userId, $bytes, $imageInfo["mime"]);
 }
 
 sync_auth_context();
