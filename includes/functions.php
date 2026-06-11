@@ -54,10 +54,6 @@ function create_auth_context($user)
 
 function current_auth_context()
 {
-    if (!empty($_SESSION["auth_context"])) {
-        return $_SESSION["auth_context"];
-    }
-
     $context = auth_context_from_request();
 
     if ($context !== "") {
@@ -155,9 +151,7 @@ function render_tab_context_script()
                 if (parsed.origin !== window.location.origin) {
                     return url;
                 }
-                if (!parsed.searchParams.has("ctx")) {
-                    parsed.searchParams.set("ctx", ctx);
-                }
+                parsed.searchParams.set("ctx", ctx);
                 return parsed.pathname + parsed.search + parsed.hash;
             } catch (error) {
                 return url;
@@ -177,13 +171,14 @@ function render_tab_context_script()
 
         document.querySelectorAll("form").forEach(function (form) {
             form.setAttribute("action", addContext(form.getAttribute("action") || window.location.href));
-            if (!form.querySelector('input[name="ctx"]')) {
-                var input = document.createElement("input");
+            var input = form.querySelector('input[name="ctx"]');
+            if (!input) {
+                input = document.createElement("input");
                 input.type = "hidden";
                 input.name = "ctx";
-                input.value = ctx;
                 form.appendChild(input);
             }
+            input.value = ctx;
         });
     })();
     </script>
