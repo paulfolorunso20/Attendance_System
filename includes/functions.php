@@ -349,7 +349,14 @@ function app_base_url()
     $path = app_root_path();
 
     if ($publicBaseUrl !== "") {
-        return rtrim($publicBaseUrl, "/") . ($path ? $path : "");
+        $configuredHost = parse_url($publicBaseUrl, PHP_URL_HOST);
+        $requestHost = explode(":", $host)[0];
+        $configuredIsLocal = in_array($configuredHost, ["localhost", "127.0.0.1", "::1"], true);
+        $requestIsLocal = in_array($requestHost, ["localhost", "127.0.0.1", "::1"], true);
+
+        if (!$configuredIsLocal || $requestIsLocal) {
+            return rtrim($publicBaseUrl, "/") . ($path ? $path : "");
+        }
     }
 
     return $scheme . "://" . $host . ($path ? $path : "");
