@@ -4,7 +4,7 @@ require_role("student");
 
 $student_id = current_user_id();
 
-$student_query = "SELECT full_name, matric_no, department FROM users WHERE id = ? LIMIT 1";
+$student_query = "SELECT full_name, matric_no, department, profile_image FROM users WHERE id = ? LIMIT 1";
 $student_stmt = mysqli_prepare($conn, $student_query);
 mysqli_stmt_bind_param($student_stmt, "i", $student_id);
 mysqli_stmt_execute($student_stmt);
@@ -57,6 +57,13 @@ $course_result = mysqli_stmt_get_result($course_stmt);
 
 <div class="role-dashboard-shell">
     <div class="role-dashboard-header">
+        <div class="dashboard-user-avatar">
+            <?php if (!empty($student["profile_image"])) { ?>
+                <img src="<?php echo e($student["profile_image"]); ?>" alt="<?php echo e($studentName); ?> profile picture">
+            <?php } else { ?>
+                <?php echo e(strtoupper(substr($studentName, 0, 1))); ?>
+            <?php } ?>
+        </div>
         <div>
             <p class="section-kicker">Student Workspace</p>
             <h2>Welcome, <?php echo e($studentName); ?></h2>

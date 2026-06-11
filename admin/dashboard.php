@@ -40,6 +40,13 @@ $attendanceRecords = dashboard_count($conn, "SELECT COUNT(*) FROM attendance_rec
 $verifiedAttendance = dashboard_count($conn, "SELECT COUNT(*) FROM attendance_records WHERE face_verified = 1 AND location_verified = 1");
 $enrolledStudents = dashboard_count($conn, "SELECT COUNT(DISTINCT student_id) FROM student_courses");
 $totalEnrollments = dashboard_count($conn, "SELECT COUNT(*) FROM student_courses");
+$adminProfile = null;
+$adminProfileStmt = mysqli_prepare($conn, "SELECT full_name, profile_image FROM users WHERE id = ? LIMIT 1");
+$adminId = current_user_id();
+mysqli_stmt_bind_param($adminProfileStmt, "i", $adminId);
+mysqli_stmt_execute($adminProfileStmt);
+$adminProfileResult = mysqli_stmt_get_result($adminProfileStmt);
+$adminProfile = mysqli_fetch_assoc($adminProfileResult) ?: [];
 
 $recentSessions = dashboard_fetch_all($conn, "
     SELECT s.id, s.created_at, s.expires_at, s.closed_at, c.course_code, c.course_title, u.full_name AS lecturer_name,
@@ -75,6 +82,13 @@ $recentAttendance = dashboard_fetch_all($conn, "
 
 <div class="admin-dashboard-shell">
     <div class="admin-overview-header">
+        <div class="dashboard-user-avatar">
+            <?php if (!empty($adminProfile["profile_image"])) { ?>
+                <img src="<?php echo e($adminProfile["profile_image"]); ?>" alt="<?php echo e($_SESSION["full_name"]); ?> profile picture">
+            <?php } else { ?>
+                <?php echo e(strtoupper(substr($_SESSION["full_name"], 0, 1))); ?>
+            <?php } ?>
+        </div>
         <div>
             <p class="section-kicker">System Overview</p>
             <h2>Admin Dashboard</h2>

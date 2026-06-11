@@ -3107,6 +3107,13 @@ input:focus {
     width: 72px;
 }
 
+.profile-avatar img {
+    border-radius: 50%;
+    height: 100%;
+    object-fit: cover;
+    width: 100%;
+}
+
 .profile-hero-copy {
     max-width: 720px;
 }
@@ -3177,6 +3184,26 @@ input:focus {
     line-height: 1.5;
     margin-top: 18px;
     padding: 14px;
+}
+
+.profile-photo-form {
+    border-top: 1px solid #e5ebf2;
+    display: grid;
+    gap: 10px;
+    margin-top: 18px;
+    padding-top: 18px;
+}
+
+.profile-photo-form label {
+    color: #003366;
+    font-weight: bold;
+}
+
+.profile-photo-form input[type="file"] {
+    background: #f8fafc;
+    border: 1px solid #ccd6e2;
+    border-radius: 8px;
+    padding: 10px;
 }
 
 .profile-settings-stack {
@@ -3605,6 +3632,32 @@ input:focus {
     color: #4f5f70;
     margin-bottom: 0;
     max-width: 700px;
+}
+
+.dashboard-user-avatar {
+    align-items: center;
+    background: #003366;
+    border-radius: 50%;
+    color: #ffffff;
+    display: flex;
+    flex: 0 0 62px;
+    font-size: 24px;
+    font-weight: bold;
+    height: 62px;
+    justify-content: center;
+    overflow: hidden;
+    width: 62px;
+}
+
+.dashboard-user-avatar img {
+    height: 100%;
+    object-fit: cover;
+    width: 100%;
+}
+
+.dashboard-user-avatar + div {
+    flex: 1;
+    min-width: 0;
 }
 
 .role-header-actions {

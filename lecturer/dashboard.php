@@ -3,7 +3,7 @@ require_once __DIR__ . "/../includes/bootstrap.php";
 require_role("lecturer");
 
 $lecturer_id = current_user_id();
-$query = "SELECT full_name, title, position, department FROM users WHERE id = ? LIMIT 1";
+$query = "SELECT full_name, title, position, department, profile_image FROM users WHERE id = ? LIMIT 1";
 $stmt = mysqli_prepare($conn, $query);
 mysqli_stmt_bind_param($stmt, "i", $lecturer_id);
 mysqli_stmt_execute($stmt);
@@ -52,6 +52,13 @@ $activeSession = mysqli_fetch_assoc($active_result);
 <div class="role-dashboard-shell">
 
     <div class="role-dashboard-header">
+        <div class="dashboard-user-avatar">
+            <?php if (!empty($lecturer["profile_image"])) { ?>
+                <img src="<?php echo e($lecturer["profile_image"]); ?>" alt="<?php echo e($displayName); ?> profile picture">
+            <?php } else { ?>
+                <?php echo e(strtoupper(substr($lecturer["full_name"] ?? $_SESSION["full_name"], 0, 1))); ?>
+            <?php } ?>
+        </div>
         <div>
             <p class="section-kicker"><?php echo e($lecturer["department"] ?? "Lecturer Workspace"); ?></p>
             <h2><?php echo e(time_greeting()); ?>, <?php echo e($displayName); ?></h2>

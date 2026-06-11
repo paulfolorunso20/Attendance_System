@@ -10,7 +10,7 @@ $role = $_SESSION["role"] ?? "";
 $error = null;
 $success = null;
 
-$query = "SELECT full_name, title, position, matric_no, department, email, password, role FROM users WHERE id = ? LIMIT 1";
+$query = "SELECT full_name, title, position, matric_no, department, email, password, role, profile_image FROM users WHERE id = ? LIMIT 1";
 $stmt = mysqli_prepare($conn, $query);
 mysqli_stmt_bind_param($stmt, "i", $user_id);
 mysqli_stmt_execute($stmt);
@@ -21,6 +21,26 @@ if (!$user) {
     session_destroy();
     redirect_with_context("auth/login.php");
     exit();
+}
+
+if (isset($_POST["upload_profile_image"])) {
+    $profileImage = save_profile_image_upload($user_id, $_FILES["profile_image"] ?? null);
+
+    if ($profileImage === null) {
+        $error = "Please upload a clear JPG, PNG, or WebP image below 3MB.";
+    } else {
+        $update = "UPDATE users SET profile_image = ? WHERE id = ?";
+        $update_stmt = mysqli_prepare($conn, $update);
+        mysqli_stmt_bind_param($update_stmt, "si", $profileImage, $user_id);
+
+        if (mysqli_stmt_execute($update_stmt)) {
+            $success = "Profile picture updated successfully.";
+            $user["profile_image"] = $profileImage;
+            audit_log($conn, "profile_image_updated", "Profile picture updated.", "user", $user_id);
+        } else {
+            $error = "Could not update profile picture.";
+        }
+    }
 }
 
 if (isset($_POST["save_profile"])) {
@@ -140,7 +160,13 @@ if ($role === "lecturer") {
         </div>
 
         <div class="profile-hero">
-            <div class="profile-avatar"><?php echo e(strtoupper(substr($user["full_name"], 0, 1))); ?></div>
+            <div class="profile-avatar">
+                <?php if (!empty($user["profile_image"])) { ?>
+                    <img src="<?php echo e($user["profile_image"]); ?>" alt="<?php echo e($user["full_name"]); ?> profile picture">
+                <?php } else { ?>
+                    <?php echo e(strtoupper(substr($user["full_name"], 0, 1))); ?>
+                <?php } ?>
+            </div>
             <div class="profile-hero-copy">
                 <p class="profile-kicker">Account Settings</p>
                 <h2><?php echo e($displayName); ?></h2>
@@ -193,6 +219,11 @@ if ($role === "lecturer") {
                 <div class="profile-summary-note">
                     Changes made here update what appears across dashboards, reports, and attendance records.
                 </div>
+                <form method="POST" enctype="multipart/form-data" class="profile-photo-form">
+                    <label>Profile Picture</label>
+                    <input type="file" name="profile_image" accept="image/jpeg,image/png,image/webp" required>
+                    <button type="submit" name="upload_profile_image" class="secondary-action">Upload Picture</button>
+                </form>
             </aside>
 
             <div class="profile-settings-stack">
