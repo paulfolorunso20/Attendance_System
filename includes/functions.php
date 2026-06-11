@@ -632,6 +632,34 @@ function mail_configured()
         trim((string) getenv("MAIL_FROM_EMAIL")) !== "";
 }
 
+function missing_mail_variables()
+{
+    $required = ["MAIL_HOST", "MAIL_USERNAME", "MAIL_PASSWORD", "MAIL_FROM_EMAIL"];
+    $missing = [];
+
+    foreach ($required as $key) {
+        if (trim((string) getenv($key)) === "") {
+            $missing[] = $key;
+        }
+    }
+
+    return $missing;
+}
+
+function set_last_mail_error($message)
+{
+    $GLOBALS["last_mail_error"] = $message;
+
+    if ($message !== "") {
+        error_log("SmartAttend mail error: " . $message);
+    }
+}
+
+function last_mail_error()
+{
+    return $GLOBALS["last_mail_error"] ?? "";
+}
+
 function smtp_read_response($socket)
 {
     $response = "";
@@ -649,6 +677,7 @@ function smtp_read_response($socket)
 function smtp_expect($socket, $codes)
 {
     $response = smtp_read_response($socket);
+    $GLOBALS["last_smtp_response"] = trim($response);
     $code = (int) substr($response, 0, 3);
 
     return in_array($code, (array) $codes, true);
@@ -677,7 +706,10 @@ function smtp_escape_message($message)
 
 function send_app_email($toEmail, $toName, $subject, $htmlBody, $textBody = "")
 {
+    set_last_mail_error("");
+
     if (!mail_configured()) {
+        set_last_mail_error("Missing mail variables: " . implode(", ", missing_mail_variables()));
         return false;
     }
 
@@ -693,6 +725,7 @@ function send_app_email($toEmail, $toName, $subject, $htmlBody, $textBody = "")
 
     $socket = @fsockopen($transportHost, $port, $errno, $errstr, 20);
     if (!$socket) {
+        set_last_mail_error("Could not connect to " . $host . ":" . $port . ". " . $errstr);
         return false;
     }
 
@@ -729,32 +762,70 @@ function send_app_email($toEmail, $toName, $subject, $htmlBody, $textBody = "")
     $message .= $htmlBody . "\r\n\r\n";
     $message .= "--" . $boundary . "--";
 
-    $ok = smtp_expect($socket, 220) &&
-        smtp_command($socket, "EHLO " . $serverName, 250);
+    $fail = function ($message) use ($socket) {
+        $response = $GLOBALS["last_smtp_response"] ?? "";
+        set_last_mail_error($message . ($response !== "" ? " Server response: " . $response : ""));
+        @smtp_command($socket, "QUIT", 221);
+        fclose($socket);
 
-    if ($ok && $secure === "tls") {
-        $ok = smtp_command($socket, "STARTTLS", 220) &&
-            stream_socket_enable_crypto($socket, true, STREAM_CRYPTO_METHOD_TLS_CLIENT) &&
-            smtp_command($socket, "EHLO " . $serverName, 250);
+        return false;
+    };
+
+    if (!smtp_expect($socket, 220)) {
+        return $fail("SMTP server did not accept the connection.");
     }
 
-    $ok = $ok &&
-        smtp_command($socket, "AUTH LOGIN", 334) &&
-        smtp_command($socket, base64_encode($username), 334) &&
-        smtp_command($socket, base64_encode($password), 235) &&
-        smtp_command($socket, "MAIL FROM:<" . $fromEmail . ">", 250) &&
-        smtp_command($socket, "RCPT TO:<" . $toEmail . ">", [250, 251]) &&
-        smtp_command($socket, "DATA", 354);
+    if (!smtp_command($socket, "EHLO " . $serverName, 250)) {
+        return $fail("SMTP greeting failed.");
+    }
 
-    if ($ok) {
-        fwrite($socket, smtp_escape_message($message) . "\r\n.\r\n");
-        $ok = smtp_expect($socket, 250);
+    if ($secure === "tls") {
+        if (!smtp_command($socket, "STARTTLS", 220)) {
+            return $fail("SMTP TLS start failed.");
+        }
+
+        if (!stream_socket_enable_crypto($socket, true, STREAM_CRYPTO_METHOD_TLS_CLIENT)) {
+            return $fail("SMTP TLS encryption could not be enabled.");
+        }
+
+        if (!smtp_command($socket, "EHLO " . $serverName, 250)) {
+            return $fail("SMTP greeting after TLS failed.");
+        }
+    }
+
+    if (!smtp_command($socket, "AUTH LOGIN", 334)) {
+        return $fail("SMTP authentication was not accepted.");
+    }
+
+    if (!smtp_command($socket, base64_encode($username), 334)) {
+        return $fail("SMTP username was rejected.");
+    }
+
+    if (!smtp_command($socket, base64_encode($password), 235)) {
+        return $fail("SMTP password was rejected.");
+    }
+
+    if (!smtp_command($socket, "MAIL FROM:<" . $fromEmail . ">", 250)) {
+        return $fail("SMTP sender email was rejected.");
+    }
+
+    if (!smtp_command($socket, "RCPT TO:<" . $toEmail . ">", [250, 251])) {
+        return $fail("SMTP recipient email was rejected.");
+    }
+
+    if (!smtp_command($socket, "DATA", 354)) {
+        return $fail("SMTP message body was not accepted.");
+    }
+
+    fwrite($socket, smtp_escape_message($message) . "\r\n.\r\n");
+    if (!smtp_expect($socket, 250)) {
+        return $fail("SMTP server rejected the final email message.");
     }
 
     smtp_command($socket, "QUIT", 221);
     fclose($socket);
 
-    return (bool) $ok;
+    return true;
 }
 
 function send_password_reset_code_email($email, $name, $code)

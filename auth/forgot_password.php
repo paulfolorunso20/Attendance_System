@@ -80,7 +80,11 @@ if (isset($_POST["request_code"])) {
             if (!mysqli_stmt_execute($insert)) {
                 $error = "Could not create a recovery code. Please try again.";
             } elseif (!send_password_reset_code_email($user["email"], $user["full_name"], $code)) {
-                $error = "Could not send the recovery email. Please try again later.";
+                $mailError = last_mail_error();
+                $error = "Could not send the recovery email.";
+                if ($mailError !== "") {
+                    $error .= " " . $mailError;
+                }
             } else {
                 $_SESSION["password_reset_user_id"] = (int) $user["id"];
                 $_SESSION["password_reset_email"] = $user["email"];
