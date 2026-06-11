@@ -3,7 +3,10 @@ require_once __DIR__ . "/../includes/bootstrap.php";
 
 $error = null;
 $success = null;
-$selectedRole = $_POST["role"] ?? ($_SESSION["password_reset_role"] ?? "student");
+$requestedWorkflow = $_GET["recover_as"] ?? $_POST["recover_as"] ?? "";
+$requestedWorkflow = $requestedWorkflow === "staff" ? "staff" : ($requestedWorkflow === "student" ? "student" : "");
+$selectedWorkflow = $requestedWorkflow ?: ($_SESSION["password_reset_workflow"] ?? "");
+$selectedRole = $_SESSION["password_reset_role"] ?? ($selectedWorkflow === "student" ? "student" : "lecturer");
 $step = "identify";
 
 if (!empty($_SESSION["password_reset_verified_user_id"])) {
@@ -19,6 +22,7 @@ function clear_password_reset_session()
         $_SESSION["password_reset_email"],
         $_SESSION["password_reset_name"],
         $_SESSION["password_reset_matric_no"],
+        $_SESSION["password_reset_workflow"],
         $_SESSION["password_reset_role"],
         $_SESSION["password_reset_verified_user_id"]
     );
@@ -27,37 +31,38 @@ function clear_password_reset_session()
 if (isset($_POST["request_code"])) {
     clear_password_reset_session();
 
-    $role = trim($_POST["role"] ?? "");
+    $workflow = trim($_POST["recover_as"] ?? "");
     $email = trim($_POST["email"] ?? "");
     $matricNo = trim($_POST["matric_no"] ?? "");
-    $selectedRole = $role;
+    $selectedWorkflow = $workflow === "staff" ? "staff" : ($workflow === "student" ? "student" : "");
+    $selectedRole = $selectedWorkflow === "student" ? "student" : "lecturer";
 
-    if (!in_array($role, ["student", "lecturer", "admin"], true)) {
-        $error = "Please select a valid account type.";
+    if (!in_array($selectedWorkflow, ["student", "staff"], true)) {
+        $error = "Please select Student Login or Lecturer Portal first.";
     } elseif ($email === "" || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $error = "Please enter the email address on your account.";
-    } elseif ($role === "student" && $matricNo === "") {
+    } elseif ($selectedWorkflow === "student" && $matricNo === "") {
         $error = "Students must enter their matric no.";
-    } elseif ($role === "student" && !is_valid_matric_no($matricNo)) {
+    } elseif ($selectedWorkflow === "student" && !is_valid_matric_no($matricNo)) {
         $error = "Matric no. must follow this format: 2022/42335.";
     } elseif (!mail_configured()) {
         $error = "Email recovery is not configured yet. Please contact the system admin.";
     } else {
-        if ($role === "student") {
+        if ($selectedWorkflow === "student") {
             $query = "SELECT id, full_name, email, role FROM users WHERE role = 'student' AND email = ? AND matric_no = ? LIMIT 1";
             $stmt = mysqli_prepare($conn, $query);
             mysqli_stmt_bind_param($stmt, "ss", $email, $matricNo);
         } else {
-            $query = "SELECT id, full_name, email, role FROM users WHERE role = ? AND email = ? LIMIT 1";
+            $query = "SELECT id, full_name, email, role FROM users WHERE role IN ('lecturer', 'admin') AND email = ? LIMIT 1";
             $stmt = mysqli_prepare($conn, $query);
-            mysqli_stmt_bind_param($stmt, "ss", $role, $email);
+            mysqli_stmt_bind_param($stmt, "s", $email);
         }
 
         mysqli_stmt_execute($stmt);
         $result = mysqli_stmt_get_result($stmt);
 
         if (mysqli_num_rows($result) !== 1) {
-            audit_log($conn, "password_reset_code_failed", "Password recovery account lookup failed for " . $email, "user", null, 0, $role);
+            audit_log($conn, "password_reset_code_failed", "Password recovery account lookup failed for " . $email, "user", null, 0, $selectedRole);
             $error = "No matching account was found. Please check the details and try again.";
         } else {
             $user = mysqli_fetch_assoc($result);
@@ -81,6 +86,7 @@ if (isset($_POST["request_code"])) {
                 $_SESSION["password_reset_email"] = $user["email"];
                 $_SESSION["password_reset_name"] = $user["full_name"];
                 $_SESSION["password_reset_matric_no"] = $matricNo;
+                $_SESSION["password_reset_workflow"] = $selectedWorkflow;
                 $_SESSION["password_reset_role"] = $user["role"];
                 $selectedRole = $user["role"];
                 $step = "verify";
@@ -94,6 +100,7 @@ if (isset($_POST["request_code"])) {
 if (isset($_POST["verify_code"])) {
     $code = trim($_POST["recovery_code"] ?? "");
     $userId = (int) ($_SESSION["password_reset_user_id"] ?? 0);
+    $selectedWorkflow = $_SESSION["password_reset_workflow"] ?? $selectedWorkflow;
     $selectedRole = $_SESSION["password_reset_role"] ?? $selectedRole;
 
     if ($userId <= 0) {
@@ -128,6 +135,7 @@ if (isset($_POST["reset_password"])) {
     $userId = (int) ($_SESSION["password_reset_verified_user_id"] ?? 0);
     $newPassword = trim($_POST["new_password"] ?? "");
     $confirmPassword = trim($_POST["confirm_password"] ?? "");
+    $selectedWorkflow = $_SESSION["password_reset_workflow"] ?? $selectedWorkflow;
     $selectedRole = $_SESSION["password_reset_role"] ?? $selectedRole;
 
     if ($userId <= 0) {
@@ -176,7 +184,8 @@ if (isset($_POST["reset_password"])) {
 if (isset($_POST["start_over"])) {
     clear_password_reset_session();
     $step = "identify";
-    $selectedRole = "student";
+    $selectedWorkflow = $requestedWorkflow;
+    $selectedRole = $selectedWorkflow === "student" ? "student" : "lecturer";
 }
 
 $maskedEmail = "";
@@ -184,6 +193,11 @@ if (!empty($_SESSION["password_reset_email"])) {
     $parts = explode("@", $_SESSION["password_reset_email"], 2);
     $maskedEmail = substr($parts[0], 0, 2) . str_repeat("*", max(2, strlen($parts[0]) - 2)) . "@" . ($parts[1] ?? "");
 }
+
+$workflowLabel = $selectedWorkflow === "student" ? "Student Login" : "Lecturer Portal";
+$workflowSubtitle = $selectedWorkflow === "student"
+    ? "Enter your registered email and matric no. to receive a recovery code."
+    : "Enter your registered email to receive a recovery code.";
 ?>
 
 <!DOCTYPE html>
@@ -217,9 +231,12 @@ if (!empty($_SESSION["password_reset_email"])) {
             <?php } elseif ($step === "done") { ?>
                 <h2>Password updated</h2>
                 <p>Your account is ready. You can now sign in.</p>
+            <?php } elseif ($selectedWorkflow === "") { ?>
+                <h2>Choose recovery type</h2>
+                <p>Select the account area you were trying to access.</p>
             <?php } else { ?>
-                <h2>Find your account</h2>
-                <p>We will send a recovery code to your registered email.</p>
+                <h2><?php echo e($workflowLabel); ?> recovery</h2>
+                <p><?php echo e($workflowSubtitle); ?></p>
             <?php } ?>
         </div>
 
@@ -232,16 +249,27 @@ if (!empty($_SESSION["password_reset_email"])) {
         <?php } ?>
 
         <?php if ($step === "identify") { ?>
-            <form method="POST">
-                <select name="role" id="reset-role" required>
-                    <option value="student" <?php echo $selectedRole === "student" ? "selected" : ""; ?>>Student</option>
-                    <option value="lecturer" <?php echo $selectedRole === "lecturer" ? "selected" : ""; ?>>Lecturer</option>
-                    <option value="admin" <?php echo $selectedRole === "admin" ? "selected" : ""; ?>>Admin</option>
-                </select>
-                <input type="email" name="email" placeholder="Registered email address" required>
-                <input type="text" name="matric_no" id="reset-matric" placeholder="Student matric no. e.g. 2022/42335" pattern="\d{4}/\d{5}" maxlength="10" inputmode="numeric" data-matric-format title="Use four digits, slash, then five digits. Example: 2022/42335">
-                <button type="submit" name="request_code">Send Recovery Code</button>
-            </form>
+            <?php if ($selectedWorkflow === "") { ?>
+                <div class="auth-choice-grid">
+                    <a href="<?php echo e(with_context("auth/forgot_password.php?recover_as=student")); ?>" class="auth-choice-option">
+                        <strong>Student Login</strong>
+                        <span>Recover with email and matric no.</span>
+                    </a>
+                    <a href="<?php echo e(with_context("auth/forgot_password.php?recover_as=staff")); ?>" class="auth-choice-option">
+                        <strong>Lecturer Portal</strong>
+                        <span>Recover with registered email</span>
+                    </a>
+                </div>
+            <?php } else { ?>
+                <form method="POST">
+                    <input type="hidden" name="recover_as" value="<?php echo e($selectedWorkflow); ?>">
+                    <input type="email" name="email" placeholder="Registered email address" required>
+                    <?php if ($selectedWorkflow === "student") { ?>
+                        <input type="text" name="matric_no" id="reset-matric" placeholder="Student matric no. e.g. 2022/42335" pattern="\d{4}/\d{5}" maxlength="10" inputmode="numeric" data-matric-format title="Use four digits, slash, then five digits. Example: 2022/42335" required>
+                    <?php } ?>
+                    <button type="submit" name="request_code">Send Recovery Code</button>
+                </form>
+            <?php } ?>
         <?php } elseif ($step === "verify") { ?>
             <form method="POST">
                 <input type="text" name="recovery_code" class="recovery-code-input" placeholder="6-digit code" pattern="\d{6}" maxlength="6" inputmode="numeric" autocomplete="one-time-code" required>
@@ -249,7 +277,7 @@ if (!empty($_SESSION["password_reset_email"])) {
             </form>
             <form method="POST" class="inline-reset-action">
                 <button type="submit" name="request_code" value="1" class="secondary-action">Send Code Again</button>
-                <input type="hidden" name="role" value="<?php echo e($_SESSION["password_reset_role"] ?? $selectedRole); ?>">
+                <input type="hidden" name="recover_as" value="<?php echo e($_SESSION["password_reset_workflow"] ?? $selectedWorkflow); ?>">
                 <input type="hidden" name="email" value="<?php echo e($_SESSION["password_reset_email"] ?? ""); ?>">
                 <input type="hidden" name="matric_no" value="<?php echo e($_SESSION["password_reset_matric_no"] ?? ""); ?>">
             </form>
@@ -263,34 +291,17 @@ if (!empty($_SESSION["password_reset_email"])) {
             <a href="login.php" class="button-link">Back to Login</a>
         <?php } ?>
 
-        <?php if ($step !== "done") { ?>
+        <?php if ($step !== "done" && $selectedWorkflow !== "") { ?>
             <form method="POST" class="inline-reset-action">
+                <input type="hidden" name="recover_as" value="<?php echo e($selectedWorkflow); ?>">
                 <button type="submit" name="start_over" class="link-button">Start over</button>
             </form>
+            <p class="form-footer">Remembered your password? <a href="login.php">Back to login</a></p>
+        <?php } elseif ($step !== "done") { ?>
             <p class="form-footer">Remembered your password? <a href="login.php">Back to login</a></p>
         <?php } ?>
     </div>
 </div>
-
-<script>
-const roleSelect = document.getElementById("reset-role");
-const matricInput = document.getElementById("reset-matric");
-
-function syncMatricField() {
-    if (!roleSelect || !matricInput) {
-        return;
-    }
-
-    const isStudent = roleSelect.value === "student";
-    matricInput.style.display = isStudent ? "block" : "none";
-    matricInput.required = isStudent;
-}
-
-if (roleSelect) {
-    roleSelect.addEventListener("change", syncMatricField);
-    syncMatricField();
-}
-</script>
 
 <script src="../assets/js/password-toggle.js?v=1"></script>
 <script src="../assets/js/matric-format.js?v=1"></script>

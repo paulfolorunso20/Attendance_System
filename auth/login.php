@@ -9,6 +9,11 @@ $identifierPlaceholder = $loginMode === "staff" ? "Email Address" : "Matric No."
 $identifierType = $loginMode === "staff" ? "email" : "text";
 $identifierAttributes = $loginMode === "staff" ? "" : ' maxlength="10" inputmode="numeric" data-matric-format';
 $attendanceToken = trim((string) ($_POST["attendance_token"] ?? $_GET["attendance_token"] ?? ""));
+$forgotPasswordLink = "forgot_password.php";
+
+if ($loginMode !== "") {
+    $forgotPasswordLink .= "?recover_as=" . urlencode($loginMode);
+}
 
 if ($attendanceToken !== "" && preg_match('/^[a-f0-9]{48}$/', $attendanceToken)) {
     $_SESSION["pending_attendance_token"] = $attendanceToken;
@@ -155,7 +160,7 @@ if (isset($_POST['login'])) {
                 </form>
             <?php } ?>
 
-            <p class="auth-simple-link"><a href="forgot_password.php">Forgot your password?</a></p>
+            <p class="auth-simple-link"><a href="<?php echo e($forgotPasswordLink); ?>">Forgot your password?</a></p>
             <p class="auth-simple-link muted-text">Don't have an account? <a href="register.php">Sign up here</a></p>
 
         </div>
