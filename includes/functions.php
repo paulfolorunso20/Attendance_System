@@ -185,6 +185,24 @@ function render_tab_context_script()
     <?php
 }
 
+function render_theme_assets()
+{
+    foreach (headers_list() as $header) {
+        if (stripos($header, "Location:") === 0) {
+            return;
+        }
+
+        if (stripos($header, "Content-Type:") === 0 && stripos($header, "text/html") === false) {
+            return;
+        }
+    }
+
+    $scriptPath = rtrim(app_root_path(), "/") . "/assets/js/theme-toggle.js?v=1";
+    ?>
+    <script src="<?php echo e($scriptPath); ?>"></script>
+    <?php
+}
+
 function require_role($role)
 {
     sync_auth_context();
@@ -952,4 +970,5 @@ function send_password_reset_code_email($email, $name, $code)
 }
 
 sync_auth_context();
+register_shutdown_function("render_theme_assets");
 register_shutdown_function("render_tab_context_script");

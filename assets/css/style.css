@@ -11,6 +11,232 @@ body {
     padding: 30px;
 }
 
+/* Optional light/dark theme */
+.theme-toggle {
+    align-items: center;
+    background: #ffffff;
+    border: 1px solid #cdd9e5;
+    border-radius: 999px;
+    bottom: 18px;
+    box-shadow: 0 12px 30px rgba(15, 40, 70, 0.18);
+    color: #003b73;
+    cursor: pointer;
+    display: inline-flex;
+    font-size: 13px;
+    font-weight: 900;
+    gap: 8px;
+    min-height: 42px;
+    padding: 0 14px;
+    position: fixed;
+    right: 18px;
+    width: auto;
+    z-index: 9999;
+}
+
+.theme-toggle:hover {
+    transform: translateY(-1px);
+}
+
+.theme-toggle-icon {
+    align-items: center;
+    background: #edf5fb;
+    border-radius: 999px;
+    display: inline-flex;
+    height: 24px;
+    justify-content: center;
+    width: 24px;
+}
+
+html[data-theme="dark"] body {
+    background: #0b1220;
+    color: #dce7f3;
+}
+
+html[data-theme="dark"] .home-page,
+html[data-theme="dark"] .landing-page,
+html[data-theme="dark"] .auth-page,
+html[data-theme="dark"] .attendance-page,
+html[data-theme="dark"] .student-dashboard-page,
+html[data-theme="dark"] .lecturer-dashboard-page,
+html[data-theme="dark"] .admin-dashboard-page,
+html[data-theme="dark"] .profile-page,
+html[data-theme="dark"] .student-courses-page,
+html[data-theme="dark"] .audit-log-page,
+html[data-theme="dark"] .session-page {
+    background:
+        radial-gradient(circle at 15% 10%, rgba(34, 102, 170, 0.18), transparent 26%),
+        linear-gradient(180deg, #0b1220 0%, #111827 100%) !important;
+    color: #dce7f3;
+}
+
+html[data-theme="dark"] .home-panel,
+html[data-theme="dark"] .container,
+html[data-theme="dark"] form,
+html[data-theme="dark"] .dashboard-card,
+html[data-theme="dark"] .role-dashboard-header,
+html[data-theme="dark"] .role-stat-card,
+html[data-theme="dark"] .role-panel,
+html[data-theme="dark"] .profile-card,
+html[data-theme="dark"] .profile-hero,
+html[data-theme="dark"] .profile-summary-card,
+html[data-theme="dark"] .student-courses-card,
+html[data-theme="dark"] .audit-filter-card,
+html[data-theme="dark"] .session-card,
+html[data-theme="dark"] .qr-box,
+html[data-theme="dark"] .verification-card,
+html[data-theme="dark"] .verification-panel,
+html[data-theme="dark"] .face-scan-panel,
+html[data-theme="dark"] .attendance-hero,
+html[data-theme="dark"] .student-identity,
+html[data-theme="dark"] .empty-state,
+html[data-theme="dark"] .auth-page .login-container .container,
+html[data-theme="dark"] .auth-choice-card,
+html[data-theme="dark"] .form-footer {
+    background: #111c2d !important;
+    border-color: #24364d !important;
+    box-shadow: 0 18px 45px rgba(0, 0, 0, 0.34) !important;
+    color: #dce7f3;
+}
+
+html[data-theme="dark"] .auth-brand-panel,
+html[data-theme="dark"] .home-preview,
+html[data-theme="dark"] .attendance-page .face-camera-frame {
+    background:
+        linear-gradient(145deg, rgba(255,255,255,0.07), rgba(255,255,255,0.02)),
+        linear-gradient(160deg, #06172a 0%, #0b2f55 52%, #0d4b2b 100%) !important;
+    border-color: rgba(255, 255, 255, 0.12) !important;
+}
+
+html[data-theme="dark"] h1,
+html[data-theme="dark"] h2,
+html[data-theme="dark"] h3,
+html[data-theme="dark"] h4,
+html[data-theme="dark"] strong,
+html[data-theme="dark"] .role-dashboard-header h2,
+html[data-theme="dark"] .attendance-hero h2,
+html[data-theme="dark"] .student-identity strong,
+html[data-theme="dark"] .panel-heading h3 {
+    color: #f5f9ff !important;
+}
+
+html[data-theme="dark"] p,
+html[data-theme="dark"] small,
+html[data-theme="dark"] label,
+html[data-theme="dark"] span,
+html[data-theme="dark"] .welcome,
+html[data-theme="dark"] .status-text,
+html[data-theme="dark"] .helper-text,
+html[data-theme="dark"] .home-copy,
+html[data-theme="dark"] .hero-subtitle,
+html[data-theme="dark"] .attendance-hero p,
+html[data-theme="dark"] .auth-page .login-header p {
+    color: #b8c8dc;
+}
+
+html[data-theme="dark"] input,
+html[data-theme="dark"] select,
+html[data-theme="dark"] textarea {
+    background: #0c1626 !important;
+    border-color: #314861 !important;
+    color: #eef5ff !important;
+}
+
+html[data-theme="dark"] input::placeholder,
+html[data-theme="dark"] textarea::placeholder {
+    color: #8da2ba !important;
+}
+
+html[data-theme="dark"] table,
+html[data-theme="dark"] td,
+html[data-theme="dark"] th {
+    background: #101b2d;
+    border-color: #26384f !important;
+    color: #dce7f3;
+}
+
+html[data-theme="dark"] th,
+html[data-theme="dark"] .table-wrap tr:first-child,
+html[data-theme="dark"] .table-wrap thead {
+    background: #0b3b6c !important;
+    color: #ffffff !important;
+}
+
+html[data-theme="dark"] a {
+    color: #7db7ff;
+}
+
+html[data-theme="dark"] button,
+html[data-theme="dark"] .button-link,
+html[data-theme="dark"] .primary-cta,
+html[data-theme="dark"] .home-primary {
+    background: #0b66bd;
+    color: #ffffff;
+}
+
+html[data-theme="dark"] .secondary-button,
+html[data-theme="dark"] .secondary-action,
+html[data-theme="dark"] .secondary-cta,
+html[data-theme="dark"] .home-secondary,
+html[data-theme="dark"] .fallback-scan-action,
+html[data-theme="dark"] .compact-button {
+    background: #15263c !important;
+    border-color: #314861 !important;
+    color: #dce7f3 !important;
+}
+
+html[data-theme="dark"] .alert-success {
+    background: #0f3d28;
+    border-color: #1c7c4a;
+    color: #c8f5d7;
+}
+
+html[data-theme="dark"] .alert-error {
+    background: #3a1518;
+    border-color: #8a2e35;
+    color: #ffd1d6;
+}
+
+html[data-theme="dark"] .eligibility-badge,
+html[data-theme="dark"] .verification-steps span,
+html[data-theme="dark"] .session-check-list p,
+html[data-theme="dark"] .home-mini-stats div,
+html[data-theme="dark"] .home-feature-row span,
+html[data-theme="dark"] .hero-trust-row span {
+    background: #101b2d !important;
+    border-color: #26384f !important;
+    color: #dce7f3 !important;
+}
+
+html[data-theme="dark"] .status-badge,
+html[data-theme="dark"] .camera-mode-badge {
+    background: #12351f;
+    border-color: #2a8c50;
+    color: #c8f5d7;
+}
+
+html[data-theme="dark"] .password-toggle-button,
+html[data-theme="dark"] .password-toggle-button:hover {
+    background: transparent !important;
+    color: #9fb6cf !important;
+}
+
+html[data-theme="dark"] .theme-toggle {
+    background: #111c2d;
+    border-color: #314861;
+    color: #f5f9ff;
+}
+
+html[data-theme="dark"] .theme-toggle-icon {
+    background: #20334a;
+}
+
+@media (max-width: 760px) {
+    .theme-toggle {
+        bottom: 14px;
+        right: 14px;
+    }
+}
+
 /* SmartAttend landing page */
 .landing-page {
     background:
@@ -6373,9 +6599,39 @@ video + canvas + .camera-file-input + button {
         padding: 30px 22px;
     }
 
-    .auth-choice-grid {
+.auth-choice-grid {
         grid-template-columns: 1fr;
     }
 
+}
+
+/* Keep the theme control above older button rules in this long stylesheet. */
+.theme-toggle,
+.theme-toggle:hover,
+html[data-theme="dark"] .theme-toggle,
+html[data-theme="dark"] .theme-toggle:hover {
+    align-items: center !important;
+    border-radius: 999px !important;
+    bottom: 18px !important;
+    display: inline-flex !important;
+    font-size: 13px !important;
+    gap: 8px !important;
+    height: auto !important;
+    min-height: 42px !important;
+    padding: 0 14px !important;
+    position: fixed !important;
+    right: 18px !important;
+    width: auto !important;
+    z-index: 9999 !important;
+}
+
+@media (max-width: 760px) {
+    .theme-toggle,
+    .theme-toggle:hover,
+    html[data-theme="dark"] .theme-toggle,
+    html[data-theme="dark"] .theme-toggle:hover {
+        bottom: 14px !important;
+        right: 14px !important;
+    }
 }
 
