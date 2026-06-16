@@ -179,16 +179,22 @@ if (isset($_POST['mark']) && $profileComplete && $faceEnrolled) {
 <html>
 <head>
     <title>Mark Attendance</title>
-    <link rel="stylesheet" href="../assets/css/style.css?v=professional-ui-5">
+    <link rel="stylesheet" href="../assets/css/style.css?v=attendance-verify-1">
 </head>
-<body>
+<body class="attendance-page">
 
-<div class="container wide-container">
-    <h2>Mark Attendance</h2>
-    <div class="student-identity">
-        <strong><?php echo e($student["full_name"] ?? $_SESSION["full_name"]); ?></strong>
+<div class="container wide-container attendance-shell">
+    <div class="attendance-hero">
+        <div>
+            <span class="attendance-kicker">Verified attendance</span>
+            <h2>Mark Attendance</h2>
+            <p><?php echo e($session["course_code"] . " - " . $session["course_title"]); ?></p>
+        </div>
+        <div class="student-identity">
+            <span>Signed in as</span>
+            <strong><?php echo e($student["full_name"] ?? $_SESSION["full_name"]); ?></strong>
+        </div>
     </div>
-    <p><?php echo e($session["course_code"] . " - " . $session["course_title"]); ?></p>
 
     <?php if ($success) { ?>
         <p class="alert alert-success"><?php echo e($success); ?></p>
@@ -226,8 +232,12 @@ if (isset($_POST['mark']) && $profileComplete && $faceEnrolled) {
     <?php } ?>
 
     <?php if (!$success && $profileComplete && !$faceEnrolled) { ?>
-    <p>Register your face once before marking attendance.</p>
+    <div class="attendance-section-intro">
+        <span class="verification-chip">One-time setup</span>
+        <p>Register your face once before marking attendance.</p>
+    </div>
     <form method="POST" id="faceEnrollForm">
+        <div class="verification-card">
         <div class="verification-grid">
             <div class="face-scan-panel">
                 <div class="face-camera-frame">
@@ -236,31 +246,43 @@ if (isset($_POST['mark']) && $profileComplete && $faceEnrolled) {
                     <div class="face-scan-guide">
                         <span></span>
                     </div>
+                    <div class="face-scan-line"></div>
                     <div class="camera-mode-badge" id="enrollCameraMode">Starting camera</div>
                 </div>
                 <input type="file" id="enrollPhotoInput" accept="image/*" capture="user" class="camera-file-input">
                 <div class="face-action-row">
-                    <button type="button" class="secondary-button face-capture-button" id="captureEnrollFace">Scan Face Profile</button>
-                    <button type="button" class="secondary-button face-capture-button" id="openEnrollCamera">Use Phone Camera</button>
+                    <button type="button" class="secondary-button face-capture-button primary-scan-action" id="captureEnrollFace">Run Live Face Scan</button>
+                    <button type="button" class="secondary-button face-capture-button fallback-scan-action" id="openEnrollCamera">Photo Fallback</button>
                 </div>
-                <p id="enrollFaceStatus" class="status-text">Position your face inside the frame and scan.</p>
+                <p id="enrollFaceStatus" class="status-text">Keep your face inside the frame and use Live Face Scan first.</p>
             </div>
 
             <div class="verification-panel">
-                <p><strong>Student:</strong> <?php echo e($student["full_name"]); ?></p>
-                <p>Capture your face in good lighting. This image will be used to verify future attendance submissions.</p>
+                <span class="verification-panel-label">Face profile</span>
+                <h3><?php echo e($student["full_name"]); ?></h3>
+                <p>We will store a secure face profile from this scan and compare it against future attendance submissions.</p>
+                <div class="verification-steps">
+                    <span>1. Center face</span>
+                    <span>2. Run scan</span>
+                    <span>3. Save profile</span>
+                </div>
             </div>
         </div>
 
         <input type="hidden" name="enrolled_face_snapshot" id="enrolledFaceSnapshot">
         <input type="hidden" name="enrolled_face_descriptor" id="enrolledFaceDescriptor">
         <button type="submit" name="save_face_profile" id="saveFaceProfile" disabled>Save Face Profile</button>
+        </div>
     </form>
     <?php } ?>
 
     <?php if (!$success && $profileComplete && $faceEnrolled) { ?>
-    <p>Complete the live face capture and GPS check before submitting.</p>
+    <div class="attendance-section-intro">
+        <span class="verification-chip">Live verification</span>
+        <p>Complete the face scan and GPS check before submitting.</p>
+    </div>
     <form method="POST" id="attendanceForm">
+        <div class="verification-card">
         <div class="verification-grid">
             <div class="face-scan-panel">
                 <div class="face-camera-frame">
@@ -269,19 +291,24 @@ if (isset($_POST['mark']) && $profileComplete && $faceEnrolled) {
                     <div class="face-scan-guide">
                         <span></span>
                     </div>
+                    <div class="face-scan-line"></div>
                     <div class="camera-mode-badge" id="cameraMode">Starting camera</div>
                 </div>
                 <input type="file" id="attendancePhotoInput" accept="image/*" capture="user" class="camera-file-input">
                 <div class="face-action-row">
-                    <button type="button" class="secondary-button face-capture-button" id="captureFace">Scan Face</button>
-                    <button type="button" class="secondary-button face-capture-button" id="openAttendanceCamera">Use Phone Camera</button>
+                    <button type="button" class="secondary-button face-capture-button primary-scan-action" id="captureFace">Run Live Face Scan</button>
+                    <button type="button" class="secondary-button face-capture-button fallback-scan-action" id="openAttendanceCamera">Photo Fallback</button>
                 </div>
-                <p id="faceStatus" class="status-text">Position your face inside the frame and scan.</p>
+                <p id="faceStatus" class="status-text">Keep your face inside the frame and use Live Face Scan first.</p>
             </div>
 
             <div class="verification-panel">
-                <p><strong>Session expires:</strong> <?php echo e($session["expires_at"]); ?></p>
-                <p><strong>Allowed radius:</strong> <?php echo e($session["radius_meters"]); ?> meters</p>
+                <span class="verification-panel-label">Session check</span>
+                <h3><?php echo e($session["course_code"]); ?></h3>
+                <div class="session-check-list">
+                    <p><strong>Expires</strong><span><?php echo e($session["expires_at"]); ?></span></p>
+                    <p><strong>Allowed radius</strong><span><?php echo e($session["radius_meters"]); ?> meters</span></p>
+                </div>
                 <p id="locationStatus" class="status-text">Waiting for GPS location.</p>
                 <button type="button" class="secondary-button compact-button" id="retryLocation">Retry GPS</button>
             </div>
@@ -295,6 +322,7 @@ if (isset($_POST['mark']) && $profileComplete && $faceEnrolled) {
         <input type="hidden" name="captured_face_descriptor" id="capturedFaceDescriptor">
 
         <button type="submit" name="mark" id="submitAttendance" disabled>Submit Verified Attendance</button>
+        </div>
     </form>
     <?php } ?>
 
@@ -547,7 +575,7 @@ function captureVideoFrame(targetVideo, targetCanvas) {
 }
 
 async function processAttendanceFace() {
-    faceStatus.textContent = "Scanning face...";
+    faceStatus.textContent = "Scanning face. Hold still...";
     faceSnapshot.value = canvas.toDataURL("image/jpeg", 0.85);
     capturedFaceDescriptor.value = buildFaceDescriptor(canvas);
     hasFace = await faceVisible(canvas);
@@ -558,7 +586,7 @@ async function processAttendanceFace() {
 }
 
 async function processEnrollFace() {
-    enrollFaceStatus.textContent = "Scanning face profile...";
+    enrollFaceStatus.textContent = "Scanning face profile. Hold still...";
     const hasEnrollFace = await faceVisible(enrollCanvas);
 
     if (!hasEnrollFace) {
@@ -577,15 +605,24 @@ const captureFaceButton = document.getElementById("captureFace");
 if (captureFaceButton) {
     captureFaceButton.addEventListener("click", async function () {
         if (!cameraStreamReady) {
+            faceStatus.textContent = "Live camera is unavailable, opening photo fallback.";
             attendancePhotoInput.click();
             return;
         }
 
+        captureFaceButton.disabled = true;
+        canvas.closest(".face-camera-frame").classList.add("is-scanning");
+        faceStatus.textContent = "Analyzing face position...";
+        await new Promise(resolve => window.setTimeout(resolve, 850));
         if (!captureVideoFrame(video, canvas)) {
-            faceStatus.textContent = "Camera preview is not ready. Use Phone Camera or try again.";
+            faceStatus.textContent = "Camera preview is not ready. Use Photo Fallback or try again.";
+            captureFaceButton.disabled = false;
+            canvas.closest(".face-camera-frame").classList.remove("is-scanning");
             return;
         }
         await processAttendanceFace();
+        canvas.closest(".face-camera-frame").classList.remove("is-scanning");
+        captureFaceButton.disabled = false;
     });
 }
 
@@ -605,15 +642,24 @@ const captureEnrollButton = document.getElementById("captureEnrollFace");
 if (captureEnrollButton) {
     captureEnrollButton.addEventListener("click", async function () {
         if (!enrollCameraStreamReady) {
+            enrollFaceStatus.textContent = "Live camera is unavailable, opening photo fallback.";
             enrollPhotoInput.click();
             return;
         }
 
+        captureEnrollButton.disabled = true;
+        enrollCanvas.closest(".face-camera-frame").classList.add("is-scanning");
+        enrollFaceStatus.textContent = "Analyzing face position...";
+        await new Promise(resolve => window.setTimeout(resolve, 850));
         if (!captureVideoFrame(enrollVideo, enrollCanvas)) {
-            enrollFaceStatus.textContent = "Camera preview is not ready. Use Phone Camera or try again.";
+            enrollFaceStatus.textContent = "Camera preview is not ready. Use Photo Fallback or try again.";
+            captureEnrollButton.disabled = false;
+            enrollCanvas.closest(".face-camera-frame").classList.remove("is-scanning");
             return;
         }
         await processEnrollFace();
+        enrollCanvas.closest(".face-camera-frame").classList.remove("is-scanning");
+        captureEnrollButton.disabled = false;
     });
 }
 

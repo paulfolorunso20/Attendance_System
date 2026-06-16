@@ -1,4 +1,4 @@
-<?php
+ !DOCTYPE html><?php
 require_once __DIR__ . "/../includes/bootstrap.php";
 
 $error = null;
