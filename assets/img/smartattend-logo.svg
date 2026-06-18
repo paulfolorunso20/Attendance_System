@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="0 0 96 96" role="img" aria-labelledby="title desc">
+  <title id="title">SmartAttend logo</title>
+  <desc id="desc">A compact SmartAttend mark with QR blocks and a verification check.</desc>
+  <rect width="96" height="96" rx="22" fill="#003B73"/>
+  <rect x="18" y="18" width="15" height="15" rx="3" fill="#FFFFFF"/>
+  <rect x="39" y="18" width="15" height="15" rx="3" fill="#137A3D"/>
+  <rect x="60" y="18" width="18" height="18" rx="4" fill="#FFFFFF"/>
+  <rect x="18" y="39" width="15" height="15" rx="3" fill="#137A3D"/>
+  <rect x="39" y="39" width="15" height="15" rx="3" fill="#FFFFFF" opacity=".8"/>
+  <rect x="18" y="60" width="18" height="18" rx="4" fill="#FFFFFF"/>
+  <rect x="39" y="60" width="15" height="15" rx="3" fill="#FFFFFF"/>
+  <path d="M60 58.5 66.8 65.3 80 50.5" fill="none" stroke="#FFFFFF" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

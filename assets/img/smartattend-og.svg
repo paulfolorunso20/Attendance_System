@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+  <title id="title">SmartAttend QR Attendance System</title>
+  <desc id="desc">SmartAttend social preview for university QR attendance verification.</desc>
+  <rect width="1200" height="630" fill="#edf4fb"/>
+  <rect x="80" y="70" width="1040" height="490" rx="38" fill="#ffffff" stroke="#d6e3ef" stroke-width="3"/>
+  <rect x="80" y="70" width="520" height="490" rx="38" fill="#003b73"/>
+  <path d="M80 520 C220 450 330 565 600 415 L600 560 L118 560 C97 560 80 543 80 522 Z" fill="#176b45" opacity="0.8"/>
+  <rect x="145" y="135" width="84" height="84" rx="18" fill="#ffffff"/>
+  <text x="187" y="189" text-anchor="middle" fill="#003b73" font-family="Arial, sans-serif" font-size="38" font-weight="800">SA</text>
+  <text x="145" y="270" fill="#ffffff" font-family="Arial, sans-serif" font-size="28" font-weight="700">SmartAttend</text>
+  <text x="145" y="330" fill="#ffffff" font-family="Arial, sans-serif" font-size="54" font-weight="800">Smart QR</text>
+  <text x="145" y="392" fill="#ffffff" font-family="Arial, sans-serif" font-size="54" font-weight="800">Attendance</text>
+  <text x="145" y="452" fill="#dcefff" font-family="Arial, sans-serif" font-size="22">QR sessions, GPS checks, face verification</text>
+  <g transform="translate(690 135)">
+    <rect width="260" height="260" rx="22" fill="#f8fbff" stroke="#d6e3ef" stroke-width="3"/>
+    <g fill="#003b73">
+      <rect x="38" y="38" width="38" height="38" rx="6"/>
+      <rect x="92" y="38" width="38" height="38" rx="6"/>
+      <rect x="200" y="38" width="38" height="38" rx="6"/>
+      <rect x="38" y="92" width="38" height="38" rx="6"/>
+      <rect x="146" y="92" width="38" height="38" rx="6"/>
+      <rect x="200" y="92" width="38" height="38" rx="6"/>
+      <rect x="92" y="146" width="38" height="38" rx="6"/>
+      <rect x="146" y="146" width="38" height="38" rx="6"/>
+      <rect x="38" y="200" width="38" height="38" rx="6"/>
+      <rect x="92" y="200" width="38" height="38" rx="6"/>
+      <rect x="200" y="200" width="38" height="38" rx="6"/>
+    </g>
+    <g fill="#176b45">
+      <rect x="146" y="38" width="38" height="38" rx="6"/>
+      <rect x="92" y="92" width="38" height="38" rx="6"/>
+      <rect x="38" y="146" width="38" height="38" rx="6"/>
+      <rect x="200" y="146" width="38" height="38" rx="6"/>
+      <rect x="146" y="200" width="38" height="38" rx="6"/>
+    </g>
+  </g>
+  <text x="690" y="455" fill="#003b73" font-family="Arial, sans-serif" font-size="32" font-weight="800">University Attendance Verification</text>
+  <text x="690" y="500" fill="#35516d" font-family="Arial, sans-serif" font-size="24">Students scan. Lecturers monitor. Records sync instantly.</text>
+</svg>

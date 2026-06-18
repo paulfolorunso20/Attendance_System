@@ -1,0 +1,14 @@
+User-agent: *
+Allow: /
+Disallow: /account/
+Disallow: /admin/
+Disallow: /attendance/
+Disallow: /auth/
+Disallow: /config/
+Disallow: /database/
+Disallow: /includes/
+Disallow: /lecturer/
+Disallow: /student/
+Disallow: /uploads/
+
+Sitemap: https://attendancesystem-p.up.railway.app/sitemap.xml

@@ -15,3 +15,8 @@ require_once APP_INCLUDES_PATH . DIRECTORY_SEPARATOR . "migrations.php";
 run_database_migrations($conn);
 
 require_once APP_INCLUDES_PATH . DIRECTORY_SEPARATOR . "functions.php";
+
+$scriptName = basename($_SERVER["SCRIPT_NAME"] ?? "");
+if ($scriptName !== "index.php" && !headers_sent()) {
+    header("X-Robots-Tag: noindex, nofollow", false);
+}
