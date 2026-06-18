@@ -107,7 +107,7 @@ if (isset($_SESSION["role"])) {
     <meta name="twitter:title" content="<?php echo e($siteTitle); ?>">
     <meta name="twitter:description" content="<?php echo e($siteDescription); ?>">
     <meta name="twitter:image" content="<?php echo e($siteImage); ?>">
-    <link rel="stylesheet" href="assets/css/style.css?v=home-professional-2">
+    <link rel="stylesheet" href="assets/css/style.css?v=home-professional-3">
     <script type="application/ld+json">
     <?php echo json_encode($structuredData, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT); ?>
     </script>
@@ -137,10 +137,10 @@ if (isset($_SESSION["role"])) {
         <section class="home-hero" aria-labelledby="home-title">
             <div class="home-copy-block">
                 <p class="home-kicker">University Attendance Verification</p>
-                <h1 id="home-title">Smart QR attendance for real classroom sessions.</h1>
+                <h1 id="home-title">Manage lecture attendance with QR verification.</h1>
                 <p class="home-copy">
-                    SmartAttend helps lecturers create QR sessions while students verify attendance
-                    with matric no. login, live face scan, and GPS checks.
+                    SmartAttend gives lecturers a fast way to run attendance sessions while students
+                    verify with matric no. login, live face scan, and venue GPS checks.
                 </p>
 
                 <div class="home-actions" aria-label="Account actions">
@@ -148,42 +148,65 @@ if (isset($_SESSION["role"])) {
                     <a href="auth/register.php" class="home-secondary">Create Account</a>
                 </div>
 
-                <p class="home-account-note">
-                    Don't have an account? Students and lecturers can register, while lecturer access
-                    requires the approved invite code.
-                </p>
+                <div class="home-capabilities" aria-label="Core SmartAttend capabilities">
+                    <span>QR sessions</span>
+                    <span>Face verification</span>
+                    <span>GPS radius check</span>
+                    <span>CSV export</span>
+                </div>
             </div>
 
             <aside class="home-preview" aria-label="Attendance session preview">
+                <div class="home-preview-window">
+                    <span></span><span></span><span></span>
+                    <strong>Lecturer Dashboard</strong>
+                </div>
+
                 <div class="home-preview-top">
                     <div>
                         <span class="home-status-dot"></span>
-                        <span>Live session</span>
+                        <span>Live attendance session</span>
                     </div>
                     <strong>CSC 401</strong>
                 </div>
 
-                <div class="home-session-card">
+                <div class="home-session-layout">
                     <div class="home-qr-card" aria-hidden="true">
-                        <span></span><span></span><span></span><span></span>
-                        <span></span><span></span><span></span><span></span>
-                        <span></span><span></span><span></span><span></span>
-                        <span></span><span></span><span></span><span></span>
+                        <span></span><span></span><span></span><span></span><span></span>
+                        <span></span><span></span><span></span><span></span><span></span>
+                        <span></span><span></span><span></span><span></span><span></span>
+                        <span></span><span></span><span></span><span></span><span></span>
+                        <span></span><span></span><span></span><span></span><span></span>
                     </div>
 
-                    <div class="home-session-copy">
-                        <p>Software Engineering</p>
-                        <strong>42 marked</strong>
-                        <small>Face scan and location verified</small>
+                    <div class="home-session-summary">
+                        <div>
+                            <small>Course</small>
+                            <strong>Software Engineering</strong>
+                        </div>
+                        <div>
+                            <small>Marked</small>
+                            <strong>42 students</strong>
+                        </div>
+                        <div>
+                            <small>Verification</small>
+                            <strong>Face + GPS passed</strong>
+                        </div>
                     </div>
                 </div>
 
-                <div class="home-progress">
-                    <span>Session expires in</span>
-                    <strong>08:39</strong>
-                    <div><i></i></div>
+                <div class="home-records">
+                    <div><span>Matric no.</span><span>Status</span></div>
+                    <div><strong>2022/42335</strong><em>Verified</em></div>
+                    <div><strong>2022/42532</strong><em>Verified</em></div>
                 </div>
             </aside>
+        </section>
+
+        <section class="home-proof-strip" aria-label="System coverage">
+            <div><strong>3 roles</strong><span>Student, lecturer, admin</span></div>
+            <div><strong>Live checks</strong><span>Face scan and GPS verification</span></div>
+            <div><strong>Reports</strong><span>Attendance history and exports</span></div>
         </section>
 
         <section class="home-workflow" aria-label="How SmartAttend works">
