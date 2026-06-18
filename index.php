@@ -5,24 +5,6 @@ $siteUrl = rtrim(app_base_url(), "/") . "/";
 $siteTitle = "SmartAttend - QR Attendance System for Universities";
 $siteDescription = "SmartAttend is a web-based QR code attendance verification system for universities using student matric number login, lecturer sessions, GPS checks, face verification, and attendance reports.";
 $siteImage = rtrim(app_base_url(), "/") . "/assets/img/smartattend-og.svg";
-$faqItems = [
-    [
-        "question" => "How does SmartAttend QR attendance work?",
-        "answer" => "A lecturer creates a class attendance session, SmartAttend generates a unique QR code, and students scan it to open the verified attendance form.",
-    ],
-    [
-        "question" => "Can students mark attendance with smartphones?",
-        "answer" => "Yes. Students can use a smartphone browser to scan the QR code, log in with matric no., complete face verification, and submit attendance.",
-    ],
-    [
-        "question" => "Does SmartAttend reduce attendance impersonation?",
-        "answer" => "SmartAttend reduces impersonation by combining QR session tokens, student authentication, GPS venue checks, and face capture verification.",
-    ],
-    [
-        "question" => "Can lecturers export attendance records?",
-        "answer" => "Lecturers and administrators can review attendance records and export reports for academic documentation.",
-    ],
-];
 $structuredData = [
     "@context" => "https://schema.org",
     "@graph" => [
@@ -53,19 +35,6 @@ $structuredData = [
                 "@type" => "EducationalAudience",
                 "educationalRole" => "student",
             ],
-        ],
-        [
-            "@type" => "FAQPage",
-            "mainEntity" => array_map(function ($item) {
-                return [
-                    "@type" => "Question",
-                    "name" => $item["question"],
-                    "acceptedAnswer" => [
-                        "@type" => "Answer",
-                        "text" => $item["answer"],
-                    ],
-                ];
-            }, $faqItems),
         ],
     ],
 ];
@@ -107,113 +76,252 @@ if (isset($_SESSION["role"])) {
     <meta name="twitter:title" content="<?php echo e($siteTitle); ?>">
     <meta name="twitter:description" content="<?php echo e($siteDescription); ?>">
     <meta name="twitter:image" content="<?php echo e($siteImage); ?>">
-    <link rel="stylesheet" href="assets/css/style.css?v=home-professional-4">
+    <link rel="stylesheet" href="assets/css/style.css?v=saas-landing-1">
     <script type="application/ld+json">
     <?php echo json_encode($structuredData, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT); ?>
     </script>
 </head>
 
-<body class="home-page">
-    <header class="home-header">
-        <a class="home-brand" href="<?php echo e($siteUrl); ?>" aria-label="SmartAttend home">
-            <img src="assets/img/smartattend-logo.svg" alt="SmartAttend logo">
-            <div class="home-brand-text">
+<body class="saas-page">
+    <header class="saas-navbar" data-nav>
+        <div class="saas-nav-inner">
+            <a class="saas-brand" href="<?php echo e($siteUrl); ?>" aria-label="SmartAttend home">
+                <img src="assets/img/smartattend-logo.svg" alt="SmartAttend logo">
                 <strong>SmartAttend</strong>
-                <small>University attendance</small>
-            </div>
-        </a>
+            </a>
 
-        <nav class="home-nav" aria-label="Primary navigation">
-            <?php if ($dashboardLink) { ?>
-                <a href="<?php echo e($dashboardLink); ?>" class="home-nav-link">Dashboard</a>
-            <?php } else { ?>
-                <a href="auth/login.php?login_as=student" class="home-nav-link">Student Login</a>
-                <a href="auth/login.php?login_as=staff" class="home-nav-link">Lecturer Portal</a>
-            <?php } ?>
-        </nav>
+            <nav class="saas-nav-links" aria-label="Landing navigation">
+                <a href="#features">Features</a>
+                <a href="#how-it-works">How it Works</a>
+                <a href="#pricing">Pricing</a>
+                <a href="#faq">FAQ</a>
+            </nav>
+
+            <div class="saas-nav-actions">
+                <?php if ($dashboardLink) { ?>
+                    <a href="<?php echo e($dashboardLink); ?>" class="saas-btn saas-btn-ghost">Dashboard</a>
+                <?php } else { ?>
+                    <a href="auth/login.php" class="saas-btn saas-btn-ghost">Login</a>
+                    <a href="auth/register.php" class="saas-btn saas-btn-primary">Get Started</a>
+                <?php } ?>
+            </div>
+        </div>
     </header>
 
-    <main class="home-shell">
-        <section class="home-hero" aria-labelledby="home-title">
-            <div class="home-copy-block">
-                <p class="home-kicker">University Attendance Verification</p>
-                <h1 id="home-title">A smarter attendance system for university classrooms.</h1>
-                <p class="home-copy">
-                    SmartAttend helps departments replace manual attendance sheets with verified QR
-                    check-ins, student identity checks, and clean attendance records.
-                </p>
-
-                <div class="home-actions" aria-label="Account actions">
-                    <a href="auth/login.php" class="home-primary">Access System</a>
-                    <a href="auth/register.php" class="home-secondary">Create Account</a>
+    <main>
+        <section class="saas-hero saas-section" data-reveal>
+            <div class="saas-container saas-hero-grid">
+                <div class="saas-hero-copy">
+                    <p class="saas-badge">&#10003; Trusted University Attendance Platform</p>
+                    <h1>Attendance tracking made effortless.</h1>
+                    <p>
+                        SmartAttend replaces paper attendance sheets with QR check-ins,
+                        face verification and GPS validation &mdash; all in one secure platform.
+                    </p>
+                    <div class="saas-hero-actions">
+                        <a href="auth/register.php" class="saas-btn saas-btn-primary">Get Started &rarr;</a>
+                        <a href="#how-it-works" class="saas-btn saas-btn-secondary">Watch Demo</a>
+                    </div>
+                    <small>Used by lecturers, students and institutions.</small>
                 </div>
 
-                <div class="home-capabilities" aria-label="Core SmartAttend capabilities">
-                    <span>QR sessions</span>
-                    <span>Face verification</span>
-                    <span>GPS radius check</span>
-                    <span>CSV export</span>
+                <aside class="saas-dashboard" aria-label="SmartAttend dashboard preview">
+                    <div class="saas-dashboard-top">
+                        <div>
+                            <span></span><span></span><span></span>
+                        </div>
+                        <strong>Attendance Overview</strong>
+                    </div>
+                    <div class="saas-dashboard-grid">
+                        <div class="saas-progress-card">
+                            <div class="saas-ring" style="--value: 86;">
+                                <span>86%</span>
+                            </div>
+                            <p>Attendance Percentage</p>
+                        </div>
+                        <div class="saas-metric">
+                            <span>Active Sessions</span>
+                            <strong>12</strong>
+                            <em>+4 this week</em>
+                        </div>
+                        <div class="saas-metric">
+                            <span>Students Present</span>
+                            <strong>438</strong>
+                            <em class="is-success">Verified</em>
+                        </div>
+                        <div class="saas-metric">
+                            <span>QR Session Status</span>
+                            <strong>Online</strong>
+                            <em class="is-success">Stable</em>
+                        </div>
+                    </div>
+                    <div class="saas-chart" aria-hidden="true">
+                        <span style="height: 42%"></span>
+                        <span style="height: 68%"></span>
+                        <span style="height: 54%"></span>
+                        <span style="height: 82%"></span>
+                        <span style="height: 74%"></span>
+                        <span style="height: 90%"></span>
+                    </div>
+                    <div class="saas-table">
+                        <div><span>Student</span><span>Status</span></div>
+                        <div><strong>2022/42335</strong><em>Present</em></div>
+                        <div><strong>2022/42532</strong><em>Present</em></div>
+                    </div>
+                </aside>
+            </div>
+        </section>
+
+        <section class="saas-section" id="features" data-reveal>
+            <div class="saas-container">
+                <div class="saas-section-heading">
+                    <span>Features</span>
+                    <h2>Everything needed for verified attendance.</h2>
+                </div>
+                <div class="saas-feature-grid">
+                    <article>
+                        <i>QR</i>
+                        <h3>QR Attendance</h3>
+                        <p>Generate session QR codes for instant attendance.</p>
+                    </article>
+                    <article>
+                        <i>AI</i>
+                        <h3>Face Verification</h3>
+                        <p>Prevent impersonation with AI face verification.</p>
+                    </article>
+                    <article>
+                        <i>GPS</i>
+                        <h3>GPS Validation</h3>
+                        <p>Ensure students are physically within approved class locations.</p>
+                    </article>
                 </div>
             </div>
-
-            <aside class="home-overview-panel" aria-label="SmartAttend platform overview">
-                <div class="home-overview-head">
-                    <p>System overview</p>
-                    <strong>Built for academic attendance workflows</strong>
-                </div>
-
-                <div class="home-module-grid">
-                    <div>
-                        <span>01</span>
-                        <strong>Student access</strong>
-                        <p>Matric no. login, course registration, attendance percentage, and history.</p>
-                    </div>
-                    <div>
-                        <span>02</span>
-                        <strong>Lecturer tools</strong>
-                        <p>Course sessions, venue settings, attendance monitoring, and exports.</p>
-                    </div>
-                    <div>
-                        <span>03</span>
-                        <strong>Admin oversight</strong>
-                        <p>User management, course records, audit logs, and system-wide reports.</p>
-                    </div>
-                </div>
-
-                <div class="home-verification-stack">
-                    <strong>Verification layers</strong>
-                    <span>QR token</span>
-                    <span>Face scan</span>
-                    <span>GPS radius</span>
-                    <span>Secure login</span>
-                </div>
-            </aside>
         </section>
 
-        <section class="home-proof-strip" aria-label="System coverage">
-            <div><strong>3 roles</strong><span>Student, lecturer, admin</span></div>
-            <div><strong>Verified check-ins</strong><span>QR, face scan, and GPS confirmation</span></div>
-            <div><strong>Reports</strong><span>Attendance history and exports</span></div>
+        <section class="saas-section" id="how-it-works" data-reveal>
+            <div class="saas-container">
+                <div class="saas-section-heading">
+                    <span>How it works</span>
+                    <h2>From session setup to export in three steps.</h2>
+                </div>
+                <div class="saas-timeline">
+                    <article>
+                        <i>1</i>
+                        <span>Step 1</span>
+                        <strong>Lecturer creates attendance session.</strong>
+                    </article>
+                    <article>
+                        <i>2</i>
+                        <span>Step 2</span>
+                        <strong>Students scan QR and verify identity.</strong>
+                    </article>
+                    <article>
+                        <i>3</i>
+                        <span>Step 3</span>
+                        <strong>Attendance is automatically recorded and exported.</strong>
+                    </article>
+                </div>
+            </div>
         </section>
 
-        <section class="home-workflow" aria-label="How SmartAttend works">
-            <article>
-                <span>01</span>
-                <strong>Create session</strong>
-                <p>Lecturers choose a course, capture venue GPS, and generate a session QR code.</p>
-            </article>
-            <article>
-                <span>02</span>
-                <strong>Verify student</strong>
-                <p>Students scan the QR code, log in, complete face scan, and pass the location check.</p>
-            </article>
-            <article>
-                <span>03</span>
-                <strong>Review records</strong>
-                <p>Attendance is saved instantly for lecturer dashboards, admin review, and CSV export.</p>
-            </article>
+        <section class="saas-stats saas-section" data-reveal>
+            <div class="saas-container saas-stats-grid">
+                <div><strong data-count="98" data-suffix="%">0%</strong><span>Attendance Accuracy</span></div>
+                <div><strong data-count="50" data-suffix="K+">0K+</strong><span>Attendance Records</span></div>
+                <div><strong data-count="500" data-suffix="+">0+</strong><span>Sessions Conducted</span></div>
+                <div><strong data-count="99.9" data-suffix="%">0%</strong><span>System Uptime</span></div>
+            </div>
+        </section>
+
+        <section class="saas-cta saas-section" id="pricing" data-reveal>
+            <div class="saas-container">
+                <h2>Ready to modernize classroom attendance?</h2>
+                <p>Join institutions using SmartAttend to simplify attendance management.</p>
+                <div>
+                    <a href="auth/register.php" class="saas-btn saas-btn-light">Get Started</a>
+                    <a href="auth/login.php?login_as=staff" class="saas-btn saas-btn-dark-ghost">Book Demo</a>
+                </div>
+            </div>
         </section>
     </main>
+
+    <footer class="saas-footer" id="faq">
+        <div class="saas-container saas-footer-grid">
+            <div>
+                <strong>Product</strong>
+                <a href="#features">Features</a>
+                <a href="#pricing">Pricing</a>
+                <a href="#features">Security</a>
+            </div>
+            <div>
+                <strong>Resources</strong>
+                <a href="#how-it-works">Documentation</a>
+                <a href="#faq">FAQ</a>
+                <a href="auth/login.php">Support</a>
+            </div>
+            <div>
+                <strong>Company</strong>
+                <a href="<?php echo e($siteUrl); ?>">About</a>
+                <a href="auth/login.php">Contact</a>
+            </div>
+            <div>
+                <strong>Legal</strong>
+                <a href="<?php echo e($siteUrl); ?>">Privacy</a>
+                <a href="<?php echo e($siteUrl); ?>">Terms</a>
+            </div>
+        </div>
+        <p>&copy; SmartAttend 2026</p>
+    </footer>
+
+    <script>
+    (function () {
+        var navbar = document.querySelector("[data-nav]");
+        var revealItems = document.querySelectorAll("[data-reveal]");
+        var counters = document.querySelectorAll("[data-count]");
+
+        function handleScroll() {
+            if (navbar) {
+                navbar.classList.toggle("is-scrolled", window.scrollY > 16);
+            }
+        }
+
+        var observer = new IntersectionObserver(function (entries) {
+            entries.forEach(function (entry) {
+                if (!entry.isIntersecting) {
+                    return;
+                }
+                entry.target.classList.add("is-visible");
+                entry.target.querySelectorAll("[data-count]").forEach(function (counter) {
+                    if (counter.dataset.done) {
+                        return;
+                    }
+                    counter.dataset.done = "true";
+                    var target = parseFloat(counter.dataset.count || "0");
+                    var suffix = counter.dataset.suffix || "";
+                    var start = performance.now();
+                    function tick(now) {
+                        var progress = Math.min((now - start) / 1100, 1);
+                        var eased = 1 - Math.pow(1 - progress, 3);
+                        var value = target * eased;
+                        counter.textContent = (target % 1 ? value.toFixed(1) : Math.round(value)) + suffix;
+                        if (progress < 1) {
+                            requestAnimationFrame(tick);
+                        }
+                    }
+                    requestAnimationFrame(tick);
+                });
+                observer.unobserve(entry.target);
+            });
+        }, { threshold: 0.18 });
+
+        revealItems.forEach(function (item) {
+            observer.observe(item);
+        });
+
+        window.addEventListener("scroll", handleScroll, { passive: true });
+        handleScroll();
+    })();
+    </script>
 </body>
 
 </html>
