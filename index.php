@@ -66,8 +66,9 @@ $structuredData = [
     <meta name="twitter:title" content="<?php echo e($siteTitle); ?>">
     <meta name="twitter:description" content="<?php echo e($siteDescription); ?>">
     <meta name="twitter:image" content="<?php echo e($siteImage); ?>">
+    <link rel="icon" href="<?php echo e($siteUrl); ?>favicon.ico" sizes="any">
+    <link rel="shortcut icon" href="<?php echo e($siteUrl); ?>favicon.ico">
     <link rel="icon" type="image/svg+xml" href="<?php echo e($siteUrl); ?>favicon.svg">
-    <link rel="shortcut icon" type="image/svg+xml" href="<?php echo e($siteUrl); ?>favicon.svg">
     <link rel="stylesheet" href="assets/css/style.css?v=saas-landing-1">
     <script type="application/ld+json">
     <?php echo json_encode($structuredData, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT); ?>
