@@ -39,16 +39,6 @@ $structuredData = [
     ],
 ];
 
-$dashboardLink = null;
-if (isset($_SESSION["role"])) {
-    if ($_SESSION["role"] === "student") {
-        $dashboardLink = "student/dashboard.php";
-    } elseif ($_SESSION["role"] === "lecturer") {
-        $dashboardLink = "lecturer/dashboard.php";
-    } elseif ($_SESSION["role"] === "admin") {
-        $dashboardLink = "admin/dashboard.php";
-    }
-}
 ?>
 
 <!DOCTYPE html>
@@ -95,17 +85,12 @@ if (isset($_SESSION["role"])) {
             <nav class="saas-nav-links" aria-label="Landing navigation">
                 <a href="#features">Features</a>
                 <a href="#how-it-works">How it Works</a>
-                <a href="#pricing">Pricing</a>
-                <a href="#faq">FAQ</a>
+                <a href="#results">Results</a>
             </nav>
 
             <div class="saas-nav-actions">
-                <?php if ($dashboardLink) { ?>
-                    <a href="<?php echo e($dashboardLink); ?>" class="saas-btn saas-btn-ghost">Dashboard</a>
-                <?php } else { ?>
-                    <a href="auth/login.php" class="saas-btn saas-btn-ghost">Login</a>
-                    <a href="auth/register.php" class="saas-btn saas-btn-primary">Get Started</a>
-                <?php } ?>
+                <a href="auth/login.php?login_as=student" class="saas-btn saas-btn-ghost">Student Login</a>
+                <a href="auth/login.php?login_as=staff" class="saas-btn saas-btn-primary">Lecturer Portal</a>
             </div>
         </div>
     </header>
@@ -121,8 +106,8 @@ if (isset($_SESSION["role"])) {
                         face verification and GPS validation &mdash; all in one secure platform.
                     </p>
                     <div class="saas-hero-actions">
-                        <a href="auth/register.php" class="saas-btn saas-btn-primary">Get Started &rarr;</a>
-                        <a href="#how-it-works" class="saas-btn saas-btn-secondary">Watch Demo</a>
+                        <a href="auth/login.php?login_as=student" class="saas-btn saas-btn-primary">Student Login &rarr;</a>
+                        <a href="auth/login.php?login_as=staff" class="saas-btn saas-btn-secondary">Lecturer Portal</a>
                     </div>
                     <small>Used by lecturers, students and institutions.</small>
                 </div>
@@ -166,9 +151,9 @@ if (isset($_SESSION["role"])) {
                         <span style="height: 90%"></span>
                     </div>
                     <div class="saas-table">
-                        <div><span>Student</span><span>Status</span></div>
-                        <div><strong>2022/42335</strong><em>Present</em></div>
-                        <div><strong>2022/42532</strong><em>Present</em></div>
+                        <div><span>Recent activity</span><span>Result</span></div>
+                        <div><strong>Face verification</strong><em>Passed</em></div>
+                        <div><strong>Location check</strong><em>Verified</em></div>
                     </div>
                 </aside>
             </div>
@@ -226,7 +211,7 @@ if (isset($_SESSION["role"])) {
             </div>
         </section>
 
-        <section class="saas-stats saas-section" data-reveal>
+        <section class="saas-stats saas-section" id="results" data-reveal>
             <div class="saas-container saas-stats-grid">
                 <div><strong data-count="98" data-suffix="%">0%</strong><span>Attendance Accuracy</span></div>
                 <div><strong data-count="50" data-suffix="K+">0K+</strong><span>Attendance Records</span></div>
@@ -235,41 +220,42 @@ if (isset($_SESSION["role"])) {
             </div>
         </section>
 
-        <section class="saas-cta saas-section" id="pricing" data-reveal>
+        <section class="saas-cta saas-section" id="access" data-reveal>
             <div class="saas-container">
                 <h2>Ready to modernize classroom attendance?</h2>
                 <p>Join institutions using SmartAttend to simplify attendance management.</p>
                 <div>
-                    <a href="auth/register.php" class="saas-btn saas-btn-light">Get Started</a>
-                    <a href="auth/login.php?login_as=staff" class="saas-btn saas-btn-dark-ghost">Book Demo</a>
+                    <a href="auth/login.php?login_as=student" class="saas-btn saas-btn-light">Student Login</a>
+                    <a href="auth/login.php?login_as=staff" class="saas-btn saas-btn-dark-ghost">Lecturer Portal</a>
                 </div>
             </div>
         </section>
     </main>
 
-    <footer class="saas-footer" id="faq">
+    <footer class="saas-footer">
         <div class="saas-container saas-footer-grid">
+            <div>
+                <strong>SmartAttend</strong>
+                <a href="<?php echo e($siteUrl); ?>">University attendance system</a>
+                <a href="#access">Access portal</a>
+            </div>
             <div>
                 <strong>Product</strong>
                 <a href="#features">Features</a>
-                <a href="#pricing">Pricing</a>
-                <a href="#features">Security</a>
+                <a href="#how-it-works">How it Works</a>
+                <a href="#results">Results</a>
             </div>
             <div>
-                <strong>Resources</strong>
-                <a href="#how-it-works">Documentation</a>
-                <a href="#faq">FAQ</a>
-                <a href="auth/login.php">Support</a>
+                <strong>Access</strong>
+                <a href="auth/login.php?login_as=student">Student Login</a>
+                <a href="auth/login.php?login_as=staff">Lecturer Portal</a>
+                <a href="auth/register.php">Create Account</a>
             </div>
             <div>
-                <strong>Company</strong>
-                <a href="<?php echo e($siteUrl); ?>">About</a>
-                <a href="auth/login.php">Contact</a>
-            </div>
-            <div>
-                <strong>Legal</strong>
-                <a href="<?php echo e($siteUrl); ?>">Privacy</a>
-                <a href="<?php echo e($siteUrl); ?>">Terms</a>
+                <strong>Project</strong>
+                <a href="#features">QR verification</a>
+                <a href="#features">Face and GPS checks</a>
+                <a href="#results">Attendance reports</a>
             </div>
         </div>
         <p>&copy; SmartAttend 2026</p>
