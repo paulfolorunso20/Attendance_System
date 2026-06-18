@@ -8537,3 +8537,48 @@ html[data-theme="dark"] .saas-chart {
     }
 }
 
+/* Final dark-theme auth override. Keep after auth and landing rules so it wins. */
+html[data-theme="dark"] body.auth-page {
+    background:
+        radial-gradient(circle at 10% 12%, rgba(37, 99, 235, 0.14), transparent 30%),
+        linear-gradient(180deg, #07111f 0%, #0b1220 100%) !important;
+    color: #dce7f3 !important;
+}
+
+html[data-theme="dark"] .auth-page .login-container {
+    background: transparent !important;
+}
+
+html[data-theme="dark"] .auth-page .login-container .container {
+    background:
+        linear-gradient(180deg, rgba(17, 28, 45, 0.98), rgba(12, 22, 38, 0.96)),
+        #111c2d !important;
+    border-color: #24364d !important;
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.38) !important;
+    color: #dce7f3 !important;
+}
+
+html[data-theme="dark"] .auth-page .login-header h2,
+html[data-theme="dark"] .auth-page .login-header .section-kicker {
+    color: #f5f9ff !important;
+}
+
+html[data-theme="dark"] .auth-page .login-header p,
+html[data-theme="dark"] .auth-page .auth-simple-link {
+    color: #b8c8dc !important;
+}
+
+html[data-theme="dark"] .auth-page .auth-simple-link a {
+    color: #7db7ff !important;
+}
+
+html[data-theme="dark"] .auth-page .login-container input,
+html[data-theme="dark"] .auth-page .login-container select {
+    background: #0c1626 !important;
+    border-color: #314861 !important;
+    color: #eef5ff !important;
+}
+
+html[data-theme="dark"] .auth-page .login-container input::placeholder {
+    color: #8da2ba !important;
+}
