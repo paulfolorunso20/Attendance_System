@@ -107,7 +107,7 @@ if (isset($_SESSION["role"])) {
     <meta name="twitter:title" content="<?php echo e($siteTitle); ?>">
     <meta name="twitter:description" content="<?php echo e($siteDescription); ?>">
     <meta name="twitter:image" content="<?php echo e($siteImage); ?>">
-    <link rel="stylesheet" href="assets/css/style.css?v=home-professional-3">
+    <link rel="stylesheet" href="assets/css/style.css?v=home-professional-4">
     <script type="application/ld+json">
     <?php echo json_encode($structuredData, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT); ?>
     </script>
@@ -137,10 +137,10 @@ if (isset($_SESSION["role"])) {
         <section class="home-hero" aria-labelledby="home-title">
             <div class="home-copy-block">
                 <p class="home-kicker">University Attendance Verification</p>
-                <h1 id="home-title">Manage lecture attendance with QR verification.</h1>
+                <h1 id="home-title">A smarter attendance system for university classrooms.</h1>
                 <p class="home-copy">
-                    SmartAttend gives lecturers a fast way to run attendance sessions while students
-                    verify with matric no. login, live face scan, and venue GPS checks.
+                    SmartAttend helps departments replace manual attendance sheets with verified QR
+                    check-ins, student identity checks, and clean attendance records.
                 </p>
 
                 <div class="home-actions" aria-label="Account actions">
@@ -156,56 +156,43 @@ if (isset($_SESSION["role"])) {
                 </div>
             </div>
 
-            <aside class="home-preview" aria-label="Attendance session preview">
-                <div class="home-preview-window">
-                    <span></span><span></span><span></span>
-                    <strong>Lecturer Dashboard</strong>
+            <aside class="home-overview-panel" aria-label="SmartAttend platform overview">
+                <div class="home-overview-head">
+                    <p>System overview</p>
+                    <strong>Built for academic attendance workflows</strong>
                 </div>
 
-                <div class="home-preview-top">
+                <div class="home-module-grid">
                     <div>
-                        <span class="home-status-dot"></span>
-                        <span>Live attendance session</span>
+                        <span>01</span>
+                        <strong>Student access</strong>
+                        <p>Matric no. login, course registration, attendance percentage, and history.</p>
                     </div>
-                    <strong>CSC 401</strong>
-                </div>
-
-                <div class="home-session-layout">
-                    <div class="home-qr-card" aria-hidden="true">
-                        <span></span><span></span><span></span><span></span><span></span>
-                        <span></span><span></span><span></span><span></span><span></span>
-                        <span></span><span></span><span></span><span></span><span></span>
-                        <span></span><span></span><span></span><span></span><span></span>
-                        <span></span><span></span><span></span><span></span><span></span>
+                    <div>
+                        <span>02</span>
+                        <strong>Lecturer tools</strong>
+                        <p>Course sessions, venue settings, attendance monitoring, and exports.</p>
                     </div>
-
-                    <div class="home-session-summary">
-                        <div>
-                            <small>Course</small>
-                            <strong>Software Engineering</strong>
-                        </div>
-                        <div>
-                            <small>Marked</small>
-                            <strong>42 students</strong>
-                        </div>
-                        <div>
-                            <small>Verification</small>
-                            <strong>Face + GPS passed</strong>
-                        </div>
+                    <div>
+                        <span>03</span>
+                        <strong>Admin oversight</strong>
+                        <p>User management, course records, audit logs, and system-wide reports.</p>
                     </div>
                 </div>
 
-                <div class="home-records">
-                    <div><span>Matric no.</span><span>Status</span></div>
-                    <div><strong>2022/42335</strong><em>Verified</em></div>
-                    <div><strong>2022/42532</strong><em>Verified</em></div>
+                <div class="home-verification-stack">
+                    <strong>Verification layers</strong>
+                    <span>QR token</span>
+                    <span>Face scan</span>
+                    <span>GPS radius</span>
+                    <span>Secure login</span>
                 </div>
             </aside>
         </section>
 
         <section class="home-proof-strip" aria-label="System coverage">
             <div><strong>3 roles</strong><span>Student, lecturer, admin</span></div>
-            <div><strong>Live checks</strong><span>Face scan and GPS verification</span></div>
+            <div><strong>Verified check-ins</strong><span>QR, face scan, and GPS confirmation</span></div>
             <div><strong>Reports</strong><span>Attendance history and exports</span></div>
         </section>
 
