@@ -117,10 +117,10 @@ if (isset($_SESSION["role"])) {
     <header class="home-header">
         <a class="home-brand" href="<?php echo e($siteUrl); ?>" aria-label="SmartAttend home">
             <img src="assets/img/smartattend-logo.svg" alt="SmartAttend logo">
-            <span class="home-brand-text">
+            <div class="home-brand-text">
                 <strong>SmartAttend</strong>
                 <small>University attendance</small>
-            </span>
+            </div>
         </a>
 
         <nav class="home-nav" aria-label="Primary navigation">

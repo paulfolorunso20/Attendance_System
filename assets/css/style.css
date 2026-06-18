@@ -6666,12 +6666,14 @@ html[data-theme="dark"] .theme-toggle:hover {
 .home-brand img {
     border-radius: 14px;
     box-shadow: 0 10px 24px rgba(0, 59, 115, 0.16);
-    height: 48px;
-    width: 48px;
+    flex: 0 0 auto;
+    height: 46px;
+    width: 46px;
 }
 
 .home-brand-text {
     display: grid;
+    min-width: 0;
     gap: 2px;
 }
 
@@ -6743,16 +6745,17 @@ html[data-theme="dark"] .theme-toggle:hover {
 
 .home-hero h1 {
     color: #003b73;
-    font-size: clamp(46px, 7vw, 82px);
+    font-size: clamp(42px, 5vw, 64px);
     font-weight: 950;
     letter-spacing: 0;
-    line-height: 0.96;
+    line-height: 1.03;
     margin: 0;
+    max-width: 740px;
 }
 
 .home-copy {
     color: #405a73;
-    font-size: clamp(18px, 2.4vw, 23px);
+    font-size: clamp(17px, 2vw, 21px);
     line-height: 1.55;
     margin: 26px 0 0;
     max-width: 760px;
@@ -7096,7 +7099,7 @@ html[data-theme="dark"] .home-workflow article {
     }
 
     .home-hero h1 {
-        font-size: clamp(42px, 14vw, 60px);
+        font-size: clamp(38px, 12vw, 52px);
     }
 
     .home-actions {
