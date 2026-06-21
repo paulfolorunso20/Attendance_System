@@ -45,7 +45,7 @@ $activeSession = mysqli_fetch_assoc($active_result);
 <html>
 <head>
     <title>Lecturer Dashboard</title>
-    <link rel="stylesheet" href="../assets/css/style.css?v=professional-ui-5">
+    <link rel="stylesheet" href="../assets/css/style.css?v=lecturer-dashboard-2">
 </head>
 <body class="role-dashboard-page lecturer-dashboard-page">
 

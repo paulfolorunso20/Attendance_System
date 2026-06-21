@@ -8582,3 +8582,288 @@ html[data-theme="dark"] .auth-page .login-container select {
 html[data-theme="dark"] .auth-page .login-container input::placeholder {
     color: #8da2ba !important;
 }
+
+/* Lecturer dashboard header */
+.lecturer-dashboard-page {
+    background:
+        radial-gradient(circle at 12% 8%, rgba(0, 59, 115, 0.08), transparent 32%),
+        linear-gradient(180deg, #f8fafc 0%, #eef4f9 100%);
+    color: #0f172a;
+}
+
+.lecturer-dashboard-page .role-dashboard-shell {
+    max-width: 1200px;
+    padding: 40px 24px 64px;
+}
+
+.lecturer-dashboard-page .role-dashboard-header {
+    align-items: center;
+    background:
+        linear-gradient(135deg, rgba(255, 255, 255, 0.98), rgba(248, 250, 252, 0.94)),
+        #ffffff;
+    border: 1px solid rgba(203, 213, 225, 0.86);
+    border-radius: 20px;
+    box-shadow: 0 24px 60px rgba(15, 40, 70, 0.10);
+    gap: 22px;
+    margin-bottom: 24px;
+    overflow: hidden;
+    padding: 30px;
+    position: relative;
+}
+
+.lecturer-dashboard-page .role-dashboard-header::before {
+    background: linear-gradient(180deg, #003b73, #176b2c);
+    content: "";
+    inset: 0 auto 0 0;
+    position: absolute;
+    width: 6px;
+}
+
+.lecturer-dashboard-page .dashboard-user-avatar {
+    background: linear-gradient(135deg, #003b73, #0b66bd);
+    box-shadow: 0 16px 34px rgba(0, 59, 115, 0.22);
+    flex-basis: 82px;
+    font-size: 30px;
+    height: 82px;
+    width: 82px;
+}
+
+.lecturer-dashboard-page .section-kicker {
+    color: #176b2c;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+}
+
+.lecturer-dashboard-page .role-dashboard-header h2 {
+    color: #003b73;
+    font-size: clamp(28px, 3vw, 38px);
+    font-weight: 800;
+    letter-spacing: 0;
+    line-height: 1.08;
+    margin: 0 0 10px;
+}
+
+.lecturer-dashboard-page .role-dashboard-header .welcome {
+    color: #475569;
+    font-size: 16px;
+    line-height: 1.65;
+    max-width: 720px;
+}
+
+.lecturer-dashboard-page .role-header-actions {
+    align-items: center;
+    gap: 12px;
+}
+
+.lecturer-dashboard-page .button-link {
+    align-items: center;
+    border-radius: 999px;
+    display: inline-flex;
+    font-weight: 800;
+    justify-content: center;
+    min-height: 42px;
+    padding: 0 18px;
+    transition: box-shadow 0.18s ease, transform 0.18s ease, background 0.18s ease, border-color 0.18s ease;
+}
+
+.lecturer-dashboard-page .button-link:hover {
+    transform: translateY(-1px);
+}
+
+.lecturer-dashboard-page .secondary-action {
+    background: #f8fafc;
+    border-color: #cbd5e1;
+    color: #003b73;
+}
+
+.lecturer-dashboard-page .danger-action {
+    background: #b8002b;
+    box-shadow: 0 12px 24px rgba(184, 0, 43, 0.16);
+}
+
+/* Lecturer dashboard stats cards */
+.lecturer-dashboard-page .role-stats-grid {
+    gap: 18px;
+    margin-bottom: 24px;
+}
+
+.lecturer-dashboard-page .role-stat-card {
+    background: #ffffff;
+    border: 0;
+    border-radius: 20px;
+    box-shadow: 0 18px 44px rgba(15, 40, 70, 0.08);
+    min-height: 154px;
+    padding: 24px;
+    transition: box-shadow 0.18s ease, transform 0.18s ease;
+}
+
+.lecturer-dashboard-page .role-stat-card:hover {
+    box-shadow: 0 24px 54px rgba(15, 40, 70, 0.12);
+    transform: translateY(-3px);
+}
+
+.lecturer-dashboard-page .role-stat-card::before {
+    border-radius: 999px;
+    height: 5px;
+    left: 24px;
+    right: 24px;
+}
+
+.lecturer-dashboard-page .role-stat-card span {
+    color: #64748b;
+    font-size: 12px;
+    letter-spacing: 0.06em;
+    margin-bottom: 12px;
+}
+
+.lecturer-dashboard-page .role-stat-card strong {
+    color: #003b73;
+    font-size: 42px;
+    font-weight: 800;
+    letter-spacing: 0;
+    margin-bottom: 12px;
+}
+
+.lecturer-dashboard-page .role-stat-card small {
+    color: #475569;
+    display: block;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+/* Lecturer dashboard active session */
+.lecturer-dashboard-page .lecturer-live-session-card {
+    background:
+        linear-gradient(135deg, rgba(240, 253, 244, 0.96), rgba(255, 255, 255, 0.98)),
+        #ffffff;
+    border: 1px solid rgba(34, 197, 94, 0.26);
+    border-radius: 20px;
+    box-shadow: 0 22px 54px rgba(23, 107, 44, 0.11);
+    gap: 22px;
+    margin-bottom: 24px;
+    padding: 24px;
+}
+
+.lecturer-dashboard-page .lecturer-live-session-card h3 {
+    color: #003b73;
+    font-size: 22px;
+    font-weight: 800;
+}
+
+.lecturer-dashboard-page .lecturer-live-session-meta {
+    gap: 12px;
+}
+
+.lecturer-dashboard-page .lecturer-live-session-meta div {
+    background: rgba(255, 255, 255, 0.86);
+    border: 1px solid rgba(203, 213, 225, 0.72);
+    border-radius: 16px;
+    padding: 15px;
+}
+
+.lecturer-dashboard-page .lecturer-live-session-actions {
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+/* Lecturer dashboard action cards */
+.lecturer-dashboard-page .role-action-grid {
+    gap: 20px;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.lecturer-dashboard-page .dashboard-card {
+    background: #ffffff;
+    border: 1px solid rgba(203, 213, 225, 0.72);
+    border-radius: 20px;
+    box-shadow: 0 18px 44px rgba(15, 40, 70, 0.08);
+    min-height: 180px;
+    padding: 26px;
+    position: relative;
+    transition: border-color 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease;
+}
+
+.lecturer-dashboard-page .dashboard-card::after {
+    align-items: center;
+    background: #eff6ff;
+    border-radius: 999px;
+    color: #003b73;
+    content: "Open";
+    display: inline-flex;
+    font-size: 12px;
+    font-weight: 800;
+    justify-content: center;
+    margin-top: 18px;
+    min-height: 30px;
+    padding: 0 12px;
+}
+
+.lecturer-dashboard-page .dashboard-card:hover {
+    border-color: rgba(37, 99, 235, 0.38);
+    box-shadow: 0 26px 62px rgba(15, 40, 70, 0.13);
+    transform: translateY(-5px);
+}
+
+.lecturer-dashboard-page .dashboard-card h3 {
+    color: #003b73;
+    font-size: 20px;
+    font-weight: 800;
+    letter-spacing: 0;
+    line-height: 1.25;
+    margin-bottom: 12px;
+}
+
+.lecturer-dashboard-page .dashboard-card p {
+    color: #475569;
+    font-size: 15px;
+    line-height: 1.58;
+}
+
+/* Lecturer dashboard responsive styles */
+@media (max-width: 1100px) {
+    .lecturer-dashboard-page .role-stats-grid,
+    .lecturer-dashboard-page .role-action-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .lecturer-dashboard-page .lecturer-live-session-card {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 760px) {
+    .lecturer-dashboard-page .role-dashboard-shell {
+        padding: 20px 14px 42px;
+    }
+
+    .lecturer-dashboard-page .role-dashboard-header {
+        align-items: flex-start;
+        border-radius: 18px;
+        padding: 24px;
+    }
+
+    .lecturer-dashboard-page .dashboard-user-avatar {
+        flex-basis: 68px;
+        height: 68px;
+        width: 68px;
+    }
+
+    .lecturer-dashboard-page .role-header-actions,
+    .lecturer-dashboard-page .lecturer-live-session-actions {
+        width: 100%;
+    }
+
+    .lecturer-dashboard-page .role-header-actions .button-link,
+    .lecturer-dashboard-page .lecturer-live-session-actions .button-link {
+        flex: 1;
+    }
+
+    .lecturer-dashboard-page .role-stats-grid,
+    .lecturer-dashboard-page .role-action-grid,
+    .lecturer-dashboard-page .lecturer-live-session-meta {
+        grid-template-columns: 1fr;
+    }
+}
