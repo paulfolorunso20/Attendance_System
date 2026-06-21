@@ -8771,17 +8771,18 @@ html[data-theme="dark"] .auth-page .login-container input::placeholder {
 
 /* Lecturer dashboard action cards */
 .lecturer-dashboard-page .role-action-grid {
-    gap: 20px;
+    gap: 18px;
     grid-template-columns: repeat(4, minmax(0, 1fr));
 }
 
 .lecturer-dashboard-page .dashboard-card {
+    align-content: start;
     background: #ffffff;
     border: 1px solid rgba(203, 213, 225, 0.72);
     border-radius: 20px;
     box-shadow: 0 18px 44px rgba(15, 40, 70, 0.08);
-    min-height: 180px;
-    padding: 26px;
+    min-height: 156px;
+    padding: 22px;
     position: relative;
     transition: border-color 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease;
 }
@@ -8796,7 +8797,7 @@ html[data-theme="dark"] .auth-page .login-container input::placeholder {
     font-size: 12px;
     font-weight: 800;
     justify-content: center;
-    margin-top: 18px;
+    margin-top: 14px;
     min-height: 30px;
     padding: 0 12px;
 }
@@ -8813,13 +8814,13 @@ html[data-theme="dark"] .auth-page .login-container input::placeholder {
     font-weight: 800;
     letter-spacing: 0;
     line-height: 1.25;
-    margin-bottom: 12px;
+    margin-bottom: 10px;
 }
 
 .lecturer-dashboard-page .dashboard-card p {
     color: #475569;
     font-size: 15px;
-    line-height: 1.58;
+    line-height: 1.5;
 }
 
 /* Lecturer dashboard responsive styles */
