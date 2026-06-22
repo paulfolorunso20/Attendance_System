@@ -27,11 +27,11 @@
 
     function updateButton(button, theme) {
         const isDark = theme === "dark";
-        button.setAttribute("aria-label", isDark ? "Switch to light theme" : "Switch to dark theme");
-        button.setAttribute("title", isDark ? "Switch to light theme" : "Switch to dark theme");
+        button.setAttribute("aria-label", isDark ? "Switch to light theme" : "Switch to mood theme");
+        button.setAttribute("title", isDark ? "Switch to light theme" : "Switch to mood theme");
         button.innerHTML = `
             <span class="theme-toggle-icon" aria-hidden="true">${isDark ? "L" : "D"}</span>
-            <span class="theme-toggle-text">${isDark ? "Light" : "Dark"}</span>
+            <span class="theme-toggle-text">${isDark ? "Light" : "Mood"}</span>
         `;
     }
 
