@@ -14,15 +14,29 @@ if (isset($_POST["create_course"])) {
     if ($courseCode === "" || $courseTitle === "") {
         $error = "Please enter the course code and course title.";
     } else {
-        $query = "INSERT INTO courses (course_code, course_title, lecturer_id) VALUES (?, ?, ?)";
-        $stmt = mysqli_prepare($conn, $query);
-        mysqli_stmt_bind_param($stmt, "ssi", $courseCode, $courseTitle, $lecturer_id);
+        try {
+            $checkQuery = "SELECT id FROM courses WHERE course_code = ? LIMIT 1";
+            $checkStmt = mysqli_prepare($conn, $checkQuery);
+            mysqli_stmt_bind_param($checkStmt, "s", $courseCode);
+            mysqli_stmt_execute($checkStmt);
+            $existingCourse = mysqli_stmt_get_result($checkStmt);
 
-        if (mysqli_stmt_execute($stmt)) {
-            audit_log($conn, "course_created", "Lecturer created course " . $courseCode . " - " . $courseTitle, "course", mysqli_insert_id($conn));
-            $success = "Course added successfully.";
-        } else {
-            $error = "Could not add course. The course code may already exist.";
+            if (mysqli_fetch_assoc($existingCourse)) {
+                $error = "This course code already exists. Please use another course code.";
+            } else {
+                $query = "INSERT INTO courses (course_code, course_title, lecturer_id) VALUES (?, ?, ?)";
+                $stmt = mysqli_prepare($conn, $query);
+                mysqli_stmt_bind_param($stmt, "ssi", $courseCode, $courseTitle, $lecturer_id);
+
+                if (mysqli_stmt_execute($stmt)) {
+                    audit_log($conn, "course_created", "Lecturer created course " . $courseCode . " - " . $courseTitle, "course", mysqli_insert_id($conn));
+                    $success = "Course added successfully.";
+                } else {
+                    $error = "Could not add course right now. Please try again.";
+                }
+            }
+        } catch (mysqli_sql_exception $exception) {
+            $error = "Could not add course. Please check the course details and try again.";
         }
     }
 }

@@ -56,7 +56,8 @@ if (is_array($parsedDatabaseUrl)) {
 $conn = mysqli_connect($host, $user, $password, $database, $port);
 
 if (!$conn) {
-    die("Connection failed: " . mysqli_connect_error());
+    http_response_code(503);
+    die("The system is temporarily unable to connect to the database. Please try again shortly.");
 }
 
 mysqli_set_charset($conn, "utf8mb4");
