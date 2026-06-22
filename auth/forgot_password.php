@@ -215,7 +215,7 @@ $workflowSubtitle = $selectedWorkflow === "student"
 
 <div class="login-container">
     <div class="auth-brand-panel">
-        <div class="brand-mark">SA</div>
+        <div class="brand-mark"><img src="../assets/img/smartattend-logo.svg" alt="" aria-hidden="true"></div>
         <p class="section-kicker">Account Recovery</p>
         <h1>Reset your SmartAttend password</h1>
         <p>Use a secure email verification code before creating a new password.</p>

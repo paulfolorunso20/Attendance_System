@@ -69,7 +69,7 @@ if (isset($_POST["register"])) {
 
 <div class="login-container">
     <div class="auth-brand-panel">
-        <div class="brand-mark">LC</div>
+        <div class="brand-mark"><img src="../assets/img/smartattend-logo.svg" alt="" aria-hidden="true"></div>
         <p class="section-kicker">Lecturer Access</p>
         <h1>Manage class sessions professionally</h1>
         <p>Create secure QR sessions, monitor live attendance, and export verified class records.</p>

@@ -12,7 +12,7 @@ require_once __DIR__ . "/../includes/bootstrap.php";
 
 <div class="auth-choice-shell">
     <div class="auth-choice-card">
-        <div class="brand-mark">SA</div>
+        <div class="brand-mark"><img src="../assets/img/smartattend-logo.svg" alt="" aria-hidden="true"></div>
         <p class="section-kicker">Create Account</p>
         <h1>Choose your account type</h1>
         <p class="auth-choice-copy">Select the role that matches how you will use SmartAttend.</p>

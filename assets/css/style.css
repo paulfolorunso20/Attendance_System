@@ -247,6 +247,15 @@ html[data-theme="dark"] .theme-toggle-icon {
     }
 }
 
+/* Auth brand icon */
+.auth-page .brand-mark img,
+.auth-choice-card .brand-mark img {
+    display: block;
+    height: 72%;
+    object-fit: contain;
+    width: 72%;
+}
+
 /* SmartAttend landing page */
 .landing-page {
     background:

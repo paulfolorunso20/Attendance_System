@@ -66,7 +66,7 @@ if (isset($_POST["register"])) {
 
 <div class="login-container">
     <div class="auth-brand-panel">
-        <div class="brand-mark">ST</div>
+        <div class="brand-mark"><img src="../assets/img/smartattend-logo.svg" alt="" aria-hidden="true"></div>
         <p class="section-kicker">Student Access</p>
         <h1>Create your attendance identity</h1>
         <p>Your profile details help lecturers identify who marked attendance during each class session.</p>
