@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . "/../includes/bootstrap.php";
+require_valid_csrf();
 $error = null;
 
 if (isset($_POST["register"])) {
@@ -107,6 +108,7 @@ if (isset($_POST["register"])) {
 
         <form method="POST">
             <?php render_context_input(); ?>
+            <?php render_csrf_input(); ?>
             <input type="text" name="full_name" placeholder="Full Name" required>
             <input type="text" name="matric_no" placeholder="Matric Number e.g. 2022/42335" pattern="\d{4}/\d{5}" maxlength="10" inputmode="numeric" data-matric-format title="Use four digits, slash, then five digits. Example: 2022/42335" required>
             <select name="department" required>

@@ -124,6 +124,37 @@ function render_context_input()
     }
 }
 
+function csrf_token()
+{
+    if (empty($_SESSION["csrf_token"])) {
+        $_SESSION["csrf_token"] = random_token(32);
+    }
+
+    return $_SESSION["csrf_token"];
+}
+
+function render_csrf_input()
+{
+    echo '<input type="hidden" name="csrf_token" value="' . e(csrf_token()) . '">';
+}
+
+function csrf_token_is_valid()
+{
+    $token = $_POST["csrf_token"] ?? "";
+
+    return is_string($token) &&
+        isset($_SESSION["csrf_token"]) &&
+        hash_equals($_SESSION["csrf_token"], $token);
+}
+
+function require_valid_csrf()
+{
+    if ($_SERVER["REQUEST_METHOD"] === "POST" && !csrf_token_is_valid()) {
+        http_response_code(403);
+        exit("Security check failed. Please refresh the page and try again.");
+    }
+}
+
 function render_tab_context_script()
 {
     foreach (headers_list() as $header) {

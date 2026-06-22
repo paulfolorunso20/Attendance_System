@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__ . "/../includes/bootstrap.php";
 require_role("lecturer");
+require_valid_csrf();
 
 $lecturer_id = current_user_id();
 $error = null;
@@ -54,6 +55,7 @@ $courses = mysqli_stmt_get_result($course_stmt);
     <?php } ?>
 
     <form method="POST">
+        <?php render_csrf_input(); ?>
         <label>Course Code</label>
         <input type="text" name="course_code" placeholder="Example: SEN 402" required>
 

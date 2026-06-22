@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__ . "/../includes/bootstrap.php";
 require_role("lecturer");
+require_valid_csrf();
 
 $lecturer_id = current_user_id();
 $session_id = (int) ($_POST["session_id"] ?? 0);

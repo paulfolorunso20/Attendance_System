@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__ . "/../includes/bootstrap.php";
 require_role("lecturer");
+require_valid_csrf();
 
 $lecturer_id = current_user_id();
 $courses = [];
@@ -161,6 +162,7 @@ if (!$createdSession && !isset($_POST["create"])) {
     <?php } else { ?>
 
     <form method="POST" class="session-form-card" autocomplete="off">
+        <?php render_csrf_input(); ?>
 
         <label>Select Course</label>
         <select name="course_id" required>
@@ -267,6 +269,7 @@ if (!$createdSession && !isset($_POST["create"])) {
                     </div>
 
                     <form method="POST" class="end-session-form">
+                        <?php render_csrf_input(); ?>
                         <input type="hidden" name="session_id" value="<?php echo e($createdSession["id"]); ?>">
                         <button type="submit" name="end_created_session" class="danger-button">End Session</button>
                     </form>
@@ -509,6 +512,7 @@ if (extendSessionButton && extendMinutes) {
         const body = new URLSearchParams();
         body.set("session_id", <?php echo (int) ($createdSession["id"] ?? 0); ?>);
         body.set("minutes", minutes);
+        body.set("csrf_token", <?php echo json_encode(csrf_token()); ?>);
 
         extendSessionButton.disabled = true;
         if (extendSessionStatus) {

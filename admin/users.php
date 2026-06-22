@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__ . "/../includes/bootstrap.php";
 require_role("admin");
+require_valid_csrf();
 
 $error = null;
 
@@ -85,6 +86,7 @@ $flash = get_flash();
             <?php while ($row = mysqli_fetch_assoc($result)) { ?>
             <tr>
                 <form method="POST">
+                    <?php render_csrf_input(); ?>
                     <td>
                         <input type="hidden" name="user_id" value="<?php echo e($row["id"]); ?>">
                         <input type="text" name="full_name" value="<?php echo e($row["full_name"]); ?>" required>

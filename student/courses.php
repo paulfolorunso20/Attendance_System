@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__ . "/../includes/bootstrap.php";
 require_role("student");
+require_valid_csrf();
 
 $student_id = current_user_id();
 
@@ -137,6 +138,7 @@ $flash = get_flash();
 
     <div class="course-registration-grid">
         <form method="POST" class="course-entry-card">
+            <?php render_csrf_input(); ?>
             <div class="settings-heading">
                 <div>
                     <h3>Select Existing Course</h3>
@@ -156,6 +158,7 @@ $flash = get_flash();
         </form>
 
         <form method="POST" class="course-entry-card manual-course-form">
+            <?php render_csrf_input(); ?>
             <div class="settings-heading">
                 <div>
                     <h3>Course Not Listed?</h3>
@@ -194,6 +197,7 @@ $flash = get_flash();
                     <td><?php echo e($course["lecturer_name"] ?: "Unassigned"); ?></td>
                     <td>
                         <form method="POST" class="inline-action-form">
+                            <?php render_csrf_input(); ?>
                             <input type="hidden" name="course_id" value="<?php echo e($course["id"]); ?>">
                             <button type="submit" name="remove_course" class="danger-button">Remove</button>
                         </form>

@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__ . "/../includes/bootstrap.php";
 require_role("admin");
+require_valid_csrf();
 
 $lecturers = [];
 $lecturer_result = mysqli_query($conn, "SELECT id, full_name, title, position FROM users WHERE role = 'lecturer' ORDER BY full_name");
@@ -69,6 +70,7 @@ $flash = get_flash();
             <?php while ($row = mysqli_fetch_assoc($courses)) { ?>
             <tr>
                 <form method="POST">
+                    <?php render_csrf_input(); ?>
                     <td>
                         <input type="hidden" name="course_id" value="<?php echo e($row["id"]); ?>">
                         <input type="text" name="course_code" value="<?php echo e($row["course_code"]); ?>" required>

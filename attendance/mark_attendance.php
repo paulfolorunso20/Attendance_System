@@ -8,6 +8,7 @@ if (!isset($_SESSION["user_id"]) && isset($_GET["token"])) {
 }
 
 require_role("student");
+require_valid_csrf();
 
 if (!isset($_GET['token'])) {
     die("Invalid attendance link.");
@@ -211,6 +212,7 @@ if (isset($_POST['mark']) && $profileComplete && $faceEnrolled) {
 
     <?php if (!$success && !$profileComplete) { ?>
     <form method="POST" class="profile-form">
+        <?php render_csrf_input(); ?>
         <h3>Confirm Student Details</h3>
         <label>Full Name</label>
         <input type="text" name="full_name" value="<?php echo e($student["full_name"] ?? ""); ?>" required>
@@ -237,6 +239,7 @@ if (isset($_POST['mark']) && $profileComplete && $faceEnrolled) {
         <p>Register your face once before marking attendance.</p>
     </div>
     <form method="POST" id="faceEnrollForm">
+        <?php render_csrf_input(); ?>
         <div class="verification-card">
         <div class="verification-grid">
             <div class="face-scan-panel">
@@ -282,6 +285,7 @@ if (isset($_POST['mark']) && $profileComplete && $faceEnrolled) {
         <p>Complete the face scan and GPS check before submitting.</p>
     </div>
     <form method="POST" id="attendanceForm">
+        <?php render_csrf_input(); ?>
         <div class="verification-card">
         <div class="verification-grid">
             <div class="face-scan-panel">

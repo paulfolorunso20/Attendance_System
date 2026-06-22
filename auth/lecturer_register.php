@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . "/../includes/bootstrap.php";
+require_valid_csrf();
 $error = null;
 
 if (isset($_POST["register"])) {
@@ -110,6 +111,7 @@ if (isset($_POST["register"])) {
 
         <form method="POST">
             <?php render_context_input(); ?>
+            <?php render_csrf_input(); ?>
             <select name="title" required>
                 <option value="">Select Title</option>
                 <option value="Mr">Mr</option>

@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . "/../includes/bootstrap.php";
+require_valid_csrf();
 if (!isset($_SESSION["user_id"])) {
     redirect_with_context("auth/login.php");
     exit();
@@ -223,6 +224,7 @@ if ($role === "lecturer") {
                     Changes made here update what appears across dashboards, reports, and attendance records.
                 </div>
                 <form method="POST" enctype="multipart/form-data" class="profile-photo-form" id="profilePhotoForm">
+                    <?php render_csrf_input(); ?>
                     <label>Profile Picture</label>
                     <input type="file" name="profile_image" id="profileImageInput" accept="image/jpeg,image/png,image/webp" required>
                     <input type="hidden" name="profile_image_data" id="profileImageData">
@@ -247,6 +249,7 @@ if ($role === "lecturer") {
 
             <div class="profile-settings-stack">
                 <form method="POST" class="settings-panel">
+                    <?php render_csrf_input(); ?>
                     <div class="settings-heading">
                         <div>
                             <h3>Personal Information</h3>
@@ -315,6 +318,7 @@ if ($role === "lecturer") {
                 </form>
 
                 <form method="POST" class="settings-panel">
+                    <?php render_csrf_input(); ?>
                     <div class="settings-heading">
                         <div>
                             <h3>Password Security</h3>

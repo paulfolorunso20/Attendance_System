@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . "/../includes/bootstrap.php";
+require_valid_csrf();
 
 $requestedLoginMode = $_GET["login_as"] ?? $_POST["login_as"] ?? "";
 $loginMode = $requestedLoginMode === "staff" ? "staff" : ($requestedLoginMode === "student" ? "student" : "");
@@ -146,6 +147,7 @@ if (isset($_POST['login'])) {
                 <form method="POST">
 
                     <?php render_context_input(); ?>
+                    <?php render_csrf_input(); ?>
                     <input type="hidden" name="login_as" value="<?php echo e($loginMode); ?>">
                     <?php if ($attendanceToken !== "") { ?>
                         <input type="hidden" name="attendance_token" value="<?php echo e($attendanceToken); ?>">

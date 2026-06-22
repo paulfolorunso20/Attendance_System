@@ -1,5 +1,6 @@
  !DOCTYPE html><?php
 require_once __DIR__ . "/../includes/bootstrap.php";
+require_valid_csrf();
 
 $error = null;
 $success = null;
@@ -266,6 +267,7 @@ $workflowSubtitle = $selectedWorkflow === "student"
                 </div>
             <?php } else { ?>
                 <form method="POST">
+                    <?php render_csrf_input(); ?>
                     <input type="hidden" name="recover_as" value="<?php echo e($selectedWorkflow); ?>">
                     <input type="email" name="email" placeholder="Registered email address" required>
                     <?php if ($selectedWorkflow === "student") { ?>
@@ -276,10 +278,12 @@ $workflowSubtitle = $selectedWorkflow === "student"
             <?php } ?>
         <?php } elseif ($step === "verify") { ?>
             <form method="POST">
+                <?php render_csrf_input(); ?>
                 <input type="text" name="recovery_code" class="recovery-code-input" placeholder="6-digit code" pattern="\d{6}" maxlength="6" inputmode="numeric" autocomplete="one-time-code" required>
                 <button type="submit" name="verify_code">Verify Code</button>
             </form>
             <form method="POST" class="inline-reset-action">
+                <?php render_csrf_input(); ?>
                 <button type="submit" name="request_code" value="1" class="secondary-action">Send Code Again</button>
                 <input type="hidden" name="recover_as" value="<?php echo e($_SESSION["password_reset_workflow"] ?? $selectedWorkflow); ?>">
                 <input type="hidden" name="email" value="<?php echo e($_SESSION["password_reset_email"] ?? ""); ?>">
@@ -287,6 +291,7 @@ $workflowSubtitle = $selectedWorkflow === "student"
             </form>
         <?php } elseif ($step === "reset") { ?>
             <form method="POST">
+                <?php render_csrf_input(); ?>
                 <input type="password" name="new_password" placeholder="New password" required>
                 <input type="password" name="confirm_password" placeholder="Confirm new password" required>
                 <button type="submit" name="reset_password">Save New Password</button>
@@ -297,6 +302,7 @@ $workflowSubtitle = $selectedWorkflow === "student"
 
         <?php if ($step !== "done" && $selectedWorkflow !== "") { ?>
             <form method="POST" class="inline-reset-action">
+                <?php render_csrf_input(); ?>
                 <input type="hidden" name="recover_as" value="<?php echo e($selectedWorkflow); ?>">
                 <button type="submit" name="start_over" class="link-button">Start over</button>
             </form>

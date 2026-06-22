@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__ . "/../includes/bootstrap.php";
 require_role("lecturer");
+require_valid_csrf();
 
 $lecturer_id = current_user_id();
 $flash = get_flash();
@@ -106,6 +107,7 @@ $sessions = mysqli_stmt_get_result($stmt);
                         </td>
                         <td>
                             <form method="POST" class="inline-action-form">
+                                <?php render_csrf_input(); ?>
                                 <input type="hidden" name="session_id" value="<?php echo e($row["id"]); ?>">
                                 <input type="number" name="minutes" min="1" max="180" value="10"
                                     aria-label="Minutes to extend">
@@ -114,6 +116,7 @@ $sessions = mysqli_stmt_get_result($stmt);
 
                             <?php if (!$isClosed) { ?>
                                 <form method="POST" class="inline-action-form">
+                                    <?php render_csrf_input(); ?>
                                     <input type="hidden" name="session_id" value="<?php echo e($row["id"]); ?>">
                                     <button type="submit" name="close_session" class="danger-button">Close</button>
                                 </form>
