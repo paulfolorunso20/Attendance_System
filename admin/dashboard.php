@@ -106,26 +106,31 @@ $recentAttendance = dashboard_fetch_all($conn, "
 
     <div class="overview-stats-grid">
         <div class="overview-stat-card">
+            <?php echo dashboard_icon("users"); ?>
             <span>Users</span>
             <strong><?php echo number_format($totalUsers); ?></strong>
             <small><?php echo number_format($totalStudents); ?> students · <?php echo number_format($totalLecturers); ?> lecturers · <?php echo number_format($totalAdmins); ?> admins</small>
         </div>
         <div class="overview-stat-card">
+            <?php echo dashboard_icon("book"); ?>
             <span>Courses</span>
             <strong><?php echo number_format($totalCourses); ?></strong>
             <small><?php echo number_format($assignedCourses); ?> assigned to lecturers</small>
         </div>
         <div class="overview-stat-card">
+            <?php echo dashboard_icon("calendar"); ?>
             <span>Sessions</span>
             <strong><?php echo number_format($totalSessions); ?></strong>
             <small><?php echo number_format($activeSessions); ?> active · <?php echo number_format($expiredSessions); ?> expired · <?php echo number_format($closedSessions); ?> closed</small>
         </div>
         <div class="overview-stat-card">
+            <?php echo dashboard_icon("check"); ?>
             <span>Attendance</span>
             <strong><?php echo number_format($attendanceRecords); ?></strong>
             <small><?php echo number_format($verifiedAttendance); ?> fully verified submissions</small>
         </div>
         <div class="overview-stat-card">
+            <?php echo dashboard_icon("layers"); ?>
             <span>Enrollments</span>
             <strong><?php echo number_format($totalEnrollments); ?></strong>
             <small><?php echo number_format($enrolledStudents); ?> students enrolled in at least one course</small>

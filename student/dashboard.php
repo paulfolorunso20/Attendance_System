@@ -85,21 +85,25 @@ $course_result = mysqli_stmt_get_result($course_stmt);
 
     <div class="role-stats-grid">
         <div class="role-stat-card">
+            <?php echo dashboard_icon("check"); ?>
             <span>Classes Attended</span>
             <strong><?php echo e($attendedSessions); ?></strong>
             <small>Sessions you have successfully marked</small>
         </div>
         <div class="role-stat-card">
+            <?php echo dashboard_icon("calendar"); ?>
             <span>Total Classes</span>
             <strong><?php echo e($totalSessions); ?></strong>
             <small>Sessions from your registered courses</small>
         </div>
         <div class="role-stat-card">
+            <?php echo dashboard_icon("alert"); ?>
             <span>Missed Classes</span>
             <strong><?php echo e($missedSessions); ?></strong>
             <small>Sessions not found in your attendance record</small>
         </div>
         <div class="role-stat-card">
+            <?php echo dashboard_icon("percent"); ?>
             <span>Attendance Rate</span>
             <strong><?php echo e($percentage); ?>%</strong>
             <small>Minimum expected attendance is 75%</small>

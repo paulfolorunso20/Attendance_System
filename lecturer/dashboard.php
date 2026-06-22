@@ -76,21 +76,25 @@ $activeSession = mysqli_fetch_assoc($active_result);
 
     <div class="role-stats-grid">
         <div class="role-stat-card">
+            <?php echo dashboard_icon("book"); ?>
             <span>Courses</span>
             <strong><?php echo number_format((int) ($stats["total_courses"] ?? 0)); ?></strong>
             <small>Assigned to your lecturer account</small>
         </div>
         <div class="role-stat-card">
+            <?php echo dashboard_icon("calendar"); ?>
             <span>Sessions</span>
             <strong><?php echo number_format((int) ($stats["total_sessions"] ?? 0)); ?></strong>
             <small>Total attendance sessions created</small>
         </div>
         <div class="role-stat-card">
+            <?php echo dashboard_icon("activity"); ?>
             <span>Active Now</span>
             <strong><?php echo number_format((int) ($stats["active_sessions"] ?? 0)); ?></strong>
             <small>Open sessions students can still mark</small>
         </div>
         <div class="role-stat-card">
+            <?php echo dashboard_icon("check"); ?>
             <span>Records</span>
             <strong><?php echo number_format((int) ($stats["attendance_records"] ?? 0)); ?></strong>
             <small>Student attendance submissions</small>

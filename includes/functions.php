@@ -317,6 +317,24 @@ function render_department_options($selectedDepartment = "")
     }
 }
 
+function dashboard_icon($name)
+{
+    $icons = [
+        "users" => '<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path>',
+        "book" => '<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M4 4.5A2.5 2.5 0 0 1 6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5z"></path>',
+        "calendar" => '<path d="M8 2v4"></path><path d="M16 2v4"></path><rect x="3" y="4" width="18" height="18" rx="2"></rect><path d="M3 10h18"></path>',
+        "activity" => '<path d="M22 12h-4l-3 8L9 4l-3 8H2"></path>',
+        "check" => '<path d="M20 6 9 17l-5-5"></path>',
+        "alert" => '<path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><path d="M12 9v4"></path><path d="M12 17h.01"></path>',
+        "percent" => '<path d="M19 5 5 19"></path><circle cx="6.5" cy="6.5" r="2.5"></circle><circle cx="17.5" cy="17.5" r="2.5"></circle>',
+        "layers" => '<path d="m12 2 9 5-9 5-9-5 9-5z"></path><path d="m3 12 9 5 9-5"></path><path d="m3 17 9 5 9-5"></path>',
+    ];
+
+    $paths = $icons[$name] ?? $icons["activity"];
+
+    return '<span class="stat-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false">' . $paths . '</svg></span>';
+}
+
 function is_valid_matric_no($matricNo)
 {
     return is_string($matricNo) && preg_match('/^\d{4}\/\d{5}$/', trim($matricNo)) === 1;
