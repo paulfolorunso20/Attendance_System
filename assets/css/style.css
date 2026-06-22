@@ -47,6 +47,16 @@ body {
     width: 24px;
 }
 
+.theme-toggle-icon svg {
+    fill: none;
+    height: 15px;
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 2;
+    width: 15px;
+}
+
 html[data-theme="dark"] body {
     background: #0b1220;
     color: #dce7f3;
