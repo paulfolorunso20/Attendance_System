@@ -69,7 +69,7 @@ $structuredData = [
     <link rel="icon" href="<?php echo e($siteUrl); ?>favicon.ico" sizes="any">
     <link rel="shortcut icon" href="<?php echo e($siteUrl); ?>favicon.ico">
     <link rel="icon" type="image/svg+xml" href="<?php echo e($siteUrl); ?>favicon.svg">
-    <link rel="stylesheet" href="assets/css/style.css?v=saas-landing-1">
+    <link rel="stylesheet" href="assets/css/style.css?v=saas-landing-2">
     <script type="application/ld+json">
     <?php echo json_encode($structuredData, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT); ?>
     </script>
@@ -168,17 +168,52 @@ $structuredData = [
                 </div>
                 <div class="saas-feature-grid">
                     <article>
-                        <i>QR</i>
+                        <i class="saas-feature-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" focusable="false">
+                                <rect x="3" y="3" width="6" height="6" rx="1.5"></rect>
+                                <rect x="15" y="3" width="6" height="6" rx="1.5"></rect>
+                                <rect x="3" y="15" width="6" height="6" rx="1.5"></rect>
+                                <path d="M14 14h2v2h-2z"></path>
+                                <path d="M19 14h2v2h-2z"></path>
+                                <path d="M14 19h7"></path>
+                                <path d="M19 19v2"></path>
+                                <path d="M11 5h1"></path>
+                                <path d="M11 8h1"></path>
+                                <path d="M5 11h4"></path>
+                                <path d="M15 11h6"></path>
+                            </svg>
+                        </i>
                         <h3>QR Attendance</h3>
                         <p>Generate session QR codes for instant attendance.</p>
                     </article>
                     <article>
-                        <i>AI</i>
+                        <i class="saas-feature-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" focusable="false">
+                                <path d="M4 12a8 8 0 0 1 16 0"></path>
+                                <path d="M7 12v2a5 5 0 0 0 10 0v-2"></path>
+                                <path d="M9 10h.01"></path>
+                                <path d="M15 10h.01"></path>
+                                <path d="M10 16c1.2.8 2.8.8 4 0"></path>
+                                <path d="M3 8V5a2 2 0 0 1 2-2h3"></path>
+                                <path d="M16 3h3a2 2 0 0 1 2 2v3"></path>
+                                <path d="M21 16v3a2 2 0 0 1-2 2h-3"></path>
+                                <path d="M8 21H5a2 2 0 0 1-2-2v-3"></path>
+                            </svg>
+                        </i>
                         <h3>Face Verification</h3>
                         <p>Prevent impersonation with AI face verification.</p>
                     </article>
                     <article>
-                        <i>GPS</i>
+                        <i class="saas-feature-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" focusable="false">
+                                <path d="M12 21s7-5.1 7-11a7 7 0 0 0-14 0c0 5.9 7 11 7 11z"></path>
+                                <circle cx="12" cy="10" r="2.5"></circle>
+                                <path d="M12 2v3"></path>
+                                <path d="M12 15v2"></path>
+                                <path d="M4 10H2"></path>
+                                <path d="M22 10h-2"></path>
+                            </svg>
+                        </i>
                         <h3>GPS Validation</h3>
                         <p>Ensure students are physically within approved class locations.</p>
                     </article>
