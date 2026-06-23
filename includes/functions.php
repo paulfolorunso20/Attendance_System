@@ -328,6 +328,9 @@ function dashboard_icon($name)
         "alert" => '<path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><path d="M12 9v4"></path><path d="M12 17h.01"></path>',
         "percent" => '<path d="M19 5 5 19"></path><circle cx="6.5" cy="6.5" r="2.5"></circle><circle cx="17.5" cy="17.5" r="2.5"></circle>',
         "layers" => '<path d="m12 2 9 5-9 5-9-5 9-5z"></path><path d="m3 12 9 5 9-5"></path><path d="m3 17 9 5 9-5"></path>',
+        "clock" => '<circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path>',
+        "table" => '<rect x="3" y="4" width="18" height="16" rx="2"></rect><path d="M3 10h18"></path><path d="M9 4v16"></path><path d="M15 4v16"></path>',
+        "plus" => '<path d="M12 5v14"></path><path d="M5 12h14"></path>',
     ];
 
     $paths = $icons[$name] ?? $icons["activity"];

@@ -9065,3 +9065,669 @@ html[data-theme="dark"] .saas-feature-grid .saas-feature-icon {
     box-shadow: 0 18px 34px rgba(0, 0, 0, 0.22);
     color: #93c5fd;
 }
+
+/* Premium lecturer dashboard shell */
+.lecturer-dashboard-page {
+    background: #f8fafc;
+    color: #0f172a;
+    font-family: Inter, "Plus Jakarta Sans", "Segoe UI", Arial, sans-serif;
+    padding: 0;
+}
+
+.lecturer-dashboard-page .role-dashboard-shell {
+    display: grid;
+    gap: 24px;
+    margin: 0 auto;
+    max-width: 1400px;
+    padding: 32px;
+}
+
+/* Premium lecturer topbar */
+.lecturer-topbar {
+    align-items: center;
+    backdrop-filter: blur(18px);
+    background: rgba(255, 255, 255, 0.86);
+    border: 1px solid rgba(226, 232, 240, 0.82);
+    border-radius: 20px;
+    box-shadow: 0 18px 48px rgba(15, 23, 42, 0.07);
+    display: flex;
+    justify-content: space-between;
+    min-height: 76px;
+    padding: 14px 18px;
+    position: sticky;
+    top: 18px;
+    z-index: 30;
+}
+
+.lecturer-topbar-brand {
+    align-items: center;
+    color: #0f172a;
+    display: inline-flex;
+    gap: 12px;
+    text-decoration: none;
+}
+
+.lecturer-topbar-brand img {
+    border-radius: 14px;
+    height: 42px;
+    width: 42px;
+}
+
+.lecturer-topbar-brand strong {
+    display: block;
+    font-size: 17px;
+    font-weight: 800;
+}
+
+.lecturer-topbar-brand small {
+    color: #64748b;
+    display: block;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.lecturer-topbar-actions {
+    align-items: center;
+    display: inline-flex;
+    gap: 12px;
+}
+
+.lecturer-topbar-icon {
+    align-items: center;
+    background: #f1f5f9;
+    border-radius: 999px;
+    color: #2563eb;
+    display: inline-flex;
+    height: 42px;
+    justify-content: center;
+    width: 42px;
+}
+
+.lecturer-topbar-icon .stat-icon {
+    background: transparent;
+    box-shadow: none;
+    height: auto;
+    margin: 0;
+    width: auto;
+}
+
+.lecturer-topbar-icon .stat-icon svg {
+    height: 19px;
+    width: 19px;
+}
+
+.lecturer-profile-menu {
+    position: relative;
+}
+
+.lecturer-profile-menu summary {
+    cursor: pointer;
+    list-style: none;
+}
+
+.lecturer-profile-menu summary::-webkit-details-marker {
+    display: none;
+}
+
+.lecturer-profile-menu > div {
+    background: #ffffff;
+    border: 1px solid rgba(226, 232, 240, 0.86);
+    border-radius: 16px;
+    box-shadow: 0 20px 50px rgba(15, 23, 42, 0.14);
+    display: grid;
+    min-width: 170px;
+    padding: 8px;
+    position: absolute;
+    right: 0;
+    top: calc(100% + 10px);
+}
+
+.lecturer-profile-menu a {
+    border-radius: 12px;
+    color: #334155;
+    font-size: 14px;
+    font-weight: 700;
+    padding: 10px 12px;
+    text-decoration: none;
+}
+
+.lecturer-profile-menu a:hover {
+    background: #f1f5f9;
+    color: #0f172a;
+}
+
+.lecturer-dashboard-page .compact-avatar {
+    flex-basis: 42px;
+    font-size: 16px;
+    height: 42px;
+    width: 42px;
+}
+
+/* Premium lecturer hero */
+.lecturer-dashboard-page .role-dashboard-header {
+    align-items: center;
+    background:
+        linear-gradient(135deg, rgba(255, 255, 255, 0.98), rgba(248, 250, 252, 0.96)),
+        #ffffff;
+    border: 0;
+    border-radius: 20px;
+    box-shadow: 0 20px 58px rgba(15, 23, 42, 0.08);
+    display: grid;
+    gap: 24px;
+    grid-template-columns: 1fr auto;
+    min-height: 156px;
+    overflow: hidden;
+    padding: 28px 32px;
+    position: relative;
+}
+
+.lecturer-dashboard-page .role-dashboard-header::before {
+    background: linear-gradient(180deg, #2563eb, #22c55e);
+    border-radius: 999px;
+    bottom: 28px;
+    content: "";
+    left: 0;
+    position: absolute;
+    top: 28px;
+    width: 5px;
+}
+
+.lecturer-hero-main {
+    min-width: 0;
+}
+
+.lecturer-dashboard-page .role-dashboard-header .section-kicker {
+    color: #2563eb;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+}
+
+.lecturer-dashboard-page .role-dashboard-header h2 {
+    color: #0f172a;
+    font-size: clamp(28px, 4vw, 44px);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1.04;
+    margin: 0;
+}
+
+.lecturer-dashboard-page .role-dashboard-header .welcome {
+    color: #64748b;
+    font-size: 16px;
+    line-height: 1.6;
+    margin-top: 12px;
+    max-width: 760px;
+}
+
+.lecturer-hero-side {
+    align-items: end;
+    display: grid;
+    gap: 10px;
+    justify-items: end;
+    min-width: 220px;
+}
+
+.lecturer-hero-side > span {
+    color: #64748b;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.lecturer-hero-side > strong {
+    color: #0f172a;
+    font-size: 24px;
+    font-weight: 800;
+}
+
+.lecturer-efficiency {
+    align-items: center;
+    display: inline-flex;
+    gap: 10px;
+}
+
+.lecturer-efficiency small {
+    color: #64748b;
+    font-size: 12px;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+.lecturer-ring {
+    align-items: center;
+    background:
+        radial-gradient(circle at center, #ffffff 54%, transparent 56%),
+        conic-gradient(#22c55e calc(var(--value) * 1%), #e2e8f0 0);
+    border-radius: 999px;
+    display: inline-flex;
+    height: 58px;
+    justify-content: center;
+    width: 58px;
+}
+
+.lecturer-ring b {
+    color: #0f172a;
+    font-size: 14px;
+    font-weight: 800;
+}
+
+.lecturer-dashboard-page .primary-action {
+    background: #2563eb;
+    border: 0;
+    box-shadow: 0 16px 28px rgba(37, 99, 235, 0.22);
+    color: #ffffff;
+}
+
+/* Premium lecturer stats */
+.lecturer-dashboard-page .role-stats-grid {
+    display: grid;
+    gap: 16px;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.lecturer-dashboard-page .role-stat-card {
+    animation: lecturerFadeUp 0.55s ease both;
+    background: #ffffff;
+    border: 0;
+    border-radius: 20px;
+    box-shadow: 0 16px 42px rgba(15, 23, 42, 0.07);
+    min-height: 146px;
+    padding: 22px;
+    transition: box-shadow 0.18s ease, transform 0.18s ease;
+}
+
+.lecturer-dashboard-page .role-stat-card:nth-child(2) {
+    animation-delay: 0.05s;
+}
+
+.lecturer-dashboard-page .role-stat-card:nth-child(3) {
+    animation-delay: 0.1s;
+}
+
+.lecturer-dashboard-page .role-stat-card:nth-child(4) {
+    animation-delay: 0.15s;
+}
+
+.lecturer-dashboard-page .role-stat-card::before {
+    content: none;
+}
+
+.lecturer-dashboard-page .role-stat-card:hover {
+    box-shadow: 0 22px 54px rgba(15, 23, 42, 0.11);
+    transform: translateY(-5px);
+}
+
+.lecturer-dashboard-page .role-stat-card .stat-icon {
+    background: #eff6ff;
+    border-radius: 999px;
+    color: #2563eb;
+    height: 42px;
+    margin-bottom: 18px;
+    width: 42px;
+}
+
+.lecturer-dashboard-page .role-stat-card span {
+    color: #64748b;
+    display: block;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+}
+
+.lecturer-dashboard-page .role-stat-card strong {
+    color: #0f172a;
+    display: block;
+    font-size: 38px;
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    line-height: 1;
+    margin-bottom: 10px;
+}
+
+.lecturer-dashboard-page .role-stat-card small {
+    color: #64748b;
+    font-size: 14px;
+    line-height: 1.45;
+}
+
+/* Premium lecturer quick actions */
+.lecturer-dashboard-section,
+.lecturer-table-card,
+.lecturer-activity-card {
+    background: transparent;
+}
+
+.lecturer-section-heading {
+    margin-bottom: 14px;
+}
+
+.lecturer-section-heading h3 {
+    color: #0f172a;
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    margin: 0 0 4px;
+}
+
+.lecturer-section-heading p {
+    color: #64748b;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.lecturer-dashboard-page .role-action-grid {
+    display: grid;
+    gap: 16px;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.lecturer-dashboard-page .role-action-grid .dashboard-card {
+    background: #ffffff;
+    border: 0;
+    border-radius: 20px;
+    box-shadow: 0 16px 42px rgba(15, 23, 42, 0.07);
+    min-height: 180px;
+    padding: 22px;
+}
+
+.lecturer-dashboard-page .role-action-grid .dashboard-card::before {
+    content: none;
+}
+
+.lecturer-dashboard-page .role-action-grid a.dashboard-card::after {
+    background: #f1f5f9;
+    box-shadow: none;
+    color: #2563eb;
+    content: "Open";
+    margin-top: auto;
+}
+
+.lecturer-dashboard-page .role-action-grid a.dashboard-card:hover::after {
+    background: #2563eb;
+    color: #ffffff;
+}
+
+.lecturer-dashboard-page .action-icon {
+    display: inline-flex;
+}
+
+.lecturer-dashboard-page .action-icon .stat-icon {
+    background: #eff6ff;
+    border-radius: 16px;
+    color: #2563eb;
+    height: 46px;
+    margin: 0 0 10px;
+    width: 46px;
+}
+
+.lecturer-dashboard-page .role-action-grid .dashboard-card h3 {
+    color: #0f172a;
+    font-size: 20px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+}
+
+.lecturer-dashboard-page .role-action-grid .dashboard-card p {
+    color: #64748b;
+    font-size: 14px;
+    line-height: 1.55;
+}
+
+/* Premium lecturer table and activity panel */
+.lecturer-lower-grid {
+    display: grid;
+    gap: 24px;
+    grid-template-columns: minmax(0, 1.6fr) minmax(320px, 0.8fr);
+}
+
+.lecturer-table-card,
+.lecturer-activity-card {
+    background: #ffffff;
+    border-radius: 20px;
+    box-shadow: 0 16px 42px rgba(15, 23, 42, 0.07);
+    padding: 24px;
+}
+
+.lecturer-table-wrap {
+    border-radius: 16px;
+    overflow: auto;
+}
+
+.lecturer-table-card table {
+    border-collapse: collapse;
+    min-width: 620px;
+    width: 100%;
+}
+
+.lecturer-table-card th {
+    background: #f8fafc;
+    color: #64748b;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    padding: 14px 16px;
+    position: sticky;
+    text-align: left;
+    text-transform: uppercase;
+    top: 0;
+}
+
+.lecturer-table-card td {
+    border-top: 1px solid #e2e8f0;
+    color: #334155;
+    font-size: 14px;
+    padding: 16px;
+}
+
+.lecturer-table-card tbody tr:nth-child(even) {
+    background: #fbfdff;
+}
+
+.lecturer-table-card tbody tr:hover {
+    background: #f1f5f9;
+}
+
+.table-status {
+    border-radius: 999px;
+    display: inline-flex;
+    font-size: 12px;
+    font-weight: 800;
+    padding: 6px 10px;
+}
+
+.table-status.status-present {
+    background: #dcfce7;
+    color: #15803d;
+}
+
+.table-status.status-absent {
+    background: #fee2e2;
+    color: #b91c1c;
+}
+
+.activity-list {
+    display: grid;
+    gap: 14px;
+}
+
+.activity-item {
+    align-items: flex-start;
+    display: grid;
+    gap: 12px;
+    grid-template-columns: 34px 1fr;
+}
+
+.activity-item > span {
+    align-items: center;
+    background: #ecfdf5;
+    border-radius: 999px;
+    color: #16a34a;
+    display: inline-flex;
+    height: 34px;
+    justify-content: center;
+    width: 34px;
+}
+
+.activity-item .stat-icon {
+    background: transparent;
+    height: auto;
+    margin: 0;
+    width: auto;
+}
+
+.activity-item .stat-icon svg {
+    height: 16px;
+    width: 16px;
+}
+
+.activity-item strong {
+    color: #0f172a;
+    display: block;
+    font-size: 14px;
+    font-weight: 800;
+    margin-bottom: 4px;
+}
+
+.activity-item small,
+.empty-activity {
+    color: #64748b;
+    font-size: 13px;
+}
+
+@keyframes lecturerFadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(18px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Premium lecturer dark mode */
+html[data-theme="dark"] .lecturer-dashboard-page {
+    background: #020617 !important;
+    color: #f8fafc;
+}
+
+html[data-theme="dark"] .lecturer-topbar,
+html[data-theme="dark"] .lecturer-profile-menu > div,
+html[data-theme="dark"] .lecturer-dashboard-page .role-dashboard-header,
+html[data-theme="dark"] .lecturer-dashboard-page .role-stat-card,
+html[data-theme="dark"] .lecturer-dashboard-page .role-action-grid .dashboard-card,
+html[data-theme="dark"] .lecturer-table-card,
+html[data-theme="dark"] .lecturer-activity-card {
+    background: #0f172a !important;
+    border-color: rgba(148, 163, 184, 0.18) !important;
+    box-shadow: 0 18px 48px rgba(0, 0, 0, 0.28) !important;
+}
+
+html[data-theme="dark"] .lecturer-topbar-brand,
+html[data-theme="dark"] .lecturer-dashboard-page .role-dashboard-header h2,
+html[data-theme="dark"] .lecturer-hero-side > strong,
+html[data-theme="dark"] .lecturer-ring b,
+html[data-theme="dark"] .lecturer-dashboard-page .role-stat-card strong,
+html[data-theme="dark"] .lecturer-section-heading h3,
+html[data-theme="dark"] .lecturer-dashboard-page .role-action-grid .dashboard-card h3,
+html[data-theme="dark"] .activity-item strong {
+    color: #f8fafc !important;
+}
+
+html[data-theme="dark"] .lecturer-topbar-brand small,
+html[data-theme="dark"] .lecturer-dashboard-page .role-dashboard-header .welcome,
+html[data-theme="dark"] .lecturer-hero-side > span,
+html[data-theme="dark"] .lecturer-efficiency small,
+html[data-theme="dark"] .lecturer-dashboard-page .role-stat-card span,
+html[data-theme="dark"] .lecturer-dashboard-page .role-stat-card small,
+html[data-theme="dark"] .lecturer-section-heading p,
+html[data-theme="dark"] .lecturer-dashboard-page .role-action-grid .dashboard-card p,
+html[data-theme="dark"] .activity-item small,
+html[data-theme="dark"] .empty-activity {
+    color: #94a3b8 !important;
+}
+
+html[data-theme="dark"] .lecturer-table-card th {
+    background: #111c2d;
+    color: #94a3b8;
+}
+
+html[data-theme="dark"] .lecturer-table-card td {
+    border-color: rgba(148, 163, 184, 0.18);
+    color: #cbd5e1;
+}
+
+html[data-theme="dark"] .lecturer-table-card tbody tr:nth-child(even),
+html[data-theme="dark"] .lecturer-table-card tbody tr:hover {
+    background: rgba(148, 163, 184, 0.08);
+}
+
+html[data-theme="dark"] .lecturer-ring {
+    background:
+        radial-gradient(circle at center, #0f172a 54%, transparent 56%),
+        conic-gradient(#22c55e calc(var(--value) * 1%), #1e293b 0);
+}
+
+/* Premium lecturer responsive styles */
+@media (max-width: 1120px) {
+    .lecturer-dashboard-page .role-stats-grid,
+    .lecturer-dashboard-page .role-action-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .lecturer-lower-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 760px) {
+    .lecturer-dashboard-page .role-dashboard-shell {
+        padding: 18px 14px 42px;
+    }
+
+    .lecturer-topbar,
+    .lecturer-dashboard-page .role-dashboard-header {
+        border-radius: 18px;
+    }
+
+    .lecturer-topbar {
+        align-items: flex-start;
+        gap: 14px;
+        position: static;
+    }
+
+    .lecturer-topbar-brand strong {
+        font-size: 15px;
+    }
+
+    .lecturer-dashboard-page .role-dashboard-header {
+        grid-template-columns: 1fr;
+        padding: 24px;
+    }
+
+    .lecturer-hero-side {
+        align-items: start;
+        justify-items: start;
+        min-width: 0;
+    }
+
+    .lecturer-dashboard-page .role-stats-grid,
+    .lecturer-dashboard-page .role-action-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .lecturer-dashboard-page .role-action-grid .dashboard-card {
+        min-height: 156px;
+    }
+
+    .lecturer-table-card,
+    .lecturer-activity-card {
+        padding: 18px;
+    }
+}
