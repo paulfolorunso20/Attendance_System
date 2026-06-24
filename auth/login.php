@@ -83,7 +83,7 @@ if (isset($_POST['login'])) {
 
 <head>
     <title>Login</title>
-    <link rel="stylesheet" href="../assets/css/style.css?v=auth-unified-1">
+    <link rel="stylesheet" href="../assets/css/style.css?v=professional-ui-6">
 </head>
 
 <body class="auth-page">
