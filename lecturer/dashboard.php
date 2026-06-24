@@ -79,7 +79,7 @@ $attendanceEfficiency = (int) min(100, max(0, ($stats["attendance_records"] ?? 0
 <html>
 <head>
     <title>Lecturer Dashboard</title>
-    <link rel="stylesheet" href="../assets/css/style.css?v=lecturer-dashboard-4">
+    <link rel="stylesheet" href="../assets/css/style.css?v=lecturer-dashboard-5">
 </head>
 <body class="role-dashboard-page lecturer-dashboard-page">
 
@@ -201,7 +201,7 @@ $attendanceEfficiency = (int) min(100, max(0, ($stats["attendance_records"] ?? 0
         <div class="dashboard-grid role-action-grid">
 
             <a href="<?php echo e(with_context("lecturer/create_session.php")); ?>" class="dashboard-card">
-                <span class="action-icon"><?php echo dashboard_icon("plus"); ?></span>
+                <span class="action-icon"><?php echo dashboard_icon("qr"); ?></span>
                 <h3>Create Session</h3>
                 <p>Generate attendance QR.</p>
             </a>
@@ -213,7 +213,7 @@ $attendanceEfficiency = (int) min(100, max(0, ($stats["attendance_records"] ?? 0
             </a>
 
             <a href="<?php echo e(with_context("lecturer/create_course.php")); ?>" class="dashboard-card">
-                <span class="action-icon"><?php echo dashboard_icon("book"); ?></span>
+                <span class="action-icon"><?php echo dashboard_icon("book_plus"); ?></span>
                 <h3>Add Course</h3>
                 <p>Register a new course.</p>
             </a>

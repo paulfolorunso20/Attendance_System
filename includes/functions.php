@@ -320,16 +320,18 @@ function render_department_options($selectedDepartment = "")
 function dashboard_icon($name)
 {
     $icons = [
-        "users" => '<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path>',
-        "book" => '<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M4 4.5A2.5 2.5 0 0 1 6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5z"></path>',
-        "calendar" => '<path d="M8 2v4"></path><path d="M16 2v4"></path><rect x="3" y="4" width="18" height="18" rx="2"></rect><path d="M3 10h18"></path>',
-        "activity" => '<path d="M22 12h-4l-3 8L9 4l-3 8H2"></path>',
-        "check" => '<path d="M20 6 9 17l-5-5"></path>',
-        "alert" => '<path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><path d="M12 9v4"></path><path d="M12 17h.01"></path>',
+        "users" => '<path d="M16 21v-2.2a4.8 4.8 0 0 0-4.8-4.8H6.8A4.8 4.8 0 0 0 2 18.8V21"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2.1a4.1 4.1 0 0 0-3.1-4"></path><path d="M16.5 3.4a4 4 0 0 1 0 7.2"></path>',
+        "book" => '<path d="M12 7v14"></path><path d="M3.5 5.6A2.6 2.6 0 0 1 6.1 3H12v18H6.1a2.6 2.6 0 0 1-2.6-2.6V5.6z"></path><path d="M12 3h5.9a2.6 2.6 0 0 1 2.6 2.6v12.8a2.6 2.6 0 0 1-2.6 2.6H12V3z"></path>',
+        "book_plus" => '<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M4 4.5A2.5 2.5 0 0 1 6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5z"></path><path d="M12 7v6"></path><path d="M9 10h6"></path>',
+        "calendar" => '<rect x="3" y="4" width="18" height="17" rx="3"></rect><path d="M8 2v4"></path><path d="M16 2v4"></path><path d="M3 10h18"></path><path d="m9 15 2 2 4-4"></path>',
+        "activity" => '<path d="M12 12h.01"></path><path d="M16.2 7.8a6 6 0 0 1 0 8.4"></path><path d="M7.8 16.2a6 6 0 0 1 0-8.4"></path><path d="M19.1 4.9a10 10 0 0 1 0 14.2"></path><path d="M4.9 19.1a10 10 0 0 1 0-14.2"></path>',
+        "check" => '<path d="M9 5h6"></path><path d="M9 3h6a2 2 0 0 1 2 2v1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h1V5a2 2 0 0 1 2-2z"></path><path d="m9 14 2 2 4-4"></path>',
+        "alert" => '<path d="M12 9v4"></path><path d="M12 17h.01"></path><path d="M10.4 3.9 2.2 18.1A2 2 0 0 0 3.9 21h16.2a2 2 0 0 0 1.7-2.9L13.6 3.9a1.9 1.9 0 0 0-3.2 0z"></path>',
         "percent" => '<path d="M19 5 5 19"></path><circle cx="6.5" cy="6.5" r="2.5"></circle><circle cx="17.5" cy="17.5" r="2.5"></circle>',
-        "layers" => '<path d="m12 2 9 5-9 5-9-5 9-5z"></path><path d="m3 12 9 5 9-5"></path><path d="m3 17 9 5 9-5"></path>',
-        "clock" => '<circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path>',
-        "table" => '<rect x="3" y="4" width="18" height="16" rx="2"></rect><path d="M3 10h18"></path><path d="M9 4v16"></path><path d="M15 4v16"></path>',
+        "layers" => '<path d="m12 2.5 9 5-9 5-9-5 9-5z"></path><path d="m3 12 9 5 9-5"></path><path d="m3 17 9 5 9-5"></path>',
+        "clock" => '<circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path><path d="M7 4.8 5.4 3.2"></path><path d="M17 4.8l1.6-1.6"></path>',
+        "qr" => '<rect x="3" y="3" width="6" height="6" rx="1.5"></rect><rect x="15" y="3" width="6" height="6" rx="1.5"></rect><rect x="3" y="15" width="6" height="6" rx="1.5"></rect><path d="M14 14h3"></path><path d="M15.5 12.5v3"></path><path d="M19 17h2"></path><path d="M17 21v-2"></path><path d="M14 20h3"></path>',
+        "table" => '<rect x="3" y="4" width="18" height="16" rx="2"></rect><path d="M3 10h18"></path><path d="M9 10v10"></path><path d="M15 10v10"></path><path d="m5.7 15.2 1.2 1.2 2.2-2.4"></path>',
         "plus" => '<path d="M12 5v14"></path><path d="M5 12h14"></path>',
     ];
 

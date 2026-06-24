@@ -9731,3 +9731,76 @@ html[data-theme="dark"] .lecturer-ring {
         padding: 18px;
     }
 }
+
+/* Refined lecturer dashboard icons */
+.lecturer-dashboard-page .stat-icon svg,
+.lecturer-dashboard-page .stat-icon svg * {
+    fill: none !important;
+    stroke: currentColor !important;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    vector-effect: non-scaling-stroke;
+}
+
+.lecturer-dashboard-page .role-stat-card .stat-icon,
+.lecturer-dashboard-page .action-icon .stat-icon,
+.lecturer-topbar-icon .stat-icon,
+.lecturer-dashboard-page .activity-item .stat-icon {
+    box-shadow: none;
+}
+
+.lecturer-dashboard-page .role-stat-card .stat-icon {
+    background: linear-gradient(135deg, #eef6ff, #e7f0ff);
+    border: 1px solid rgba(37, 99, 235, 0.12);
+    color: #2563eb;
+}
+
+.lecturer-dashboard-page .role-stat-card .stat-icon svg {
+    height: 23px;
+    width: 23px;
+}
+
+.lecturer-dashboard-page .action-icon .stat-icon {
+    align-items: center;
+    background: #0f172a;
+    border: 0;
+    border-radius: 18px;
+    color: #ffffff;
+    display: inline-flex;
+    height: 54px;
+    justify-content: center;
+    transition: transform 0.18s ease, box-shadow 0.18s ease;
+    width: 54px;
+}
+
+.lecturer-dashboard-page .action-icon .stat-icon svg {
+    height: 27px;
+    width: 27px;
+}
+
+.lecturer-dashboard-page .role-action-grid .dashboard-card:nth-child(1) .action-icon .stat-icon {
+    background: linear-gradient(135deg, #2563eb, #1d4ed8);
+}
+
+.lecturer-dashboard-page .role-action-grid .dashboard-card:nth-child(2) .action-icon .stat-icon {
+    background: linear-gradient(135deg, #0f172a, #334155);
+}
+
+.lecturer-dashboard-page .role-action-grid .dashboard-card:nth-child(3) .action-icon .stat-icon {
+    background: linear-gradient(135deg, #16a34a, #15803d);
+}
+
+.lecturer-dashboard-page .role-action-grid .dashboard-card:nth-child(4) .action-icon .stat-icon {
+    background: linear-gradient(135deg, #7c3aed, #4f46e5);
+}
+
+.lecturer-dashboard-page .role-action-grid .dashboard-card:hover .action-icon .stat-icon {
+    box-shadow: 0 16px 30px rgba(15, 23, 42, 0.18);
+    transform: translateY(-2px) scale(1.03);
+}
+
+html[data-theme="dark"] .lecturer-dashboard-page .role-stat-card .stat-icon {
+    background: rgba(37, 99, 235, 0.16);
+    border-color: rgba(147, 197, 253, 0.22);
+    color: #93c5fd;
+}
