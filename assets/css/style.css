@@ -8913,6 +8913,8 @@ html[data-theme="dark"] .auth-page .login-container input::placeholder {
     width: 21px;
 }
 
+
+
 .role-stat-card:nth-child(2) .stat-icon,
 .admin-dashboard-page .overview-stat-card:nth-child(2) .stat-icon {
     background: #ecfdf5;
