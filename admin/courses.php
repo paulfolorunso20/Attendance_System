@@ -70,6 +70,7 @@ $flash = get_flash();
             <?php while ($row = mysqli_fetch_assoc($courses)) { ?>
             <tr>
                 <form method="POST">
+                    <?php render_context_input(); ?>
                     <?php render_csrf_input(); ?>
                     <td>
                         <input type="hidden" name="course_id" value="<?php echo e($row["id"]); ?>">
@@ -94,8 +95,9 @@ $flash = get_flash();
     </div>
 
     <br>
-    <a href="dashboard.php">Back to Admin Dashboard</a>
+    <a href="<?php echo e(with_context("admin/dashboard.php")); ?>">Back to Admin Dashboard</a>
 </div>
 
+<?php render_context_script(); ?>
 </body>
 </html>

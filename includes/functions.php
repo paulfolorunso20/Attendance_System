@@ -63,6 +63,22 @@ function current_auth_context()
     return $_SESSION["auth_context"] ?? "";
 }
 
+function select_auth_context_for_role($role)
+{
+    if (empty($_SESSION["auth_contexts"]) || !is_array($_SESSION["auth_contexts"])) {
+        return "";
+    }
+
+    foreach ($_SESSION["auth_contexts"] as $context => $auth) {
+        if (($auth["role"] ?? "") === $role) {
+            apply_auth_context($context, $auth);
+            return $context;
+        }
+    }
+
+    return "";
+}
+
 function app_root_path()
 {
     $configuredPath = trim((string) (getenv("APP_BASE_PATH") ?: ""));
@@ -239,6 +255,10 @@ function require_role($role)
     sync_auth_context();
 
     if (!isset($_SESSION["user_id"]) || ($_SESSION["role"] ?? "") !== $role) {
+        if (select_auth_context_for_role($role) !== "") {
+            return;
+        }
+
         redirect_with_context("auth/login.php");
     }
 }

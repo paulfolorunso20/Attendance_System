@@ -22,6 +22,11 @@ if ($attendanceToken !== "" && preg_match('/^[a-f0-9]{48}$/', $attendanceToken))
     $attendanceToken = $_SESSION["pending_attendance_token"] ?? "";
 }
 
+sync_auth_context();
+if ($_SERVER["REQUEST_METHOD"] !== "POST" && !empty($_SESSION["user_id"]) && in_array(($_SESSION["role"] ?? ""), ["admin", "lecturer", "student"], true)) {
+    redirect_for_role($_SESSION["role"]);
+}
+
 if (isset($_POST['login'])) {
 
     $identifier = trim($_POST['identifier'] ?? "");

@@ -138,12 +138,12 @@ $recentAttendance = dashboard_fetch_all($conn, "
     </div>
 
     <div class="dashboard-grid">
-        <a href="users.php" class="dashboard-card">
+        <a href="<?php echo e(with_context("admin/users.php")); ?>" class="dashboard-card">
             <h3>Manage Users</h3>
             <p>View students, lecturers, and admin accounts.</p>
         </a>
 
-        <a href="courses.php" class="dashboard-card">
+        <a href="<?php echo e(with_context("admin/courses.php")); ?>" class="dashboard-card">
             <h3>Manage Courses</h3>
             <p>View and reassign courses to lecturers.</p>
         </a>
@@ -153,7 +153,7 @@ $recentAttendance = dashboard_fetch_all($conn, "
             <p>Update your admin profile and change your password.</p>
         </a>
 
-        <a href="audit_log.php" class="dashboard-card">
+        <a href="<?php echo e(with_context("admin/audit_log.php")); ?>" class="dashboard-card">
             <h3>Audit Log</h3>
             <p>Review important actions recorded across the system.</p>
         </a>
@@ -228,5 +228,6 @@ $recentAttendance = dashboard_fetch_all($conn, "
     </div>
 </div>
 
+<?php render_context_script(); ?>
 </body>
 </html>

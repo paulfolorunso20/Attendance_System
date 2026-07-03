@@ -85,7 +85,7 @@ $attendanceEvents = audit_count($conn, "SELECT COUNT(*) FROM audit_logs WHERE ac
             <h2>Audit Log</h2>
             <p class="welcome">Review important system activity, account changes, course updates, and attendance events.</p>
         </div>
-        <a href="dashboard.php" class="button-link secondary-action">Back to Dashboard</a>
+        <a href="<?php echo e(with_context("admin/dashboard.php")); ?>" class="button-link secondary-action">Back to Dashboard</a>
     </div>
 
     <div class="audit-stats-grid">
@@ -112,6 +112,7 @@ $attendanceEvents = audit_count($conn, "SELECT COUNT(*) FROM audit_logs WHERE ac
     </div>
 
     <form method="GET" class="audit-filter-panel">
+        <?php render_context_input(); ?>
         <div>
             <label>Action</label>
             <select name="action">
@@ -184,5 +185,6 @@ $attendanceEvents = audit_count($conn, "SELECT COUNT(*) FROM audit_logs WHERE ac
     </div>
 </div>
 
+<?php render_context_script(); ?>
 </body>
 </html>

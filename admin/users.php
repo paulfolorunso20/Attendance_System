@@ -86,6 +86,7 @@ $flash = get_flash();
             <?php while ($row = mysqli_fetch_assoc($result)) { ?>
             <tr>
                 <form method="POST">
+                    <?php render_context_input(); ?>
                     <?php render_csrf_input(); ?>
                     <td>
                         <input type="hidden" name="user_id" value="<?php echo e($row["id"]); ?>">
@@ -132,9 +133,10 @@ $flash = get_flash();
     </div>
 
     <br>
-    <a href="dashboard.php">Back to Admin Dashboard</a>
+    <a href="<?php echo e(with_context("admin/dashboard.php")); ?>">Back to Admin Dashboard</a>
 </div>
 
 <script src="../assets/js/matric-format.js?v=1"></script>
+<?php render_context_script(); ?>
 </body>
 </html>

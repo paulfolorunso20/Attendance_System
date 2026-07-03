@@ -6191,24 +6191,31 @@ html[data-theme="dark"] .auth-page .login-container input::placeholder {
 .admin-dashboard-page .overview-stat-card .stat-icon {
     align-items: center;
     background: #eff6ff;
-    border-radius: 16px;
+    border-radius: 999px;
     color: #003b73;
     display: inline-flex;
     height: 44px;
     justify-content: center;
+    line-height: 1;
     margin-bottom: 16px;
+    min-height: 44px;
+    min-width: 44px;
     width: 44px;
 }
 
 .role-stat-card .stat-icon svg,
 .admin-dashboard-page .overview-stat-card .stat-icon svg {
+    display: block;
     fill: none;
-    height: 21px;
+    height: 20px;
+    margin: 0;
+    padding: 0;
     stroke: currentColor;
     stroke-linecap: round;
     stroke-linejoin: round;
     stroke-width: 2;
-    width: 21px;
+    vertical-align: middle;
+    width: 20px;
 }
 
 
@@ -6754,15 +6761,24 @@ html[data-theme="dark"] .saas-feature-grid .saas-feature-icon {
 }
 
 .lecturer-dashboard-page .action-icon {
+    align-items: center;
     display: inline-flex;
+    justify-content: center;
+    line-height: 1;
 }
 
 .lecturer-dashboard-page .action-icon .stat-icon {
+    align-items: center;
     background: #eff6ff;
-    border-radius: 16px;
+    border-radius: 999px;
     color: #2563eb;
+    display: inline-flex;
     height: 46px;
+    justify-content: center;
+    line-height: 1;
     margin: 0 0 10px;
+    min-height: 46px;
+    min-width: 46px;
     width: 46px;
 }
 
@@ -7103,4 +7119,36 @@ html[data-theme="dark"] .lecturer-dashboard-page .role-stat-card .stat-icon {
     background: rgba(37, 99, 235, 0.16);
     border-color: rgba(147, 197, 253, 0.22);
     color: #93c5fd;
+}
+
+/* Dashboard icon centering guard */
+.stat-icon,
+.action-icon,
+.dashboard-icon,
+.role-stat-card .stat-icon,
+.role-action-card .action-icon,
+.admin-dashboard-page .overview-stat-card .stat-icon {
+    align-items: center;
+    border-radius: 999px;
+    display: inline-flex;
+    justify-content: center;
+    line-height: 1;
+    min-height: 44px;
+    min-width: 44px;
+}
+
+.stat-icon svg,
+.action-icon svg,
+.dashboard-icon svg,
+.stat-icon i,
+.action-icon i,
+.dashboard-icon i,
+.role-stat-card .stat-icon svg,
+.role-action-card .action-icon svg,
+.admin-dashboard-page .overview-stat-card .stat-icon svg {
+    display: block;
+    line-height: 1;
+    margin: 0;
+    padding: 0;
+    vertical-align: middle;
 }
