@@ -7152,3 +7152,417 @@ html[data-theme="dark"] .lecturer-dashboard-page .role-stat-card .stat-icon {
     padding: 0;
     vertical-align: middle;
 }
+
+/* ==========================================================
+   Premium dark theme system
+   ========================================================== */
+:root {
+    --sa-bg: #f8fafc;
+    --sa-bg-soft: #f4f7fb;
+    --sa-surface: #ffffff;
+    --sa-surface-elevated: #ffffff;
+    --sa-border: rgba(203, 213, 225, 0.72);
+    --sa-text: #0f172a;
+    --sa-text-secondary: #334155;
+    --sa-text-muted: #64748b;
+    --sa-primary: #2563eb;
+    --sa-primary-soft: #eff6ff;
+    --sa-success: #22c55e;
+    --sa-warning: #f59e0b;
+    --sa-danger: #ef4444;
+}
+
+html[data-theme="dark"] {
+    --sa-bg: #0b1220;
+    --sa-bg-soft: #111827;
+    --sa-surface: #1e293b;
+    --sa-surface-elevated: #273449;
+    --sa-surface-glass: rgba(30, 41, 59, 0.86);
+    --sa-border: rgba(255, 255, 255, 0.08);
+    --sa-border-strong: rgba(255, 255, 255, 0.14);
+    --sa-text: #f8fafc;
+    --sa-text-secondary: #cbd5e1;
+    --sa-text-muted: #94a3b8;
+    --sa-primary: #3b82f6;
+    --sa-primary-strong: #60a5fa;
+    --sa-primary-soft: rgba(59, 130, 246, 0.15);
+    --sa-success: #22c55e;
+    --sa-warning: #f59e0b;
+    --sa-danger: #ef4444;
+    --sa-shadow: 0 18px 48px rgba(0, 0, 0, 0.34);
+    color-scheme: dark;
+}
+
+html[data-theme="dark"] body {
+    background: var(--sa-bg);
+    color: var(--sa-text);
+}
+
+html[data-theme="dark"] .home-page,
+html[data-theme="dark"] .landing-page,
+html[data-theme="dark"] .auth-page,
+html[data-theme="dark"] .attendance-page,
+html[data-theme="dark"] .student-dashboard-page,
+html[data-theme="dark"] .lecturer-dashboard-page,
+html[data-theme="dark"] .admin-dashboard-page,
+html[data-theme="dark"] .profile-page,
+html[data-theme="dark"] .student-courses-page,
+html[data-theme="dark"] .audit-log-page,
+html[data-theme="dark"] .session-page {
+    background:
+        radial-gradient(circle at 18% 6%, rgba(59, 130, 246, 0.16), transparent 28%),
+        radial-gradient(circle at 86% 18%, rgba(34, 197, 94, 0.1), transparent 26%),
+        linear-gradient(180deg, var(--sa-bg) 0%, var(--sa-bg-soft) 100%) !important;
+    color: var(--sa-text);
+}
+
+/* Dark cards and elevated surfaces */
+html[data-theme="dark"] .home-panel,
+html[data-theme="dark"] .container,
+html[data-theme="dark"] form,
+html[data-theme="dark"] .dashboard-card,
+html[data-theme="dark"] .overview-stat-card,
+html[data-theme="dark"] .role-dashboard-header,
+html[data-theme="dark"] .role-stat-card,
+html[data-theme="dark"] .role-panel,
+html[data-theme="dark"] .profile-card,
+html[data-theme="dark"] .profile-hero,
+html[data-theme="dark"] .profile-summary-card,
+html[data-theme="dark"] .student-courses-card,
+html[data-theme="dark"] .audit-filter-card,
+html[data-theme="dark"] .audit-table-card,
+html[data-theme="dark"] .session-card,
+html[data-theme="dark"] .qr-box,
+html[data-theme="dark"] .verification-card,
+html[data-theme="dark"] .verification-panel,
+html[data-theme="dark"] .face-scan-panel,
+html[data-theme="dark"] .attendance-hero,
+html[data-theme="dark"] .student-identity,
+html[data-theme="dark"] .empty-state,
+html[data-theme="dark"] .auth-page .login-container .container,
+html[data-theme="dark"] .auth-choice-card,
+html[data-theme="dark"] .form-footer,
+html[data-theme="dark"] .lecturer-topbar,
+html[data-theme="dark"] .lecturer-profile-menu > div,
+html[data-theme="dark"] .lecturer-dashboard-page .role-dashboard-header,
+html[data-theme="dark"] .lecturer-dashboard-page .role-stat-card,
+html[data-theme="dark"] .lecturer-dashboard-page .role-action-grid .dashboard-card,
+html[data-theme="dark"] .lecturer-table-card,
+html[data-theme="dark"] .lecturer-activity-card,
+html[data-theme="dark"] .lecturer-live-session-card,
+html[data-theme="dark"] .lecturer-dashboard-page .lecturer-live-session-meta div,
+html[data-theme="dark"] .saas-dashboard,
+html[data-theme="dark"] .saas-feature-grid article,
+html[data-theme="dark"] .saas-timeline article,
+html[data-theme="dark"] .saas-stats-grid,
+html[data-theme="dark"] .saas-progress-card,
+html[data-theme="dark"] .saas-metric,
+html[data-theme="dark"] .saas-table,
+html[data-theme="dark"] .saas-chart {
+    background: var(--sa-surface) !important;
+    border-color: var(--sa-border) !important;
+    box-shadow: var(--sa-shadow) !important;
+    color: var(--sa-text);
+}
+
+html[data-theme="dark"] .auth-brand-panel,
+html[data-theme="dark"] .home-preview,
+html[data-theme="dark"] .attendance-page .face-camera-frame {
+    background:
+        linear-gradient(145deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02)),
+        linear-gradient(160deg, #0f172a 0%, #17345d 54%, #0f3d2e 100%) !important;
+    border-color: var(--sa-border-strong) !important;
+    box-shadow: var(--sa-shadow) !important;
+}
+
+html[data-theme="dark"] .role-dashboard-page .role-action-grid .dashboard-card,
+html[data-theme="dark"] .admin-dashboard-page .dashboard-grid .dashboard-card,
+html[data-theme="dark"] .lecturer-dashboard-page .role-action-grid .dashboard-card {
+    background:
+        linear-gradient(180deg, rgba(39, 52, 73, 0.95), rgba(30, 41, 59, 0.98)),
+        var(--sa-surface) !important;
+    border: 1px solid var(--sa-border) !important;
+}
+
+html[data-theme="dark"] .dashboard-card:hover,
+html[data-theme="dark"] .role-stat-card:hover,
+html[data-theme="dark"] .overview-stat-card:hover {
+    border-color: rgba(96, 165, 250, 0.26) !important;
+    box-shadow: 0 22px 56px rgba(0, 0, 0, 0.42) !important;
+}
+
+/* Dark typography */
+html[data-theme="dark"] h1,
+html[data-theme="dark"] h2,
+html[data-theme="dark"] h3,
+html[data-theme="dark"] h4,
+html[data-theme="dark"] strong,
+html[data-theme="dark"] .role-dashboard-header h2,
+html[data-theme="dark"] .attendance-hero h2,
+html[data-theme="dark"] .student-identity strong,
+html[data-theme="dark"] .panel-heading h3,
+html[data-theme="dark"] .lecturer-topbar-brand,
+html[data-theme="dark"] .lecturer-dashboard-page .role-dashboard-header h2,
+html[data-theme="dark"] .lecturer-hero-side > strong,
+html[data-theme="dark"] .lecturer-ring b,
+html[data-theme="dark"] .lecturer-dashboard-page .role-stat-card strong,
+html[data-theme="dark"] .lecturer-section-heading h3,
+html[data-theme="dark"] .lecturer-dashboard-page .role-action-grid .dashboard-card h3,
+html[data-theme="dark"] .activity-item strong,
+html[data-theme="dark"] .admin-dashboard-page .dashboard-grid .dashboard-card h3 {
+    color: var(--sa-text) !important;
+}
+
+html[data-theme="dark"] p,
+html[data-theme="dark"] small,
+html[data-theme="dark"] label,
+html[data-theme="dark"] span,
+html[data-theme="dark"] .welcome,
+html[data-theme="dark"] .status-text,
+html[data-theme="dark"] .helper-text,
+html[data-theme="dark"] .home-copy,
+html[data-theme="dark"] .hero-subtitle,
+html[data-theme="dark"] .attendance-hero p,
+html[data-theme="dark"] .auth-page .login-header p,
+html[data-theme="dark"] .lecturer-topbar-brand small,
+html[data-theme="dark"] .lecturer-dashboard-page .role-dashboard-header .welcome,
+html[data-theme="dark"] .lecturer-hero-side > span,
+html[data-theme="dark"] .lecturer-efficiency small,
+html[data-theme="dark"] .lecturer-dashboard-page .role-stat-card span,
+html[data-theme="dark"] .lecturer-dashboard-page .role-stat-card small,
+html[data-theme="dark"] .lecturer-section-heading p,
+html[data-theme="dark"] .lecturer-dashboard-page .role-action-grid .dashboard-card p,
+html[data-theme="dark"] .admin-dashboard-page .dashboard-grid .dashboard-card p,
+html[data-theme="dark"] .activity-item small,
+html[data-theme="dark"] .empty-activity {
+    color: var(--sa-text-muted) !important;
+}
+
+html[data-theme="dark"] a {
+    color: var(--sa-primary-strong);
+}
+
+/* Dark forms */
+html[data-theme="dark"] input,
+html[data-theme="dark"] select,
+html[data-theme="dark"] textarea,
+html[data-theme="dark"] .auth-page .login-container input,
+html[data-theme="dark"] .auth-page .login-container select {
+    background: var(--sa-surface-elevated) !important;
+    border-color: var(--sa-border) !important;
+    color: var(--sa-text) !important;
+    box-shadow: none !important;
+}
+
+html[data-theme="dark"] input:focus,
+html[data-theme="dark"] select:focus,
+html[data-theme="dark"] textarea:focus {
+    border-color: rgba(96, 165, 250, 0.72) !important;
+    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.18) !important;
+    outline: none;
+}
+
+html[data-theme="dark"] input::placeholder,
+html[data-theme="dark"] textarea::placeholder {
+    color: var(--sa-text-muted) !important;
+}
+
+html[data-theme="dark"] .password-toggle-button,
+html[data-theme="dark"] .password-toggle-button:hover {
+    background: transparent !important;
+    border-color: transparent !important;
+    box-shadow: none !important;
+    color: var(--sa-text-muted) !important;
+}
+
+/* Dark tables */
+html[data-theme="dark"] .table-wrap,
+html[data-theme="dark"] .audit-table-shell,
+html[data-theme="dark"] .lecturer-table-wrap {
+    background: var(--sa-surface) !important;
+    border-color: var(--sa-border) !important;
+}
+
+html[data-theme="dark"] table,
+html[data-theme="dark"] .saas-table,
+html[data-theme="dark"] .registered-courses-card table,
+html[data-theme="dark"] .role-panel table,
+html[data-theme="dark"] .lecturer-table-card table,
+html[data-theme="dark"] .audit-log-page .audit-table-wrap table {
+    background: var(--sa-surface) !important;
+    color: var(--sa-text);
+}
+
+html[data-theme="dark"] th,
+html[data-theme="dark"] .table-wrap tr:first-child,
+html[data-theme="dark"] .table-wrap thead,
+html[data-theme="dark"] .lecturer-table-card th,
+html[data-theme="dark"] .audit-log-page .audit-table-wrap th {
+    background: var(--sa-surface-elevated) !important;
+    border-color: var(--sa-border) !important;
+    color: var(--sa-text-secondary) !important;
+}
+
+html[data-theme="dark"] td,
+html[data-theme="dark"] .lecturer-table-card td,
+html[data-theme="dark"] .audit-log-page .audit-table-wrap td {
+    background: transparent !important;
+    border-color: var(--sa-border) !important;
+    color: var(--sa-text-secondary) !important;
+}
+
+html[data-theme="dark"] tr:hover td,
+html[data-theme="dark"] .lecturer-table-card tbody tr:hover,
+html[data-theme="dark"] .audit-log-page .audit-table-wrap tr:hover td {
+    background: #334155 !important;
+    color: var(--sa-text) !important;
+}
+
+html[data-theme="dark"] .lecturer-table-card tbody tr:nth-child(even) {
+    background: rgba(148, 163, 184, 0.05) !important;
+}
+
+/* Dark buttons */
+html[data-theme="dark"] button,
+html[data-theme="dark"] .button-link,
+html[data-theme="dark"] .primary-cta,
+html[data-theme="dark"] .home-primary,
+html[data-theme="dark"] .primary-action {
+    background: var(--sa-primary) !important;
+    border-color: rgba(96, 165, 250, 0.28) !important;
+    box-shadow: 0 12px 28px rgba(37, 99, 235, 0.26) !important;
+    color: #ffffff !important;
+}
+
+html[data-theme="dark"] button:hover,
+html[data-theme="dark"] .button-link:hover,
+html[data-theme="dark"] .primary-cta:hover,
+html[data-theme="dark"] .home-primary:hover,
+html[data-theme="dark"] .primary-action:hover {
+    box-shadow: 0 16px 34px rgba(59, 130, 246, 0.32) !important;
+}
+
+html[data-theme="dark"] .secondary-button,
+html[data-theme="dark"] .secondary-action,
+html[data-theme="dark"] .secondary-cta,
+html[data-theme="dark"] .home-secondary,
+html[data-theme="dark"] .fallback-scan-action,
+html[data-theme="dark"] .compact-button,
+html[data-theme="dark"] .saas-btn-dark-ghost,
+html[data-theme="dark"] .lecturer-dashboard-page .role-action-grid a.dashboard-card::after,
+html[data-theme="dark"] .role-dashboard-page .role-action-grid a.dashboard-card::after,
+html[data-theme="dark"] .admin-dashboard-page .dashboard-grid a.dashboard-card::after {
+    background: var(--sa-surface-elevated) !important;
+    border: 1px solid var(--sa-border) !important;
+    box-shadow: none !important;
+    color: var(--sa-text) !important;
+}
+
+html[data-theme="dark"] .secondary-button:hover,
+html[data-theme="dark"] .secondary-action:hover,
+html[data-theme="dark"] .secondary-cta:hover,
+html[data-theme="dark"] .home-secondary:hover,
+html[data-theme="dark"] .fallback-scan-action:hover,
+html[data-theme="dark"] .compact-button:hover,
+html[data-theme="dark"] .role-dashboard-page .role-action-grid a.dashboard-card:hover::after,
+html[data-theme="dark"] .admin-dashboard-page .dashboard-grid a.dashboard-card:hover::after {
+    background: #334155 !important;
+    color: var(--sa-text) !important;
+}
+
+html[data-theme="dark"] .danger-action,
+html[data-theme="dark"] .button-link.danger-action {
+    background: rgba(239, 68, 68, 0.16) !important;
+    border-color: rgba(239, 68, 68, 0.32) !important;
+    box-shadow: none !important;
+    color: #fecaca !important;
+}
+
+/* Dark badges and alerts */
+html[data-theme="dark"] .alert-success {
+    background: rgba(34, 197, 94, 0.13) !important;
+    border-color: rgba(34, 197, 94, 0.28) !important;
+    color: #bbf7d0 !important;
+}
+
+html[data-theme="dark"] .alert-error {
+    background: rgba(239, 68, 68, 0.13) !important;
+    border-color: rgba(239, 68, 68, 0.32) !important;
+    color: #fecaca !important;
+}
+
+html[data-theme="dark"] .status-badge,
+html[data-theme="dark"] .camera-mode-badge,
+html[data-theme="dark"] .eligibility-badge,
+html[data-theme="dark"] .verification-steps span,
+html[data-theme="dark"] .session-check-list p,
+html[data-theme="dark"] .home-mini-stats div,
+html[data-theme="dark"] .home-feature-row span,
+html[data-theme="dark"] .hero-trust-row span {
+    background: var(--sa-surface-elevated) !important;
+    border-color: var(--sa-border) !important;
+    color: var(--sa-text-secondary) !important;
+}
+
+html[data-theme="dark"] .status-present,
+html[data-theme="dark"] .table-status.status-present,
+html[data-theme="dark"] .present,
+html[data-theme="dark"] .badge-success {
+    background: rgba(34, 197, 94, 0.15) !important;
+    color: #86efac !important;
+}
+
+html[data-theme="dark"] .status-absent,
+html[data-theme="dark"] .table-status.status-absent,
+html[data-theme="dark"] .absent,
+html[data-theme="dark"] .badge-danger {
+    background: rgba(239, 68, 68, 0.15) !important;
+    color: #fca5a5 !important;
+}
+
+html[data-theme="dark"] .status-late,
+html[data-theme="dark"] .late,
+html[data-theme="dark"] .badge-warning {
+    background: rgba(245, 158, 11, 0.15) !important;
+    color: #fcd34d !important;
+}
+
+/* Dark icons */
+html[data-theme="dark"] .stat-icon,
+html[data-theme="dark"] .action-icon,
+html[data-theme="dark"] .dashboard-icon,
+html[data-theme="dark"] .role-stat-card .stat-icon,
+html[data-theme="dark"] .role-action-card .action-icon,
+html[data-theme="dark"] .admin-dashboard-page .overview-stat-card .stat-icon,
+html[data-theme="dark"] .lecturer-dashboard-page .role-stat-card .stat-icon,
+html[data-theme="dark"] .lecturer-dashboard-page .action-icon .stat-icon,
+html[data-theme="dark"] .lecturer-topbar-icon {
+    background: var(--sa-primary-soft) !important;
+    border-color: rgba(96, 165, 250, 0.22) !important;
+    color: var(--sa-primary-strong) !important;
+}
+
+html[data-theme="dark"] .lecturer-dashboard-page .role-action-grid .dashboard-card:nth-child(2) .action-icon .stat-icon,
+html[data-theme="dark"] .lecturer-dashboard-page .role-action-grid .dashboard-card:nth-child(3) .action-icon .stat-icon,
+html[data-theme="dark"] .lecturer-dashboard-page .role-action-grid .dashboard-card:nth-child(4) .action-icon .stat-icon {
+    background: var(--sa-primary-soft) !important;
+    color: var(--sa-primary-strong) !important;
+}
+
+html[data-theme="dark"] .lecturer-ring {
+    background:
+        radial-gradient(circle at center, var(--sa-surface) 54%, transparent 56%),
+        conic-gradient(var(--sa-success) calc(var(--value) * 1%), var(--sa-surface-elevated) 0) !important;
+}
+
+html[data-theme="dark"] .theme-toggle {
+    background: var(--sa-surface) !important;
+    border-color: var(--sa-border) !important;
+    box-shadow: var(--sa-shadow) !important;
+    color: var(--sa-text) !important;
+}
+
+html[data-theme="dark"] .theme-toggle-icon {
+    background: var(--sa-primary-soft) !important;
+    color: var(--sa-primary-strong) !important;
+}
