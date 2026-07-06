@@ -7123,18 +7123,12 @@ html[data-theme="dark"] .lecturer-dashboard-page .role-stat-card .stat-icon {
 
 /* Dashboard icon centering guard */
 .stat-icon,
-.action-icon,
-.dashboard-icon,
 .role-stat-card .stat-icon,
-.role-action-card .action-icon,
 .admin-dashboard-page .overview-stat-card .stat-icon {
     align-items: center;
-    border-radius: 999px;
     display: inline-flex;
     justify-content: center;
     line-height: 1;
-    min-height: 44px;
-    min-width: 44px;
 }
 
 .stat-icon svg,
