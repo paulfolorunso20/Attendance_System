@@ -7,6 +7,7 @@ $lecturer_id = current_user_id();
 $courses = [];
 $createdSession = null;
 $qr_link = null;
+$justCreatedSession = false;
 $flash = get_flash();
 
 $course_query = "SELECT * FROM courses WHERE lecturer_id = ? ORDER BY course_code";
@@ -82,6 +83,7 @@ if (isset($_POST['create'])) {
                 "radius_meters" => $radius,
                 "marked_count" => 0,
             ];
+            $justCreatedSession = true;
         } else {
             $error = "Could not create attendance session.";
         }
@@ -127,7 +129,7 @@ if (!$createdSession && !isset($_POST["create"])) {
 
 <head>
     <title>Create Session</title>
-    <link rel="stylesheet" href="../assets/css/style.css?v=professional-ui-5">
+    <link rel="stylesheet" href="../assets/css/style.css?v=session-focus-1">
 </head>
 
 <body class="session-page">
@@ -409,6 +411,7 @@ const toggleSessionCard = document.getElementById("toggleSessionCard");
 const liveSessionBody = document.getElementById("liveSessionBody");
 const expiresAtText = document.getElementById("expiresAtText");
 const liveSessionCollapseKey = <?php echo json_encode($createdSession ? "live_session_card_collapsed_" . (int) $createdSession["id"] : ""); ?>;
+const shouldFocusNewSession = <?php echo $justCreatedSession ? "true" : "false"; ?>;
 let expiresAt = new Date(<?php echo json_encode($createdSession ? date("c", strtotime($createdSession["expires_at"])) : ""); ?>).getTime();
 let durationSeconds = <?php echo (int) ($createdSession["duration_seconds"] ?? 0); ?>;
 let countdownTimer = null;
@@ -464,6 +467,17 @@ function updateCountdown() {
 if (liveSessionCard && countdownText && sessionProgressBar) {
     updateCountdown();
     countdownTimer = window.setInterval(updateCountdown, 1000);
+}
+
+if (liveSessionCard && shouldFocusNewSession) {
+    window.setTimeout(function () {
+        liveSessionCard.scrollIntoView({ behavior: "smooth", block: "start" });
+        liveSessionCard.classList.add("is-session-focus");
+
+        window.setTimeout(function () {
+            liveSessionCard.classList.remove("is-session-focus");
+        }, 2200);
+    }, 180);
 }
 
 if (markedCount && liveSessionCard) {
