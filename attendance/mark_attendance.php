@@ -10,8 +10,53 @@ if (!isset($_SESSION["user_id"]) && isset($_GET["token"])) {
 require_role("student");
 require_valid_csrf();
 
+function render_attendance_feedback($type, $title, $message)
+{
+    $type = in_array($type, ["success", "warning", "error"], true) ? $type : "error";
+    $dashboardUrl = with_context("student/dashboard.php");
+    $historyUrl = with_context("student/history.php");
+    $icon = $type === "success"
+        ? '<path d="M20 6 9 17l-5-5"></path>'
+        : '<path d="M12 9v4"></path><path d="M12 17h.01"></path><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0Z"></path>';
+    ?>
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title><?php echo e($title); ?></title>
+        <link rel="stylesheet" href="../assets/css/style.css?v=attendance-feedback-1">
+    </head>
+    <body class="attendance-feedback-page">
+        <main class="attendance-feedback-shell">
+            <section class="attendance-feedback-card attendance-feedback-<?php echo e($type); ?>" role="status" aria-live="polite">
+                <span class="attendance-feedback-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" focusable="false">
+                        <?php echo $icon; ?>
+                    </svg>
+                </span>
+                <p class="attendance-feedback-kicker">Attendance verification</p>
+                <h1><?php echo e($title); ?></h1>
+                <p><?php echo e($message); ?></p>
+                <div class="attendance-feedback-actions">
+                    <a class="button-link" href="<?php echo e($dashboardUrl); ?>">Back to Dashboard</a>
+                    <?php if ($type === "success") { ?>
+                        <a class="button-link secondary-action" href="<?php echo e($historyUrl); ?>">View History</a>
+                    <?php } ?>
+                </div>
+            </section>
+        </main>
+        <script src="../assets/js/theme-toggle.js?v=2"></script>
+    </body>
+    </html>
+    <?php
+    exit;
+}
+
 if (!isset($_GET['token'])) {
-    die("Invalid attendance link.");
+    render_attendance_feedback(
+        "error",
+        "Invalid Attendance Link",
+        "This attendance link is not valid. Please scan the QR code again or contact your lecturer."
+    );
 }
 
 $token = $_GET['token'];
@@ -76,17 +121,29 @@ mysqli_stmt_execute($stmt);
 $session_result = mysqli_stmt_get_result($stmt);
 
 if (mysqli_num_rows($session_result) == 0) {
-    die("Attendance session not found.");
+    render_attendance_feedback(
+        "error",
+        "Session Not Found",
+        "We could not find this attendance session. Please scan the latest QR code from your lecturer."
+    );
 }
 
 $session = mysqli_fetch_assoc($session_result);
 
 if (strtotime($session['expires_at']) < time()) {
-    die("This attendance session has expired.");
+    render_attendance_feedback(
+        "warning",
+        "Session Expired",
+        "This attendance session has expired. Please contact your lecturer for the next step."
+    );
 }
 
 if (!empty($session["closed_at"])) {
-    die("This attendance session has been closed by the lecturer.");
+    render_attendance_feedback(
+        "warning",
+        "Session Closed",
+        "This attendance session has been closed by the lecturer and can no longer accept submissions."
+    );
 }
 
 $session_id = (int) $session['id'];
@@ -98,7 +155,11 @@ mysqli_stmt_execute($check_stmt);
 $check_result = mysqli_stmt_get_result($check_stmt);
 
 if (mysqli_num_rows($check_result) > 0) {
-    die("You have already marked attendance for this session.");
+    render_attendance_feedback(
+        "success",
+        "Attendance Already Marked",
+        "You have already marked attendance for this session. No further action is needed."
+    );
 }
 
 if (isset($_POST["save_face_profile"]) && $profileComplete) {
