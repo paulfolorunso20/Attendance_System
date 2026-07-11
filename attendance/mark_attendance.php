@@ -522,7 +522,8 @@ function captureBestPosition(onSuccess, onError) {
     let lastError = null;
     let finished = false;
     let watchId = null;
-    const options = { enableHighAccuracy: true, timeout: 20000, maximumAge: 0 };
+    const options = { enableHighAccuracy: true, timeout: 30000, maximumAge: 0 };
+    const cachedOptions = { enableHighAccuracy: true, timeout: 8000, maximumAge: 60000 };
 
     const finish = function () {
         if (finished) {
@@ -557,7 +558,11 @@ function captureBestPosition(onSuccess, onError) {
             lastError = error;
         }, options);
 
-        window.setTimeout(finish, 15000);
+        navigator.geolocation.getCurrentPosition(acceptPosition, function () {
+            // Cached location is only a backup while waiting for a fresh GPS reading.
+        }, cachedOptions);
+
+        window.setTimeout(finish, 30000);
     } catch (error) {
         navigator.geolocation.getCurrentPosition(onSuccess, onError, options);
     }
