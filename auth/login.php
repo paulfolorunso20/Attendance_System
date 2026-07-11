@@ -11,6 +11,9 @@ $identifierType = $loginMode === "staff" ? "email" : "text";
 $identifierAttributes = $loginMode === "staff" ? "" : ' maxlength="10" inputmode="numeric" data-matric-format';
 $attendanceToken = trim((string) ($_POST["attendance_token"] ?? $_GET["attendance_token"] ?? ""));
 $forgotPasswordLink = "forgot_password.php";
+$showFreshLogin = $_SERVER["REQUEST_METHOD"] !== "POST"
+    && ($_GET["fresh"] ?? "") === "1"
+    && in_array($loginMode, ["student", "staff"], true);
 
 if ($loginMode !== "") {
     $forgotPasswordLink .= "?recover_as=" . urlencode($loginMode);
@@ -23,7 +26,7 @@ if ($attendanceToken !== "" && preg_match('/^[a-f0-9]{48}$/', $attendanceToken))
 }
 
 sync_auth_context();
-if ($_SERVER["REQUEST_METHOD"] !== "POST" && !empty($_SESSION["user_id"]) && in_array(($_SESSION["role"] ?? ""), ["admin", "lecturer", "student"], true)) {
+if (!$showFreshLogin && $_SERVER["REQUEST_METHOD"] !== "POST" && !empty($_SESSION["user_id"]) && in_array(($_SESSION["role"] ?? ""), ["admin", "lecturer", "student"], true)) {
     redirect_for_role($_SESSION["role"]);
 }
 

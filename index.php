@@ -90,8 +90,8 @@ $structuredData = [
             </nav>
 
             <div class="saas-nav-actions">
-                <a href="auth/login.php?login_as=student" class="saas-btn saas-btn-ghost">Student Login</a>
-                <a href="auth/login.php?login_as=staff" class="saas-btn saas-btn-primary">Lecturer Portal</a>
+                <a href="auth/login.php?login_as=student&fresh=1" class="saas-btn saas-btn-ghost">Student Login</a>
+                <a href="auth/login.php?login_as=staff&fresh=1" class="saas-btn saas-btn-primary">Lecturer Portal</a>
             </div>
         </div>
     </header>
@@ -107,8 +107,8 @@ $structuredData = [
                         face verification and GPS validation &mdash; all in one secure platform.
                     </p>
                     <div class="saas-hero-actions">
-                        <a href="auth/login.php?login_as=student" class="saas-btn saas-btn-primary">Student Login &rarr;</a>
-                        <a href="auth/login.php?login_as=staff" class="saas-btn saas-btn-secondary">Lecturer Portal</a>
+                        <a href="auth/login.php?login_as=student&fresh=1" class="saas-btn saas-btn-primary">Student Login &rarr;</a>
+                        <a href="auth/login.php?login_as=staff&fresh=1" class="saas-btn saas-btn-secondary">Lecturer Portal</a>
                     </div>
                     <small>Used by lecturers, students and institutions.</small>
                 </div>
@@ -261,8 +261,8 @@ $structuredData = [
                 <h2>Ready to modernize classroom attendance?</h2>
                 <p>Join institutions using SmartAttend to simplify attendance management.</p>
                 <div>
-                    <a href="auth/login.php?login_as=student" class="saas-btn saas-btn-light">Student Login</a>
-                    <a href="auth/login.php?login_as=staff" class="saas-btn saas-btn-dark-ghost">Lecturer Portal</a>
+                    <a href="auth/login.php?login_as=student&fresh=1" class="saas-btn saas-btn-light">Student Login</a>
+                    <a href="auth/login.php?login_as=staff&fresh=1" class="saas-btn saas-btn-dark-ghost">Lecturer Portal</a>
                 </div>
             </div>
         </section>
@@ -283,8 +283,8 @@ $structuredData = [
             </div>
             <div>
                 <strong>Access</strong>
-                <a href="auth/login.php?login_as=student">Student Login</a>
-                <a href="auth/login.php?login_as=staff">Lecturer Portal</a>
+                <a href="auth/login.php?login_as=student&fresh=1">Student Login</a>
+                <a href="auth/login.php?login_as=staff&fresh=1">Lecturer Portal</a>
                 <a href="auth/register.php">Create Account</a>
             </div>
             <div>
