@@ -30,6 +30,7 @@ $attendedSessions = (int) ($summary["attended_sessions"] ?? 0);
 $missedSessions = max(0, $totalSessions - $attendedSessions);
 $percentage = $totalSessions > 0 ? round(($attendedSessions / $totalSessions) * 100, 1) : 0;
 $eligible = $totalSessions > 0 && $percentage >= 75;
+$rateStatusClass = $percentage >= 75 ? "student-stat-good" : ($percentage >= 50 ? "student-stat-warning" : "student-stat-danger");
 
 $course_query = "SELECT c.course_code, c.course_title,
     COUNT(DISTINCT s.id) AS total_sessions,
@@ -56,7 +57,7 @@ $course_result = mysqli_stmt_get_result($course_stmt);
 <body class="role-dashboard-page student-dashboard-page">
 
 <div class="role-dashboard-shell">
-    <div class="role-dashboard-header">
+    <div class="role-dashboard-header student-profile-header">
         <div class="dashboard-user-avatar">
             <?php if (!empty($student["profile_image"])) { ?>
                 <img src="<?php echo e(media_url($student["profile_image"])); ?>" alt="<?php echo e($studentName); ?> profile picture">
@@ -64,7 +65,7 @@ $course_result = mysqli_stmt_get_result($course_stmt);
                 <?php echo e(strtoupper(substr($studentName, 0, 1))); ?>
             <?php } ?>
         </div>
-        <div>
+        <div class="student-profile-copy">
             <p class="section-kicker">Student Workspace</p>
             <h2>Welcome, <?php echo e($studentName); ?></h2>
             <div class="student-dashboard-meta">
@@ -83,26 +84,26 @@ $course_result = mysqli_stmt_get_result($course_stmt);
         </div>
     </div>
 
-    <div class="role-stats-grid">
-        <div class="role-stat-card">
+    <div class="role-stats-grid student-stats-grid">
+        <div class="role-stat-card student-stat-card student-stat-good">
             <?php echo dashboard_icon("check"); ?>
             <span>Classes Attended</span>
             <strong><?php echo e($attendedSessions); ?></strong>
             <small>Sessions you have successfully marked</small>
         </div>
-        <div class="role-stat-card">
+        <div class="role-stat-card student-stat-card student-stat-info">
             <?php echo dashboard_icon("calendar"); ?>
             <span>Total Classes</span>
             <strong><?php echo e($totalSessions); ?></strong>
             <small>Sessions from your registered courses</small>
         </div>
-        <div class="role-stat-card">
+        <div class="role-stat-card student-stat-card student-stat-warning">
             <?php echo dashboard_icon("alert"); ?>
             <span>Missed Classes</span>
             <strong><?php echo e($missedSessions); ?></strong>
             <small>Sessions not found in your attendance record</small>
         </div>
-        <div class="role-stat-card">
+        <div class="role-stat-card student-stat-card <?php echo e($rateStatusClass); ?>">
             <?php echo dashboard_icon("percent"); ?>
             <span>Attendance Rate</span>
             <strong><?php echo e($percentage); ?>%</strong>
@@ -123,7 +124,7 @@ $course_result = mysqli_stmt_get_result($course_stmt);
         </span>
     </div>
 
-    <div class="role-panel">
+    <div class="role-panel student-course-panel">
         <div class="panel-heading">
             <h3>Course Attendance</h3>
             <span><?php echo e($percentage); ?>% overall</span>
@@ -158,25 +159,29 @@ $course_result = mysqli_stmt_get_result($course_stmt);
         </div>
     </div>
 
-    <div class="dashboard-grid role-action-grid">
+    <div class="dashboard-grid role-action-grid student-action-grid">
         <?php if (!empty($_SESSION["pending_attendance_token"])) { ?>
-        <a href="<?php echo e(with_context("attendance/mark_attendance.php?token=" . urlencode($_SESSION["pending_attendance_token"]))); ?>" class="dashboard-card">
+        <a href="<?php echo e(with_context("attendance/mark_attendance.php?token=" . urlencode($_SESSION["pending_attendance_token"]))); ?>" class="dashboard-card student-action-card">
+            <span class="action-icon"><?php echo dashboard_icon("qr"); ?></span>
             <h3>Scan QR Code</h3>
             <p>Continue the attendance session you opened from the QR code.</p>
         </a>
         <?php } else { ?>
-        <div class="dashboard-card">
+        <div class="dashboard-card student-action-card">
+            <span class="action-icon"><?php echo dashboard_icon("qr"); ?></span>
             <h3>Scan QR Code</h3>
             <p>Use your phone camera to scan the QR code displayed by your lecturer.</p>
         </div>
         <?php } ?>
 
-        <a href="courses.php" class="dashboard-card">
+        <a href="courses.php" class="dashboard-card student-action-card">
+            <span class="action-icon"><?php echo dashboard_icon("book"); ?></span>
             <h3>My Courses</h3>
             <p>Register the courses you are taking so attendance percentage is calculated correctly.</p>
         </a>
 
-        <a href="history.php" class="dashboard-card">
+        <a href="history.php" class="dashboard-card student-action-card">
+            <span class="action-icon"><?php echo dashboard_icon("table"); ?></span>
             <h3>Attendance History</h3>
             <p>View your submitted attendance records and verification status.</p>
         </a>

@@ -2474,6 +2474,182 @@ input:focus {
     padding: 7px 10px;
 }
 
+.student-dashboard-page .student-profile-header {
+    background:
+        linear-gradient(135deg, rgba(37, 99, 235, 0.05), rgba(34, 197, 94, 0.05)),
+        var(--color-surface);
+    border-color: var(--color-border);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+}
+
+.student-dashboard-page .student-profile-copy h2 {
+    color: var(--color-primary-strong);
+    font-size: clamp(28px, 4vw, 42px);
+    letter-spacing: 0;
+}
+
+.student-dashboard-page .dashboard-user-avatar {
+    border: 4px solid rgba(255, 255, 255, 0.9);
+    box-shadow: 0 14px 28px rgba(0, 51, 102, 0.16);
+}
+
+.student-dashboard-page .role-header-actions .button-link {
+    border-radius: 8px;
+    box-shadow: var(--shadow-sm);
+    min-width: 112px;
+}
+
+.student-dashboard-page .role-header-actions .button-link:hover {
+    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+    transform: translateY(-1px);
+}
+
+.student-dashboard-page .student-stats-grid {
+    align-items: stretch;
+}
+
+.student-dashboard-page .student-stat-card {
+    background: var(--color-surface);
+    border-color: var(--color-border);
+    border-left: 5px solid var(--color-primary);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+    display: grid;
+    gap: 8px;
+    min-height: 168px;
+    padding: 24px;
+}
+
+.student-dashboard-page .student-stat-card::before {
+    display: none;
+}
+
+.student-dashboard-page .student-stat-card .stat-icon {
+    background: var(--color-primary-soft);
+    color: var(--color-primary);
+    margin-bottom: 4px;
+}
+
+.student-dashboard-page .student-stat-card span {
+    color: var(--color-text-muted);
+    letter-spacing: 0;
+    margin-bottom: 0;
+}
+
+.student-dashboard-page .student-stat-card strong {
+    color: var(--color-text);
+    font-size: 42px;
+    margin-bottom: 0;
+}
+
+.student-dashboard-page .student-stat-card small {
+    color: var(--color-text-secondary);
+}
+
+.student-dashboard-page .student-stat-good {
+    border-left-color: var(--color-success);
+}
+
+.student-dashboard-page .student-stat-good .stat-icon {
+    background: var(--color-success-soft);
+    color: var(--color-success);
+}
+
+.student-dashboard-page .student-stat-warning {
+    border-left-color: var(--color-warning);
+}
+
+.student-dashboard-page .student-stat-warning .stat-icon {
+    background: var(--color-warning-soft);
+    color: var(--color-warning);
+}
+
+.student-dashboard-page .student-stat-danger {
+    border-left-color: var(--color-danger);
+}
+
+.student-dashboard-page .student-stat-danger .stat-icon {
+    background: var(--color-danger-soft);
+    color: var(--color-danger);
+}
+
+.student-dashboard-page .student-stat-info {
+    border-left-color: var(--color-primary);
+}
+
+.student-dashboard-page .student-course-panel {
+    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+}
+
+.student-dashboard-page .student-course-panel table {
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+.student-dashboard-page .student-course-panel th {
+    background: var(--color-surface-muted);
+    color: var(--color-primary-strong);
+    font-size: 13px;
+    letter-spacing: 0;
+    text-transform: uppercase;
+}
+
+.student-dashboard-page .student-course-panel tr:nth-child(even) td {
+    background: rgba(15, 23, 42, 0.02);
+}
+
+.student-dashboard-page .student-course-panel tr:hover td {
+    background: var(--color-primary-soft);
+}
+
+.student-dashboard-page .student-action-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.student-dashboard-page .student-action-card {
+    align-content: start;
+    background:
+        linear-gradient(135deg, rgba(37, 99, 235, 0.04), rgba(34, 197, 94, 0.03)),
+        var(--color-surface);
+    border-color: var(--color-border);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+    min-height: 172px;
+    padding: 28px;
+}
+
+.student-dashboard-page .student-action-card .action-icon {
+    background: var(--color-primary-soft);
+    border-radius: 999px;
+    color: var(--color-primary);
+    display: inline-flex;
+    height: 52px;
+    margin-bottom: 18px;
+    width: 52px;
+}
+
+.student-dashboard-page .student-action-card .action-icon .stat-icon {
+    background: transparent;
+    color: inherit;
+    height: 52px;
+    width: 52px;
+}
+
+.student-dashboard-page .student-action-card h3 {
+    color: var(--color-text);
+    font-size: 22px;
+    margin-bottom: 10px;
+}
+
+.student-dashboard-page .student-action-card p {
+    color: var(--color-text-secondary);
+    line-height: 1.55;
+}
+
+.student-dashboard-page .student-action-card:hover {
+    border-color: var(--color-border-strong);
+    box-shadow: var(--shadow-md);
+    transform: translateY(-3px);
+}
+
 .student-courses-page {
     background: #eef3f8;
     color: #17202a;
@@ -4421,6 +4597,26 @@ video + canvas + .camera-file-input + button {
     .dashboard-card {
         min-height: auto;
         padding: 20px;
+    }
+
+    .student-dashboard-page .student-profile-header {
+        align-items: stretch;
+        flex-direction: column;
+        padding: 22px;
+    }
+
+    .student-dashboard-page .student-stats-grid,
+    .student-dashboard-page .student-action-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .student-dashboard-page .student-stat-card,
+    .student-dashboard-page .student-action-card {
+        min-height: auto;
+    }
+
+    .student-dashboard-page .student-course-panel {
+        padding: 18px;
     }
 
     .overview-stat-card strong,
