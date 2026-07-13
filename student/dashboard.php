@@ -111,16 +111,19 @@ $course_result = mysqli_stmt_get_result($course_stmt);
         </div>
     </div>
 
-    <div class="eligibility-badge <?php echo $eligible ? 'eligible' : 'not-eligible'; ?>">
-        <strong><?php echo $eligible ? "Eligible Status" : "Attendance Status"; ?></strong>
+    <div class="eligibility-badge student-status-alert <?php echo $eligible ? 'eligible' : 'not-eligible'; ?>">
+        <span class="student-status-icon"><?php echo dashboard_icon($eligible ? "check" : "alert"); ?></span>
         <span>
-            <?php if ($totalSessions === 0) { ?>
-                Register your courses to begin tracking eligibility.
-            <?php } elseif ($eligible) { ?>
-                Eligible for examination based on 75% attendance requirement.
-            <?php } else { ?>
-                Not yet eligible for examination based on 75% attendance requirement.
-            <?php } ?>
+            <strong><?php echo $eligible ? "Eligible Status" : "Attendance Status"; ?></strong>
+            <span>
+                <?php if ($totalSessions === 0) { ?>
+                    Register your courses to begin tracking eligibility.
+                <?php } elseif ($eligible) { ?>
+                    Eligible for examination based on 75% attendance requirement.
+                <?php } else { ?>
+                    Not yet eligible for examination based on 75% attendance requirement.
+                <?php } ?>
+            </span>
         </span>
     </div>
 
@@ -165,12 +168,14 @@ $course_result = mysqli_stmt_get_result($course_stmt);
             <span class="action-icon"><?php echo dashboard_icon("qr"); ?></span>
             <h3>Scan QR Code</h3>
             <p>Continue the attendance session you opened from the QR code.</p>
+            <span class="student-action-button">Open</span>
         </a>
         <?php } else { ?>
         <div class="dashboard-card student-action-card">
             <span class="action-icon"><?php echo dashboard_icon("qr"); ?></span>
             <h3>Scan QR Code</h3>
             <p>Use your phone camera to scan the QR code displayed by your lecturer.</p>
+            <span class="student-action-button">Open</span>
         </div>
         <?php } ?>
 
@@ -178,12 +183,14 @@ $course_result = mysqli_stmt_get_result($course_stmt);
             <span class="action-icon"><?php echo dashboard_icon("book"); ?></span>
             <h3>My Courses</h3>
             <p>Register the courses you are taking so attendance percentage is calculated correctly.</p>
+            <span class="student-action-button">Open</span>
         </a>
 
         <a href="history.php" class="dashboard-card student-action-card">
             <span class="action-icon"><?php echo dashboard_icon("table"); ?></span>
             <h3>Attendance History</h3>
             <p>View your submitted attendance records and verification status.</p>
+            <span class="student-action-button">Open</span>
         </a>
 
     </div>
