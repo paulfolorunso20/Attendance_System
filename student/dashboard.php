@@ -52,66 +52,78 @@ $course_result = mysqli_stmt_get_result($course_stmt);
 <html>
 <head>
     <title>Student Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="../assets/css/style.css?v=professional-ui-5">
 </head>
 <body class="role-dashboard-page student-dashboard-page">
 
-<div class="role-dashboard-shell">
-    <div class="role-dashboard-header student-profile-header">
-        <div class="dashboard-user-avatar">
-            <?php if (!empty($student["profile_image"])) { ?>
-                <img src="<?php echo e(media_url($student["profile_image"])); ?>" alt="<?php echo e($studentName); ?> profile picture">
-            <?php } else { ?>
-                <?php echo e(strtoupper(substr($studentName, 0, 1))); ?>
-            <?php } ?>
-        </div>
-        <div class="student-profile-copy">
-            <p class="section-kicker">Student Workspace</p>
-            <h2>Welcome, <?php echo e($studentName); ?></h2>
-            <div class="student-dashboard-meta">
-                <?php if (!empty($student["department"])) { ?>
-                    <span><?php echo e($student["department"]); ?></span>
-                <?php } ?>
-                <?php if (!empty($student["matric_no"])) { ?>
-                    <span><?php echo e($student["matric_no"]); ?></span>
+<main class="role-dashboard-shell student-dashboard-shell">
+    <section class="role-dashboard-header student-profile-header student-dashboard-reveal">
+        <div class="student-profile-main">
+            <div class="dashboard-user-avatar student-avatar">
+                <?php if (!empty($student["profile_image"])) { ?>
+                    <img src="<?php echo e(media_url($student["profile_image"])); ?>" alt="<?php echo e($studentName); ?> profile picture">
+                <?php } else { ?>
+                    <?php echo e(strtoupper(substr($studentName, 0, 1))); ?>
                 <?php } ?>
             </div>
-            <p class="welcome">Track your attendance, register courses, and continue any QR attendance session from here.</p>
+            <div class="student-profile-copy">
+                <p class="section-kicker">Student Workspace</p>
+                <h2>Welcome, <?php echo e($studentName); ?></h2>
+                <div class="student-dashboard-meta">
+                    <?php if (!empty($student["department"])) { ?>
+                        <span><?php echo e($student["department"]); ?></span>
+                    <?php } ?>
+                    <?php if (!empty($student["matric_no"])) { ?>
+                        <span><?php echo e($student["matric_no"]); ?></span>
+                    <?php } ?>
+                </div>
+                <p class="welcome">Track your attendance, register courses, and continue any QR attendance session from here.</p>
+            </div>
         </div>
-        <div class="role-header-actions">
+        <div class="role-header-actions student-header-actions">
             <a href="<?php echo e(with_context("account/profile.php")); ?>" class="button-link secondary-action">Profile</a>
             <a href="<?php echo e(with_context("auth/logout.php")); ?>" class="button-link danger-action">Logout</a>
         </div>
-    </div>
+    </section>
 
-    <div class="role-stats-grid student-stats-grid">
-        <div class="role-stat-card student-stat-card student-stat-good">
-            <?php echo dashboard_icon("check"); ?>
-            <span>Classes Attended</span>
-            <strong><?php echo e($attendedSessions); ?></strong>
-            <small>Sessions you have successfully marked</small>
+    <section class="student-dashboard-section student-dashboard-reveal">
+        <div class="student-section-heading">
+            <div>
+                <p class="section-kicker">Attendance Summary</p>
+                <h3>Your class participation at a glance</h3>
+            </div>
         </div>
-        <div class="role-stat-card student-stat-card student-stat-info">
-            <?php echo dashboard_icon("calendar"); ?>
-            <span>Total Classes</span>
-            <strong><?php echo e($totalSessions); ?></strong>
-            <small>Sessions from your registered courses</small>
-        </div>
-        <div class="role-stat-card student-stat-card student-stat-warning">
-            <?php echo dashboard_icon("alert"); ?>
-            <span>Missed Classes</span>
-            <strong><?php echo e($missedSessions); ?></strong>
-            <small>Sessions not found in your attendance record</small>
-        </div>
-        <div class="role-stat-card student-stat-card <?php echo e($rateStatusClass); ?>">
-            <?php echo dashboard_icon("percent"); ?>
-            <span>Attendance Rate</span>
-            <strong><?php echo e($percentage); ?>%</strong>
-            <small>Minimum expected attendance is 75%</small>
-        </div>
-    </div>
 
-    <div class="eligibility-badge student-status-alert <?php echo $eligible ? 'eligible' : 'not-eligible'; ?>">
+        <div class="role-stats-grid student-stats-grid">
+            <div class="role-stat-card student-stat-card student-stat-good">
+                <?php echo dashboard_icon("check"); ?>
+                <span>Classes Attended</span>
+                <strong><?php echo e($attendedSessions); ?></strong>
+                <small>Sessions you have successfully marked</small>
+            </div>
+            <div class="role-stat-card student-stat-card student-stat-info">
+                <?php echo dashboard_icon("calendar"); ?>
+                <span>Total Classes</span>
+                <strong><?php echo e($totalSessions); ?></strong>
+                <small>Sessions from your registered courses</small>
+            </div>
+            <div class="role-stat-card student-stat-card student-stat-warning">
+                <?php echo dashboard_icon("alert"); ?>
+                <span>Missed Classes</span>
+                <strong><?php echo e($missedSessions); ?></strong>
+                <small>Sessions not found in your attendance record</small>
+            </div>
+            <div class="role-stat-card student-stat-card <?php echo e($rateStatusClass); ?>">
+                <?php echo dashboard_icon("percent"); ?>
+                <span>Attendance Rate</span>
+                <strong><?php echo e($percentage); ?>%</strong>
+                <small>Minimum expected attendance is 75%</small>
+            </div>
+        </div>
+    </section>
+
+    <section class="eligibility-badge student-status-alert student-dashboard-reveal <?php echo $eligible ? 'eligible' : 'not-eligible'; ?>">
         <span class="student-status-icon"><?php echo dashboard_icon($eligible ? "check" : "alert"); ?></span>
         <span>
             <strong><?php echo $eligible ? "Eligible Status" : "Attendance Status"; ?></strong>
@@ -125,22 +137,28 @@ $course_result = mysqli_stmt_get_result($course_stmt);
                 <?php } ?>
             </span>
         </span>
-    </div>
+    </section>
 
-    <div class="role-panel student-course-panel">
+    <section class="role-panel student-course-panel student-dashboard-reveal">
         <div class="panel-heading">
-            <h3>Course Attendance</h3>
+            <div>
+                <p class="section-kicker">Course Breakdown</p>
+                <h3>Course Attendance</h3>
+            </div>
             <span><?php echo e($percentage); ?>% overall</span>
         </div>
         <div class="table-wrap">
-            <table border="1" cellpadding="10" cellspacing="0" width="100%">
-                <tr>
-                    <th>Course</th>
-                    <th>Attended</th>
-                    <th>Total</th>
-                    <th>Percentage</th>
-                    <th>Status</th>
-                </tr>
+            <table border="1" cellpadding="10" cellspacing="0" width="100%" class="student-attendance-table">
+                <thead>
+                    <tr>
+                        <th>Course</th>
+                        <th>Attended</th>
+                        <th>Total</th>
+                        <th>Percentage</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
                 <?php while ($course = mysqli_fetch_assoc($course_result)) {
                     $courseTotal = (int) $course["total_sessions"];
                     $courseAttended = (int) $course["attended_sessions"];
@@ -158,11 +176,19 @@ $course_result = mysqli_stmt_get_result($course_stmt);
                     </td>
                 </tr>
                 <?php } ?>
+                </tbody>
             </table>
         </div>
-    </div>
+    </section>
 
-    <div class="dashboard-grid role-action-grid student-action-grid">
+    <section class="student-dashboard-section student-dashboard-reveal">
+        <div class="student-section-heading">
+            <div>
+                <p class="section-kicker">Quick Actions</p>
+                <h3>What would you like to do next?</h3>
+            </div>
+        </div>
+        <div class="dashboard-grid role-action-grid student-action-grid">
         <?php if (!empty($_SESSION["pending_attendance_token"])) { ?>
         <a href="<?php echo e(with_context("attendance/mark_attendance.php?token=" . urlencode($_SESSION["pending_attendance_token"]))); ?>" class="dashboard-card student-action-card">
             <span class="action-icon"><?php echo dashboard_icon("qr"); ?></span>
@@ -193,8 +219,18 @@ $course_result = mysqli_stmt_get_result($course_stmt);
             <span class="student-action-button">Open</span>
         </a>
 
-    </div>
-</div>
+        </div>
+    </section>
+</main>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll(".student-dashboard-reveal").forEach(function (item, index) {
+        item.style.transitionDelay = (index * 55) + "ms";
+        item.classList.add("is-visible");
+    });
+});
+</script>
 
 </body>
 </html>
