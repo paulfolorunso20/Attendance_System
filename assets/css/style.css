@@ -6871,6 +6871,11 @@ html[data-theme="dark"] .auth-page .login-container input::placeholder {
     content: none;
 }
 
+.student-dashboard-page .student-action-grid a.student-action-card::after {
+    content: none;
+    display: none;
+}
+
 .role-dashboard-page .role-action-grid a.dashboard-card:hover::after,
 .admin-dashboard-page .dashboard-grid a.dashboard-card:hover::after {
     background: #00519c;
@@ -8005,6 +8010,11 @@ html[data-theme="dark"] .admin-dashboard-page .dashboard-grid a.dashboard-card::
     border: 1px solid var(--sa-border) !important;
     box-shadow: none !important;
     color: var(--sa-text) !important;
+}
+
+html[data-theme="dark"] .student-dashboard-page .student-action-grid a.student-action-card::after {
+    content: none;
+    display: none;
 }
 
 html[data-theme="dark"] .secondary-button:hover,
