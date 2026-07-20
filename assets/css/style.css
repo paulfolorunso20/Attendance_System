@@ -850,6 +850,56 @@ a {
     color: var(--green);
 }
 
+.attendance-verification-alert {
+    align-items: flex-start;
+    background: color-mix(in srgb, var(--color-danger) 9%, var(--color-surface));
+    border: 1px solid color-mix(in srgb, var(--color-danger) 22%, transparent);
+    border-radius: var(--radius-md);
+    color: var(--color-text);
+    display: flex;
+    gap: 12px;
+    margin: 18px auto;
+    max-width: 760px;
+    padding: 16px 18px;
+    text-align: left;
+}
+
+.attendance-verification-alert-icon {
+    align-items: center;
+    background: color-mix(in srgb, var(--color-danger) 13%, var(--color-surface));
+    border-radius: 999px;
+    color: var(--color-danger);
+    display: inline-flex;
+    flex: 0 0 38px;
+    height: 38px;
+    justify-content: center;
+    width: 38px;
+}
+
+.attendance-verification-alert-icon svg {
+    fill: none;
+    height: 19px;
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 2;
+    width: 19px;
+}
+
+.attendance-verification-alert strong {
+    color: var(--color-text);
+    display: block;
+    font-size: 15px;
+    margin-bottom: 4px;
+}
+
+.attendance-verification-alert small {
+    color: var(--color-text-secondary);
+    display: block;
+    font-size: 14px;
+    font-weight: 500;
+}
+
 input,
 select {
     background: var(--color-surface);

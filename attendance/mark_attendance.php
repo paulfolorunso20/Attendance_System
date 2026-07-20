@@ -193,7 +193,7 @@ if (isset($_POST['mark']) && $profileComplete && $faceEnrolled) {
     $capturedDescriptor = trim($_POST["captured_face_descriptor"] ?? "");
 
     if ($studentLat === false || $studentLng === false || $studentLat === null || $studentLng === null) {
-        $error = "Location verification failed. Please allow GPS access and try again.";
+        $error = "Location check incomplete. Please allow location access on your phone, then tap Retry GPS to continue.";
     } else {
         $radius = (float) $session["radius_meters"];
         $accuracy = ($studentAccuracy !== false && $studentAccuracy !== null) ? max(0, (float) $studentAccuracy) : null;
@@ -215,9 +215,9 @@ if (isset($_POST['mark']) && $profileComplete && $faceEnrolled) {
         } elseif (!$locationVerified) {
             audit_log($conn, "attendance_failed_location", "Attendance attempt failed location verification.", "attendance_session", $session_id);
             if ($accuracy !== null && $accuracy > $maxAllowedAccuracy) {
-                $error = "Location verification failed. Your phone GPS accuracy is too weak right now (about " . round($accuracy) . "m). Move near a window/open area, turn on Precise Location, and tap Retry GPS.";
+                $error = "Location accuracy is too low right now. Your phone is reporting about " . round($accuracy) . "m accuracy, which is not reliable enough for this session. Move near a window or open area, enable Precise Location, then tap Retry GPS.";
             } else {
-                $error = "Location verification failed. Your phone location is about " . round($distance) . " meters from the lecture venue. Retry GPS or ask the lecturer to recreate the session at the venue.";
+                $error = "Attendance is only available within the approved lecture area. Your phone is currently about " . round($distance) . " meters from the saved class location. If you are in class, tap Retry GPS or ask the lecturer to confirm the venue location.";
             }
         } else {
             $insert = "INSERT INTO attendance_records
@@ -264,7 +264,19 @@ if (isset($_POST['mark']) && $profileComplete && $faceEnrolled) {
     <?php } ?>
 
     <?php if ($error) { ?>
-        <p class="alert alert-error"><?php echo e($error); ?></p>
+        <div class="alert alert-error attendance-verification-alert" role="alert">
+            <span class="attendance-verification-alert-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" focusable="false">
+                    <path d="M12 9v4"></path>
+                    <path d="M12 17h.01"></path>
+                    <path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0Z"></path>
+                </svg>
+            </span>
+            <span>
+                <strong>Location verification needed</strong>
+                <small><?php echo e($error); ?></small>
+            </span>
+        </div>
     <?php } ?>
 
     <?php if ($profileError) { ?>
