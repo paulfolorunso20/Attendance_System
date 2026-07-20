@@ -53,7 +53,7 @@ $course_result = mysqli_stmt_get_result($course_stmt);
 <head>
     <title>Student Dashboard</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="../assets/css/style.css?v=professional-ui-5">
+    <link rel="stylesheet" href="../assets/css/style.css?v=student-dashboard-polish-1">
 </head>
 <body class="role-dashboard-page student-dashboard-page">
 
