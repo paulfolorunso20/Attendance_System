@@ -42,7 +42,7 @@ if (isset($_POST['create'])) {
     $longitude = (float) $_POST['longitude'];
     $locationConfirmed = ($_POST["location_confirmed"] ?? "0") === "1";
     $venueAccuracy = filter_input(INPUT_POST, "venue_accuracy", FILTER_VALIDATE_FLOAT);
-    $radius = max(10, min(1000, (int) ($_POST['radius_meters'] ?? 100)));
+    $radius = (int) ($_POST['radius_meters'] ?? 100);
     $token = random_token(24);
     $expires_at = date("Y-m-d H:i:s", strtotime("+{$duration} minutes"));
 
@@ -54,12 +54,14 @@ if (isset($_POST['create'])) {
 
     $manualLocation = ($_POST["manual_location"] ?? "0") === "1";
 
-    if (!$locationConfirmed || $venueAccuracy === false || $venueAccuracy === null) {
+    if ($radius < 10 || $radius > 300) {
+        $error = "Allowed radius must be between 10 meters and 300 meters.";
+    } elseif (!$locationConfirmed || $venueAccuracy === false || $venueAccuracy === null) {
         $error = "Please capture the lecturer venue GPS before generating the QR code.";
     } elseif ($latitude < -90 || $latitude > 90 || $longitude < -180 || $longitude > 180) {
         $error = "The captured lecture venue coordinates are invalid. Please retry GPS.";
     } elseif (!$manualLocation && $venueAccuracy > $radius) {
-        $error = "Venue GPS accuracy is too weak (" . round($venueAccuracy) . "m) for a " . $radius . "m radius. Increase the radius or retry GPS in a more open area.";
+        $error = "GPS accuracy is too weak for a " . $radius . "m radius. Please retry your location in a more open area or choose a larger radius.";
     } elseif (mysqli_num_rows($check_result) !== 1) {
         $error = "Please select one of your registered courses.";
     } else {
@@ -202,8 +204,8 @@ if (!$createdSession && !isset($_POST["create"])) {
         <input type="hidden" id="manualLocation" name="manual_location" value="0">
 
         <label>Allowed Radius (meters)</label>
-        <input type="number" name="radius_meters" min="10" max="1000" value="500" required autocomplete="off">
-        <p class="helper-text">For indoor defense demos, 500 meters is safer because phone GPS can drift. For strict outdoor classes, use 100 meters.</p>
+        <input type="number" name="radius_meters" min="10" max="300" step="1" value="100" required autocomplete="off">
+        <p class="helper-text">Set the maximum distance students can be from the lecture venue. Choose between 10m and 300m. Smaller radii require better GPS accuracy.</p>
 
         <button type="submit" name="create" id="generateQrButton" disabled>Generate QR Code</button>
 
@@ -294,6 +296,62 @@ const generateQrButton = document.getElementById("generateQrButton");
 const manualLocationButton = document.getElementById("manualLocationButton");
 const latitudeInput = document.getElementById("latitude");
 const longitudeInput = document.getElementById("longitude");
+const radiusInput = document.querySelector("input[name='radius_meters']");
+const sessionForm = document.querySelector(".session-form-card");
+
+if (sessionForm && radiusInput) {
+    sessionForm.addEventListener("submit", function (event) {
+        const radius = parseInt(radiusInput.value || "0", 10);
+        radiusInput.setCustomValidity("");
+
+        if (!Number.isInteger(radius) || radius < 10 || radius > 300) {
+            event.preventDefault();
+            radiusInput.setCustomValidity("Allowed radius must be between 10 meters and 300 meters.");
+            radiusInput.reportValidity();
+        }
+    });
+}
+
+function selectedRadiusMeters() {
+    if (!radiusInput) {
+        return 100;
+    }
+
+    const radius = parseInt(radiusInput.value || "100", 10);
+    return Number.isInteger(radius) ? radius : 100;
+}
+
+function validateVenueAccuracy() {
+    if (!venueAccuracy || !locationConfirmed || !generateQrButton || !venueLocationStatus) {
+        return;
+    }
+
+    if (manualLocation && manualLocation.value === "1") {
+        generateQrButton.disabled = false;
+        return;
+    }
+
+    if (locationConfirmed.value !== "1" || venueAccuracy.value === "") {
+        return;
+    }
+
+    const accuracy = parseFloat(venueAccuracy.value || "0");
+    const radius = selectedRadiusMeters();
+
+    if (accuracy > radius) {
+        generateQrButton.disabled = true;
+        venueLocationStatus.textContent = "Venue GPS captured, but accuracy is about " + Math.round(accuracy) + "m. That is too weak for a " + radius + "m radius. Retry in a more open area or choose a larger radius.";
+        return;
+    }
+
+    generateQrButton.disabled = false;
+    venueLocationStatus.textContent = "Venue captured. Accuracy: about " + Math.round(accuracy) + " meters.";
+}
+
+if (radiusInput) {
+    radiusInput.addEventListener("input", validateVenueAccuracy);
+}
+
 if (useLocationButton) {
 useLocationButton.addEventListener("click", function () {
     if (!navigator.geolocation) {
@@ -301,7 +359,7 @@ useLocationButton.addEventListener("click", function () {
         return;
     }
 
-    venueLocationStatus.textContent = "Capturing best venue GPS reading. Please wait...";
+    venueLocationStatus.textContent = "Capturing the best venue GPS reading. Keep location on and stay near a window or open area...";
     useLocationButton.disabled = true;
 
     captureBestPosition(function (position) {
@@ -311,31 +369,30 @@ useLocationButton.addEventListener("click", function () {
         venueAccuracy.value = accuracy;
         locationConfirmed.value = "1";
         manualLocation.value = "0";
-        generateQrButton.disabled = false;
-        venueLocationStatus.textContent = "Venue captured. Accuracy: about " + Math.round(accuracy) + " meters.";
         useLocationButton.textContent = "Retry Venue GPS";
         useLocationButton.disabled = false;
+        validateVenueAccuracy();
     }, function (error) {
         locationConfirmed.value = "0";
         generateQrButton.disabled = true;
         useLocationButton.disabled = false;
 
         if (error.code === error.PERMISSION_DENIED) {
-            venueLocationStatus.textContent = "Location permission is blocked. Allow location for this site, then retry.";
+            venueLocationStatus.textContent = "Location permission is blocked. Allow Location for this site, enable Precise Location, then retry.";
             return;
         }
 
         if (error.code === error.POSITION_UNAVAILABLE) {
-            venueLocationStatus.textContent = "Phone cannot get GPS right now. Turn Location on, move near a window/open area, or enter coordinates manually.";
+            venueLocationStatus.textContent = "Phone cannot get GPS right now. Turn Location on, move near a window/open area, enable Precise Location, or enter coordinates manually.";
             return;
         }
 
         if (error.code === error.TIMEOUT) {
-            venueLocationStatus.textContent = "GPS timed out. Move near a window/open area and retry.";
+            venueLocationStatus.textContent = "GPS timed out. Move near a window/open area, keep the phone still, and retry.";
             return;
         }
 
-        venueLocationStatus.textContent = "Could not capture venue GPS. Retry or enter coordinates manually.";
+        venueLocationStatus.textContent = "Could not capture venue GPS. Retry in a more open area or enter the lecture venue coordinates manually.";
     });
 });
 }
@@ -378,7 +435,7 @@ function captureBestPosition(onSuccess, onError) {
         if (!bestPosition || (position.coords.accuracy || 99999) < (bestPosition.coords.accuracy || 99999)) {
             bestPosition = position;
         }
-        if ((position.coords.accuracy || 99999) <= 50) {
+        if ((position.coords.accuracy || 99999) <= Math.min(50, selectedRadiusMeters())) {
             finish();
         }
     };

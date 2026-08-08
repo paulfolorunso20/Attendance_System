@@ -197,13 +197,10 @@ if (isset($_POST['mark']) && $profileComplete && $faceEnrolled) {
     } else {
         $radius = (float) $session["radius_meters"];
         $accuracy = ($studentAccuracy !== false && $studentAccuracy !== null) ? max(0, (float) $studentAccuracy) : null;
-        $maxAllowedAccuracy = $radius >= 500 ? 2500 : max(100, $radius * 2);
+        $maxAllowedAccuracy = $radius;
         $distance = distance_in_meters($session["latitude"], $session["longitude"], $studentLat, $studentLng);
-        $accuracyBuffer = $accuracy !== null ? min($accuracy, $maxAllowedAccuracy) : 0;
-        $demoBuffer = $radius >= 500 ? 250 : 0;
-        $effectiveRadius = $radius + $accuracyBuffer + $demoBuffer;
         $locationVerified = $accuracy === null || $accuracy <= $maxAllowedAccuracy;
-        $locationVerified = $locationVerified && $distance <= $effectiveRadius;
+        $locationVerified = $locationVerified && $distance <= $radius;
         $snapshotPath = save_face_snapshot($student_id, $session_id, $faceSnapshot);
         $faceVerified = $faceConfirmed &&
             $snapshotPath !== null &&
@@ -215,7 +212,7 @@ if (isset($_POST['mark']) && $profileComplete && $faceEnrolled) {
         } elseif (!$locationVerified) {
             audit_log($conn, "attendance_failed_location", "Attendance attempt failed location verification.", "attendance_session", $session_id);
             if ($accuracy !== null && $accuracy > $maxAllowedAccuracy) {
-                $error = "Location accuracy is too low right now. Your phone is reporting about " . round($accuracy) . "m accuracy, which is not reliable enough for this session. Move near a window or open area, enable Precise Location, then tap Retry GPS.";
+                $error = "GPS accuracy is too weak for this " . round($radius) . "m attendance radius. Your phone is reporting about " . round($accuracy) . "m accuracy. Move near a window or open area, enable Precise Location, keep the phone still, then tap Retry GPS.";
             } else {
                 $error = "Attendance is only available within the approved lecture area. Your phone is currently about " . round($distance) . " meters from the saved class location. If you are in class, tap Retry GPS or ask the lecturer to confirm the venue location.";
             }
@@ -438,7 +435,7 @@ let hasFace = false;
 let cameraStreamReady = false;
 let enrollCameraStreamReady = false;
 const sessionRadiusMeters = <?php echo json_encode((float) $session["radius_meters"]); ?>;
-const demoAccuracyLimit = sessionRadiusMeters >= 500 ? 2500 : Math.max(100, sessionRadiusMeters * 2);
+const maxAllowedAccuracy = sessionRadiusMeters;
 
 function updateSubmitState() {
     if (submitButton) {
@@ -485,7 +482,7 @@ function getLocation() {
         return;
     }
 
-    locationStatus.textContent = "Capturing best GPS reading. Please wait...";
+    locationStatus.textContent = "Capturing the best GPS reading. Keep location on, enable Precise Location, and stay near a window or open area...";
     hasLocation = false;
     updateSubmitState();
 
@@ -497,11 +494,9 @@ function getLocation() {
             locationAccuracy.value = accuracy;
         }
         hasLocation = true;
-        if (accuracy > demoAccuracyLimit) {
-            locationStatus.textContent = "GPS captured, but accuracy is too weak right now: about " + Math.round(accuracy) + " meters. Move near a window/open area and retry.";
+        if (accuracy > maxAllowedAccuracy) {
+            locationStatus.textContent = "GPS captured, but accuracy is too weak for this " + Math.round(sessionRadiusMeters) + "m attendance radius. Move near a window/open area, keep the phone still, and retry.";
             hasLocation = false;
-        } else if (accuracy > sessionRadiusMeters) {
-            locationStatus.textContent = "GPS captured with weak phone accuracy: about " + Math.round(accuracy) + " meters. Demo tolerance is active for this session.";
         } else {
             locationStatus.textContent = "GPS location captured. Accuracy: about " + Math.round(accuracy) + " meters.";
         }
@@ -511,21 +506,21 @@ function getLocation() {
         updateSubmitState();
 
         if (error.code === error.PERMISSION_DENIED) {
-            locationStatus.textContent = "Location permission is blocked. Tap the site icon in Chrome, open Permissions, and allow Location.";
+            locationStatus.textContent = "Location permission is blocked. Tap the site icon in Chrome, open Permissions, allow Location, and enable Precise Location.";
             return;
         }
 
         if (error.code === error.POSITION_UNAVAILABLE) {
-            locationStatus.textContent = "GPS location is unavailable. Move near a window, keep phone location on, then tap Retry GPS.";
+            locationStatus.textContent = "GPS location is unavailable. Move near a window/open area, keep phone location on, then tap Retry GPS.";
             return;
         }
 
         if (error.code === error.TIMEOUT) {
-            locationStatus.textContent = "GPS timed out. Keep location on and tap Retry GPS.";
+            locationStatus.textContent = "GPS timed out. Keep location on, hold the phone still near a window/open area, then tap Retry GPS.";
             return;
         }
 
-        locationStatus.textContent = "GPS could not be captured. Please tap Retry GPS.";
+        locationStatus.textContent = "GPS could not be captured. Please move near a window/open area and tap Retry GPS.";
     });
 }
 
@@ -556,7 +551,7 @@ function captureBestPosition(onSuccess, onError) {
         if (!bestPosition || (position.coords.accuracy || 99999) < (bestPosition.coords.accuracy || 99999)) {
             bestPosition = position;
         }
-        if ((position.coords.accuracy || 99999) <= 50) {
+        if ((position.coords.accuracy || 99999) <= Math.min(50, maxAllowedAccuracy)) {
             finish();
         }
     };
