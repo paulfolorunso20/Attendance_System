@@ -94,7 +94,6 @@ $attendanceEfficiency = (int) min(100, max(0, ($stats["attendance_records"] ?? 0
             </span>
         </a>
         <div class="lecturer-topbar-actions">
-            <span class="lecturer-topbar-icon" aria-label="Notifications"><?php echo dashboard_icon("alert"); ?></span>
             <details class="lecturer-profile-menu">
                 <summary>
                     <span class="dashboard-user-avatar compact-avatar">
@@ -107,7 +106,6 @@ $attendanceEfficiency = (int) min(100, max(0, ($stats["attendance_records"] ?? 0
                 </summary>
                 <div>
                     <a href="<?php echo e(with_context("account/profile.php")); ?>">My Profile</a>
-                    <a href="<?php echo e(with_context("account/profile.php")); ?>">Settings</a>
                     <a href="<?php echo e(with_context("auth/logout.php")); ?>">Logout</a>
                 </div>
             </details>

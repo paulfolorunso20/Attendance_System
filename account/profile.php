@@ -155,7 +155,7 @@ if ($role === "lecturer") {
     <link rel="stylesheet" href="../assets/css/style.css?v=professional-ui-5">
 </head>
 
-<body class="profile-page">
+<body class="profile-page <?php echo e($role); ?>-profile-page">
 
     <div class="profile-shell">
         <div class="profile-topbar">

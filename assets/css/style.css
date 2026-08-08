@@ -8226,3 +8226,186 @@ html[data-theme="dark"] .theme-toggle-icon {
     background: var(--sa-primary-soft) !important;
     color: var(--sa-primary-strong) !important;
 }
+
+/* Lecturer-only premium dark surfaces */
+html[data-theme="dark"] .lecturer-dashboard-page,
+html[data-theme="dark"] .lecturer-profile-page {
+    --lecturer-dark-bg: #0B1120;
+    --lecturer-dark-surface: #111827;
+    --lecturer-dark-card: #172033;
+    --lecturer-dark-elevated: #1E293B;
+    --lecturer-dark-border: rgba(255, 255, 255, 0.08);
+    --lecturer-dark-text: #F8FAFC;
+    --lecturer-dark-secondary: #CBD5E1;
+    --lecturer-dark-muted: #94A3B8;
+    --lecturer-dark-primary: #3B82F6;
+    --lecturer-dark-success: #22C55E;
+    --lecturer-dark-warning: #F59E0B;
+    --lecturer-dark-danger: #EF4444;
+    background:
+        radial-gradient(circle at 18% 8%, rgba(59, 130, 246, 0.14), transparent 30%),
+        radial-gradient(circle at 82% 14%, rgba(34, 197, 94, 0.08), transparent 28%),
+        var(--lecturer-dark-bg) !important;
+    color: var(--lecturer-dark-text);
+}
+
+html[data-theme="dark"] .lecturer-dashboard-page .lecturer-topbar,
+html[data-theme="dark"] .lecturer-dashboard-page .lecturer-profile-menu > div,
+html[data-theme="dark"] .lecturer-dashboard-page .role-dashboard-header,
+html[data-theme="dark"] .lecturer-dashboard-page .role-stat-card,
+html[data-theme="dark"] .lecturer-dashboard-page .role-action-grid .dashboard-card,
+html[data-theme="dark"] .lecturer-dashboard-page .lecturer-live-session-card,
+html[data-theme="dark"] .lecturer-dashboard-page .lecturer-live-session-meta div,
+html[data-theme="dark"] .lecturer-dashboard-page .lecturer-table-card,
+html[data-theme="dark"] .lecturer-dashboard-page .lecturer-activity-card,
+html[data-theme="dark"] .lecturer-profile-page .profile-hero,
+html[data-theme="dark"] .lecturer-profile-page .profile-summary-card,
+html[data-theme="dark"] .lecturer-profile-page .profile-photo-form,
+html[data-theme="dark"] .lecturer-profile-page .settings-panel,
+html[data-theme="dark"] .lecturer-profile-page .profile-cropper {
+    background: var(--lecturer-dark-card) !important;
+    border: 1px solid var(--lecturer-dark-border) !important;
+    box-shadow: 0 18px 48px rgba(0, 0, 0, 0.34) !important;
+    color: var(--lecturer-dark-text) !important;
+}
+
+html[data-theme="dark"] .lecturer-dashboard-page .lecturer-topbar,
+html[data-theme="dark"] .lecturer-dashboard-page .lecturer-profile-menu > div,
+html[data-theme="dark"] .lecturer-profile-page .profile-summary-note,
+html[data-theme="dark"] .lecturer-profile-page .profile-topbar a {
+    background: var(--lecturer-dark-surface) !important;
+}
+
+html[data-theme="dark"] .lecturer-dashboard-page .lecturer-table-card th,
+html[data-theme="dark"] .lecturer-profile-page .settings-heading {
+    background: var(--lecturer-dark-elevated) !important;
+    border-color: var(--lecturer-dark-border) !important;
+}
+
+html[data-theme="dark"] .lecturer-dashboard-page .lecturer-topbar-brand,
+html[data-theme="dark"] .lecturer-dashboard-page .lecturer-profile-menu a,
+html[data-theme="dark"] .lecturer-dashboard-page .role-dashboard-header h2,
+html[data-theme="dark"] .lecturer-dashboard-page .lecturer-hero-side > strong,
+html[data-theme="dark"] .lecturer-dashboard-page .lecturer-ring b,
+html[data-theme="dark"] .lecturer-dashboard-page .role-stat-card strong,
+html[data-theme="dark"] .lecturer-dashboard-page .lecturer-section-heading h3,
+html[data-theme="dark"] .lecturer-dashboard-page .role-action-grid .dashboard-card h3,
+html[data-theme="dark"] .lecturer-dashboard-page .activity-item strong,
+html[data-theme="dark"] .lecturer-profile-page .profile-topbar a,
+html[data-theme="dark"] .lecturer-profile-page .profile-hero h2,
+html[data-theme="dark"] .lecturer-profile-page .profile-summary-row strong,
+html[data-theme="dark"] .lecturer-profile-page .settings-heading h3,
+html[data-theme="dark"] .lecturer-profile-page .profile-photo-form label {
+    color: var(--lecturer-dark-text) !important;
+}
+
+html[data-theme="dark"] .lecturer-dashboard-page .lecturer-topbar-brand small,
+html[data-theme="dark"] .lecturer-dashboard-page .role-dashboard-header .welcome,
+html[data-theme="dark"] .lecturer-dashboard-page .lecturer-hero-side > span,
+html[data-theme="dark"] .lecturer-dashboard-page .lecturer-efficiency small,
+html[data-theme="dark"] .lecturer-dashboard-page .role-stat-card span,
+html[data-theme="dark"] .lecturer-dashboard-page .role-stat-card small,
+html[data-theme="dark"] .lecturer-dashboard-page .lecturer-section-heading p,
+html[data-theme="dark"] .lecturer-dashboard-page .role-action-grid .dashboard-card p,
+html[data-theme="dark"] .lecturer-dashboard-page .activity-item small,
+html[data-theme="dark"] .lecturer-dashboard-page .empty-activity,
+html[data-theme="dark"] .lecturer-profile-page .profile-topbar span,
+html[data-theme="dark"] .lecturer-profile-page .profile-hero p,
+html[data-theme="dark"] .lecturer-profile-page .profile-summary-row span,
+html[data-theme="dark"] .lecturer-profile-page .profile-summary-note,
+html[data-theme="dark"] .lecturer-profile-page .settings-heading p,
+html[data-theme="dark"] .lecturer-profile-page .settings-panel label,
+html[data-theme="dark"] .lecturer-profile-page .crop-control label {
+    color: var(--lecturer-dark-muted) !important;
+}
+
+html[data-theme="dark"] .lecturer-dashboard-page .section-kicker,
+html[data-theme="dark"] .lecturer-profile-page .profile-kicker {
+    color: var(--lecturer-dark-primary) !important;
+}
+
+html[data-theme="dark"] .lecturer-dashboard-page .lecturer-profile-menu a:hover,
+html[data-theme="dark"] .lecturer-dashboard-page .lecturer-table-card tbody tr:hover,
+html[data-theme="dark"] .lecturer-dashboard-page .role-action-grid .dashboard-card:hover,
+html[data-theme="dark"] .lecturer-profile-page .profile-topbar a:hover {
+    background: var(--lecturer-dark-elevated) !important;
+    color: var(--lecturer-dark-text) !important;
+}
+
+html[data-theme="dark"] .lecturer-dashboard-page .lecturer-table-wrap,
+html[data-theme="dark"] .lecturer-dashboard-page .lecturer-table-card table {
+    background: var(--lecturer-dark-card) !important;
+    border-color: var(--lecturer-dark-border) !important;
+}
+
+html[data-theme="dark"] .lecturer-dashboard-page .lecturer-table-card td {
+    border-color: var(--lecturer-dark-border) !important;
+    color: var(--lecturer-dark-secondary) !important;
+}
+
+html[data-theme="dark"] .lecturer-dashboard-page .lecturer-table-card tbody tr:nth-child(even) {
+    background: rgba(255, 255, 255, 0.03) !important;
+}
+
+html[data-theme="dark"] .lecturer-profile-page input:not([type="range"]),
+html[data-theme="dark"] .lecturer-profile-page select,
+html[data-theme="dark"] .lecturer-profile-page textarea,
+html[data-theme="dark"] .lecturer-profile-page .profile-photo-form input[type="file"] {
+    background: var(--lecturer-dark-elevated) !important;
+    border-color: var(--lecturer-dark-border) !important;
+    color: var(--lecturer-dark-text) !important;
+}
+
+html[data-theme="dark"] .lecturer-profile-page input:not([type="range"]):focus,
+html[data-theme="dark"] .lecturer-profile-page select:focus,
+html[data-theme="dark"] .lecturer-profile-page textarea:focus,
+html[data-theme="dark"] .lecturer-profile-page .profile-photo-form input[type="file"]:focus {
+    border-color: var(--lecturer-dark-primary) !important;
+    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.18) !important;
+}
+
+html[data-theme="dark"] .lecturer-dashboard-page .button-link,
+html[data-theme="dark"] .lecturer-profile-page button {
+    background: var(--lecturer-dark-primary) !important;
+    border-color: rgba(96, 165, 250, 0.28) !important;
+    color: #FFFFFF !important;
+}
+
+html[data-theme="dark"] .lecturer-dashboard-page .secondary-action,
+html[data-theme="dark"] .lecturer-profile-page .secondary-action {
+    background: var(--lecturer-dark-elevated) !important;
+    border-color: var(--lecturer-dark-border) !important;
+    color: var(--lecturer-dark-text) !important;
+}
+
+html[data-theme="dark"] .lecturer-dashboard-page .danger-action {
+    background: rgba(239, 68, 68, 0.16) !important;
+    border-color: rgba(239, 68, 68, 0.32) !important;
+    color: #FCA5A5 !important;
+}
+
+html[data-theme="dark"] .lecturer-dashboard-page .status-active,
+html[data-theme="dark"] .lecturer-dashboard-page .status-present,
+html[data-theme="dark"] .lecturer-dashboard-page .table-status.status-present,
+html[data-theme="dark"] .lecturer-dashboard-page .activity-item > span {
+    background: rgba(34, 197, 94, 0.14) !important;
+    color: var(--lecturer-dark-success) !important;
+}
+
+html[data-theme="dark"] .lecturer-dashboard-page .table-status.status-absent {
+    background: rgba(239, 68, 68, 0.14) !important;
+    color: #FCA5A5 !important;
+}
+
+html[data-theme="dark"] .lecturer-dashboard-page .role-stat-card .stat-icon,
+html[data-theme="dark"] .lecturer-dashboard-page .action-icon .stat-icon {
+    background: rgba(59, 130, 246, 0.15) !important;
+    border-color: var(--lecturer-dark-border) !important;
+    color: #60A5FA !important;
+}
+
+html[data-theme="dark"] .lecturer-dashboard-page .lecturer-ring {
+    background:
+        radial-gradient(circle at center, var(--lecturer-dark-card) 54%, transparent 56%),
+        conic-gradient(var(--lecturer-dark-success) calc(var(--value) * 1%), var(--lecturer-dark-elevated) 0) !important;
+}
