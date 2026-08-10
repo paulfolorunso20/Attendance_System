@@ -710,7 +710,7 @@ function upload_image_to_cloud($bytes, $fileName, $folder, $mimeType = "image/jp
 
     $response = curl_exec($curl);
     $statusCode = (int) curl_getinfo($curl, CURLINFO_HTTP_CODE);
-    curl_close($curl);
+    unset($curl);
     unlink($temporaryFile);
 
     if ($response === false || $statusCode < 200 || $statusCode >= 300) {
@@ -1022,7 +1022,7 @@ function send_app_email_with_brevo_api($toEmail, $toName, $subject, $htmlBody, $
     $response = curl_exec($curl);
     $statusCode = (int) curl_getinfo($curl, CURLINFO_HTTP_CODE);
     $curlError = curl_error($curl);
-    curl_close($curl);
+    unset($curl);
 
     if ($response === false) {
         set_last_mail_error("Brevo API request failed. " . $curlError);
