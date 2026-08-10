@@ -341,10 +341,13 @@ function dashboard_icon($name)
 {
     $icons = [
         "users" => '<path d="M16 21v-2.2a4.8 4.8 0 0 0-4.8-4.8H6.8A4.8 4.8 0 0 0 2 18.8V21"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2.1a4.1 4.1 0 0 0-3.1-4"></path><path d="M16.5 3.4a4 4 0 0 1 0 7.2"></path>',
+        "graduation" => '<path d="m22 10-10-5-10 5 10 5 10-5z"></path><path d="M6 12.5V16c0 1.7 2.7 3 6 3s6-1.3 6-3v-3.5"></path><path d="M22 10v6"></path>',
         "book" => '<path d="M12 7v14"></path><path d="M3.5 5.6A2.6 2.6 0 0 1 6.1 3H12v18H6.1a2.6 2.6 0 0 1-2.6-2.6V5.6z"></path><path d="M12 3h5.9a2.6 2.6 0 0 1 2.6 2.6v12.8a2.6 2.6 0 0 1-2.6 2.6H12V3z"></path>',
         "book_plus" => '<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M4 4.5A2.5 2.5 0 0 1 6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5z"></path><path d="M12 7v6"></path><path d="M9 10h6"></path>',
         "calendar" => '<rect x="3" y="4" width="18" height="17" rx="3"></rect><path d="M8 2v4"></path><path d="M16 2v4"></path><path d="M3 10h18"></path><path d="m9 15 2 2 4-4"></path>',
+        "broadcast" => '<path d="M12 12h.01"></path><path d="M16.2 7.8a6 6 0 0 1 0 8.4"></path><path d="M7.8 16.2a6 6 0 0 1 0-8.4"></path><path d="M19.1 4.9a10 10 0 0 1 0 14.2"></path><path d="M4.9 19.1a10 10 0 0 1 0-14.2"></path>',
         "activity" => '<path d="M12 12h.01"></path><path d="M16.2 7.8a6 6 0 0 1 0 8.4"></path><path d="M7.8 16.2a6 6 0 0 1 0-8.4"></path><path d="M19.1 4.9a10 10 0 0 1 0 14.2"></path><path d="M4.9 19.1a10 10 0 0 1 0-14.2"></path>',
+        "clipboard_check" => '<path d="M9 5h6"></path><path d="M9 3h6a2 2 0 0 1 2 2v1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h1V5a2 2 0 0 1 2-2z"></path><path d="m9 14 2 2 4-4"></path>',
         "check" => '<path d="M9 5h6"></path><path d="M9 3h6a2 2 0 0 1 2 2v1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h1V5a2 2 0 0 1 2-2z"></path><path d="m9 14 2 2 4-4"></path>',
         "alert" => '<path d="M12 9v4"></path><path d="M12 17h.01"></path><path d="M10.4 3.9 2.2 18.1A2 2 0 0 0 3.9 21h16.2a2 2 0 0 0 1.7-2.9L13.6 3.9a1.9 1.9 0 0 0-3.2 0z"></path>',
         "percent" => '<path d="M19 5 5 19"></path><circle cx="6.5" cy="6.5" r="2.5"></circle><circle cx="17.5" cy="17.5" r="2.5"></circle>',
@@ -353,11 +356,150 @@ function dashboard_icon($name)
         "qr" => '<rect x="3" y="3" width="6" height="6" rx="1.5"></rect><rect x="15" y="3" width="6" height="6" rx="1.5"></rect><rect x="3" y="15" width="6" height="6" rx="1.5"></rect><path d="M14 14h3"></path><path d="M15.5 12.5v3"></path><path d="M19 17h2"></path><path d="M17 21v-2"></path><path d="M14 20h3"></path>',
         "table" => '<rect x="3" y="4" width="18" height="16" rx="2"></rect><path d="M3 10h18"></path><path d="M9 10v10"></path><path d="M15 10v10"></path><path d="m5.7 15.2 1.2 1.2 2.2-2.4"></path>',
         "plus" => '<path d="M12 5v14"></path><path d="M5 12h14"></path>',
+        "file_text" => '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><path d="M14 2v6h6"></path><path d="M8 13h8"></path><path d="M8 17h6"></path>',
     ];
 
     $paths = $icons[$name] ?? $icons["activity"];
 
     return '<span class="stat-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false">' . $paths . '</svg></span>';
+}
+
+function pdf_escape_text($text)
+{
+    $text = (string) $text;
+    if (function_exists("iconv")) {
+        $converted = @iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", $text);
+        if ($converted !== false) {
+            $text = $converted;
+        }
+    }
+    $text = preg_replace('/[^\x20-\x7E]/', "", $text);
+    return str_replace(["\\", "(", ")"], ["\\\\", "\\(", "\\)"], $text);
+}
+
+function pdf_trim_text($text, $limit)
+{
+    $text = trim(preg_replace('/\s+/', ' ', (string) $text));
+    if (strlen($text) <= $limit) {
+        return $text;
+    }
+    return rtrim(substr($text, 0, max(0, $limit - 3))) . "...";
+}
+
+function stream_table_pdf($filename, $title, array $metaRows, array $headers, array $rows)
+{
+    $pageWidth = 842;
+    $pageHeight = 595;
+    $margin = 34;
+    $rowHeight = 22;
+    $colWidths = [96, 68, 88, 118, 90, 82, 54, 62, 46];
+    $pages = [];
+    $current = [];
+    $y = 468;
+
+    foreach ($rows as $row) {
+        if ($y < 58) {
+            $pages[] = $current;
+            $current = [];
+            $y = 468;
+        }
+        $current[] = $row;
+        $y -= $rowHeight;
+    }
+    if (!empty($current) || empty($pages)) {
+        $pages[] = $current;
+    }
+
+    $objects = [];
+    $pageObjectIds = [];
+    $contentObjectIds = [];
+    $objects[1] = "<< /Type /Catalog /Pages 2 0 R >>";
+    $objects[3] = "<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>";
+    $objects[4] = "<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold >>";
+
+    foreach ($pages as $index => $pageRows) {
+        $pageId = 5 + ($index * 2);
+        $contentId = $pageId + 1;
+        $pageObjectIds[] = $pageId . " 0 R";
+        $contentObjectIds[] = $contentId;
+        $pageNo = $index + 1;
+        $pageCount = count($pages);
+
+        $content = [];
+        $content[] = "0.94 0.97 1 rg 0 0 $pageWidth $pageHeight re f";
+        $content[] = "0.05 0.17 0.32 rg 0 548 $pageWidth 47 re f";
+        $content[] = "1 1 1 rg BT /F2 18 Tf 1 0 0 1 $margin 566 Tm (" . pdf_escape_text("SmartAttend") . ") Tj ET";
+        $content[] = "1 1 1 rg BT /F1 10 Tf 1 0 0 1 660 568 Tm (" . pdf_escape_text("Page $pageNo of $pageCount") . ") Tj ET";
+        $content[] = "0.04 0.09 0.18 rg BT /F2 20 Tf 1 0 0 1 $margin 522 Tm (" . pdf_escape_text($title) . ") Tj ET";
+
+        $metaY = 500;
+        foreach ($metaRows as $label => $value) {
+            $content[] = "0.29 0.36 0.46 rg BT /F2 9 Tf 1 0 0 1 $margin $metaY Tm (" . pdf_escape_text($label . ":") . ") Tj ET";
+            $content[] = "0.04 0.09 0.18 rg BT /F1 9 Tf 1 0 0 1 " . ($margin + 74) . " $metaY Tm (" . pdf_escape_text(pdf_trim_text($value, 82)) . ") Tj ET";
+            $metaY -= 14;
+        }
+
+        $tableY = 448;
+        $content[] = "0.90 0.94 0.98 rg $margin $tableY 774 24 re f";
+        $x = $margin + 6;
+        foreach ($headers as $i => $header) {
+            $content[] = "0.18 0.25 0.36 rg BT /F2 8 Tf 1 0 0 1 $x " . ($tableY + 8) . " Tm (" . pdf_escape_text($header) . ") Tj ET";
+            $x += $colWidths[$i] ?? 70;
+        }
+
+        $rowY = $tableY - $rowHeight;
+        foreach ($pageRows as $rowIndex => $row) {
+            if ($rowIndex % 2 === 0) {
+                $content[] = "1 1 1 rg $margin " . ($rowY - 2) . " 774 $rowHeight re f";
+            } else {
+                $content[] = "0.98 0.99 1 rg $margin " . ($rowY - 2) . " 774 $rowHeight re f";
+            }
+            $content[] = "0.88 0.91 0.95 RG 0.5 w $margin " . ($rowY - 2) . " m 808 " . ($rowY - 2) . " l S";
+
+            $x = $margin + 6;
+            foreach ($row as $i => $value) {
+                $limit = [18, 12, 16, 22, 16, 16, 9, 10, 8][$i] ?? 14;
+                $content[] = "0.13 0.19 0.29 rg BT /F1 8 Tf 1 0 0 1 $x " . ($rowY + 6) . " Tm (" . pdf_escape_text(pdf_trim_text($value, $limit)) . ") Tj ET";
+                $x += $colWidths[$i] ?? 70;
+            }
+            $rowY -= $rowHeight;
+        }
+
+        if (empty($pageRows)) {
+            $content[] = "0.29 0.36 0.46 rg BT /F1 11 Tf 1 0 0 1 $margin 416 Tm (" . pdf_escape_text("No attendance records found for the selected filters.") . ") Tj ET";
+        }
+
+        $content[] = "0.45 0.52 0.62 rg BT /F1 8 Tf 1 0 0 1 $margin 28 Tm (" . pdf_escape_text("Generated on " . date("M j, Y g:i A")) . ") Tj ET";
+
+        $stream = implode("\n", $content);
+        $objects[$pageId] = "<< /Type /Page /Parent 2 0 R /MediaBox [0 0 $pageWidth $pageHeight] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents $contentId 0 R >>";
+        $objects[$contentId] = "<< /Length " . strlen($stream) . " >>\nstream\n" . $stream . "\nendstream";
+    }
+
+    $objects[2] = "<< /Type /Pages /Kids [" . implode(" ", $pageObjectIds) . "] /Count " . count($pages) . " >>";
+    ksort($objects);
+
+    $pdf = "%PDF-1.4\n";
+    $offsets = [0 => 0];
+    foreach ($objects as $id => $body) {
+        $offsets[$id] = strlen($pdf);
+        $pdf .= $id . " 0 obj\n" . $body . "\nendobj\n";
+    }
+
+    $xrefOffset = strlen($pdf);
+    $maxObject = max(array_keys($objects));
+    $pdf .= "xref\n0 " . ($maxObject + 1) . "\n";
+    $pdf .= "0000000000 65535 f \n";
+    for ($i = 1; $i <= $maxObject; $i++) {
+        $pdf .= sprintf("%010d 00000 n \n", $offsets[$i] ?? 0);
+    }
+    $pdf .= "trailer\n<< /Size " . ($maxObject + 1) . " /Root 1 0 R >>\nstartxref\n$xrefOffset\n%%EOF";
+
+    header("Content-Type: application/pdf");
+    header("Content-Disposition: attachment; filename=\"" . preg_replace('/[^A-Za-z0-9_.-]/', "_", $filename) . "\"");
+    header("Content-Length: " . strlen($pdf));
+    echo $pdf;
+    exit();
 }
 
 function is_valid_matric_no($matricNo)

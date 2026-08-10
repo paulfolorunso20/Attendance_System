@@ -137,7 +137,7 @@ $attendanceEfficiency = (int) min(100, max(0, ($stats["attendance_records"] ?? 0
 
     <div class="role-stats-grid">
         <div class="role-stat-card">
-            <?php echo dashboard_icon("book"); ?>
+            <?php echo dashboard_icon("graduation"); ?>
             <span>Courses</span>
             <strong><?php echo number_format((int) ($stats["total_courses"] ?? 0)); ?></strong>
             <small>Active Courses</small>
@@ -149,13 +149,13 @@ $attendanceEfficiency = (int) min(100, max(0, ($stats["attendance_records"] ?? 0
             <small>Sessions Created</small>
         </div>
         <div class="role-stat-card">
-            <?php echo dashboard_icon("activity"); ?>
+            <?php echo dashboard_icon("broadcast"); ?>
             <span>Active Now</span>
             <strong><?php echo number_format((int) ($stats["active_sessions"] ?? 0)); ?></strong>
             <small>Ongoing Sessions</small>
         </div>
         <div class="role-stat-card">
-            <?php echo dashboard_icon("check"); ?>
+            <?php echo dashboard_icon("clipboard_check"); ?>
             <span>Records</span>
             <strong><?php echo number_format((int) ($stats["attendance_records"] ?? 0)); ?></strong>
             <small>Attendance Records</small>
@@ -199,26 +199,34 @@ $attendanceEfficiency = (int) min(100, max(0, ($stats["attendance_records"] ?? 0
         <div class="dashboard-grid role-action-grid">
 
             <a href="<?php echo e(with_context("lecturer/create_session.php")); ?>" class="dashboard-card">
-                <span class="action-icon"><?php echo dashboard_icon("qr"); ?></span>
-                <h3>Create Session</h3>
+                <div class="dashboard-card-heading">
+                    <span class="action-icon"><?php echo dashboard_icon("qr"); ?></span>
+                    <h3>Create Session</h3>
+                </div>
                 <p>Generate attendance QR.</p>
             </a>
 
             <a href="<?php echo e(with_context("lecturer/manage_sessions.php")); ?>" class="dashboard-card">
-                <span class="action-icon"><?php echo dashboard_icon("clock"); ?></span>
-                <h3>Manage Sessions</h3>
+                <div class="dashboard-card-heading">
+                    <span class="action-icon"><?php echo dashboard_icon("calendar"); ?></span>
+                    <h3>Manage Sessions</h3>
+                </div>
                 <p>View active sessions.</p>
             </a>
 
             <a href="<?php echo e(with_context("lecturer/create_course.php")); ?>" class="dashboard-card">
-                <span class="action-icon"><?php echo dashboard_icon("book_plus"); ?></span>
-                <h3>Add Course</h3>
+                <div class="dashboard-card-heading">
+                    <span class="action-icon"><?php echo dashboard_icon("book_plus"); ?></span>
+                    <h3>Add Course</h3>
+                </div>
                 <p>Register a new course.</p>
             </a>
 
             <a href="<?php echo e(with_context("lecturer/view_records.php")); ?>" class="dashboard-card">
-                <span class="action-icon"><?php echo dashboard_icon("table"); ?></span>
-                <h3>Attendance Records</h3>
+                <div class="dashboard-card-heading">
+                    <span class="action-icon"><?php echo dashboard_icon("file_text"); ?></span>
+                    <h3>Attendance Records</h3>
+                </div>
                 <p>View student records.</p>
             </a>
 

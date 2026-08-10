@@ -79,7 +79,7 @@ $exportQuery = http_build_query([
     <title>Attendance Records</title>
     <link rel="stylesheet" href="../assets/css/style.css?v=professional-ui-5">
 </head>
-<body>
+<body class="lecturer-records-page">
 
 <div class="dashboard-container">
 
@@ -131,6 +131,7 @@ $exportQuery = http_build_query([
 
 <div class="table-actions">
     <a href="export_records.php?<?php echo e($exportQuery); ?>" class="button-link">Export CSV</a>
+    <a href="export_records_pdf.php?<?php echo e($exportQuery); ?>" class="button-link secondary-action">Export PDF</a>
 </div>
 
 <div class="table-wrap">

@@ -59,76 +59,99 @@ $sessions = mysqli_stmt_get_result($stmt);
     <link rel="stylesheet" href="../assets/css/style.css?v=professional-ui-5">
 </head>
 
-<body>
+<body class="lecturer-sessions-page">
 
     <div class="dashboard-container wide-admin">
-        <h2>Manage Attendance Sessions</h2>
+        <div class="lecturer-page-heading">
+            <div>
+                <p class="section-kicker">Lecturer Tool</p>
+                <h2>Manage Attendance Sessions</h2>
+                <p>Review active and previous QR sessions, extend time, or close a session.</p>
+            </div>
+            <a href="dashboard.php" class="button-link secondary-action">Back to Dashboard</a>
+        </div>
 
         <?php if ($flash) { ?>
             <p class="alert alert-<?php echo e($flash["type"]); ?>"><?php echo e($flash["message"]); ?></p>
         <?php } ?>
 
-        <div class="table-wrap">
-            <table border="1" cellpadding="10" cellspacing="0" width="100%">
-                <tr>
-                    <th>Course</th>
-                    <th>Created</th>
-                    <th>Expires</th>
-                    <th>Status</th>
-                    <th>Marked</th>
-                    <th>QR Link</th>
-                    <th>Actions</th>
-                </tr>
+        <div class="lecturer-session-list">
+            <?php
+            $hasSessions = false;
+            while ($row = mysqli_fetch_assoc($sessions)) {
+                $hasSessions = true;
+                $isClosed = !empty($row["closed_at"]);
+                $isExpired = strtotime($row["expires_at"]) < time();
+                $status = $isClosed ? "Closed" : ($isExpired ? "Expired" : "Active");
+                $statusClass = $isClosed ? "status-closed" : ($isExpired ? "status-expired" : "status-active");
+                $qrLink = app_base_url() . "/attendance/mark_attendance.php?token=" . urlencode($row["session_token"]);
+                ?>
+                <article class="lecturer-session-card">
+                    <div class="lecturer-session-header">
+                        <div>
+                            <span class="status-badge <?php echo e($statusClass); ?>"><?php echo e($status); ?></span>
+                            <h3><?php echo e($row["course_code"] . " - " . $row["course_title"]); ?></h3>
+                            <p>Session #<?php echo e($row["id"]); ?> created <?php echo e($row["created_at"]); ?></p>
+                        </div>
+                        <div class="session-count-card">
+                            <strong><?php echo e($row["marked_count"]); ?></strong>
+                            <span>Marked</span>
+                        </div>
+                    </div>
 
-                <?php while ($row = mysqli_fetch_assoc($sessions)) {
-                    $isClosed = !empty($row["closed_at"]);
-                    $isExpired = strtotime($row["expires_at"]) < time();
-                    $status = $isClosed ? "Closed" : ($isExpired ? "Expired" : "Active");
-                    $statusClass = $isClosed ? "status-closed" : ($isExpired ? "status-expired" : "status-active");
-                    $qrLink = app_base_url() . "/attendance/mark_attendance.php?token=" . urlencode($row["session_token"]);
-                    ?>
-                    <tr>
-                        <td><?php echo e($row["course_code"] . " - " . $row["course_title"]); ?></td>
-                        <td>
-                            <strong>#<?php echo e($row["id"]); ?></strong><br>
-                            <?php echo e($row["created_at"]); ?>
-                        </td>
-                        <td><?php echo e($row["expires_at"]); ?></td>
-                        <td><span class="status-badge <?php echo e($statusClass); ?>"><?php echo e($status); ?></span></td>
-                        <td><span class="marked-pill"><?php echo e($row["marked_count"]); ?> marked</span></td>
-                        <td>
+                    <div class="lecturer-session-body">
+                        <div class="lecturer-session-qr">
                             <?php if (!$isClosed && !$isExpired) { ?>
-                                <div class="session-mini-qr">
-                                    <img src="../attendance/qr_code.php?data=<?php echo urlencode($qrLink); ?>" alt="Attendance QR code">
-                                </div>
+                                <img src="../attendance/qr_code.php?data=<?php echo urlencode($qrLink); ?>" alt="Attendance QR code">
+                            <?php } else { ?>
+                                <div class="session-qr-placeholder"><?php echo dashboard_icon($isClosed ? "check" : "clock"); ?></div>
                             <?php } ?>
-                            <a href="<?php echo e($qrLink); ?>" target="_blank">Open</a>
-                            <p class="link"><?php echo e($qrLink); ?></p>
-                        </td>
-                        <td>
+                            <a href="<?php echo e($qrLink); ?>" target="_blank" class="button-link secondary-action">Open QR Link</a>
+                        </div>
+
+                        <div class="lecturer-session-details">
+                            <div>
+                                <span>Expires</span>
+                                <strong><?php echo e($row["expires_at"]); ?></strong>
+                            </div>
+                            <div>
+                                <span>Allowed Radius</span>
+                                <strong><?php echo e($row["radius_meters"]); ?>m</strong>
+                            </div>
+                            <div>
+                                <span>QR Link</span>
+                                <p class="link"><?php echo e($qrLink); ?></p>
+                            </div>
+                        </div>
+
+                        <div class="lecturer-session-controls">
                             <form method="POST" class="inline-action-form">
                                 <?php render_csrf_input(); ?>
                                 <input type="hidden" name="session_id" value="<?php echo e($row["id"]); ?>">
-                                <input type="number" name="minutes" min="1" max="180" value="10"
-                                    aria-label="Minutes to extend">
-                                <button type="submit" name="extend_session">Extend</button>
+                                <input type="number" name="minutes" min="1" max="180" value="10" aria-label="Minutes to extend">
+                                <button type="submit" name="extend_session">Extend Session</button>
                             </form>
 
                             <?php if (!$isClosed) { ?>
                                 <form method="POST" class="inline-action-form">
                                     <?php render_csrf_input(); ?>
                                     <input type="hidden" name="session_id" value="<?php echo e($row["id"]); ?>">
-                                    <button type="submit" name="close_session" class="danger-button">Close</button>
+                                    <button type="submit" name="close_session" class="danger-button">End Session</button>
                                 </form>
                             <?php } ?>
-                        </td>
-                    </tr>
-                <?php } ?>
-            </table>
-        </div>
+                        </div>
+                    </div>
+                </article>
+            <?php } ?>
 
-        <br>
-        <a href="dashboard.php">Back to Dashboard</a>
+            <?php if (!$hasSessions) { ?>
+                <div class="empty-state-card">
+                    <h3>No attendance sessions yet</h3>
+                    <p>Create a session to generate a QR code for student attendance.</p>
+                    <a href="create_session.php" class="button-link">Create Session</a>
+                </div>
+            <?php } ?>
+        </div>
     </div>
 
 </body>
