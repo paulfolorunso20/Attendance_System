@@ -23,16 +23,144 @@ function apply_auth_context($context, $auth)
     $_SESSION["role"] = trim($auth["role"] ?? "");
 }
 
+function clear_auth_context($context)
+{
+    if ($context !== "" && isset($_SESSION["auth_contexts"][$context])) {
+        unset($_SESSION["auth_contexts"][$context]);
+    }
+
+    if (($context === "" && empty($_SESSION["auth_context"])) || ($_SESSION["auth_context"] ?? "") === $context) {
+        unset(
+            $_SESSION["auth_context"],
+            $_SESSION["user_id"],
+            $_SESSION["full_name"],
+            $_SESSION["title"],
+            $_SESSION["position"],
+            $_SESSION["role"]
+        );
+    }
+}
+
+function auth_user_from_database($userId)
+{
+    global $conn;
+
+    $userId = (int) $userId;
+
+    if ($userId <= 0 || !isset($conn) || !$conn instanceof mysqli) {
+        return null;
+    }
+
+    $stmt = mysqli_prepare($conn, "SELECT id, full_name, title, position, role FROM users WHERE id = ? LIMIT 1");
+
+    if (!$stmt) {
+        return null;
+    }
+
+    mysqli_stmt_bind_param($stmt, "i", $userId);
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
+    $user = $result ? mysqli_fetch_assoc($result) : null;
+
+    if (!$user) {
+        return null;
+    }
+
+    return [
+        "user_id" => (int) $user["id"],
+        "full_name" => $user["full_name"] ?? "",
+        "title" => $user["title"] ?? "",
+        "position" => $user["position"] ?? "",
+        "role" => trim($user["role"] ?? ""),
+    ];
+}
+
+function valid_auth_context($context, $requiredRole = null)
+{
+    if ($context === "" || empty($_SESSION["auth_contexts"][$context]) || !is_array($_SESSION["auth_contexts"][$context])) {
+        return null;
+    }
+
+    $storedAuth = $_SESSION["auth_contexts"][$context];
+    $databaseAuth = auth_user_from_database($storedAuth["user_id"] ?? 0);
+
+    if (!$databaseAuth || trim($storedAuth["role"] ?? "") !== $databaseAuth["role"]) {
+        clear_auth_context($context);
+        return null;
+    }
+
+    if ($requiredRole !== null && $databaseAuth["role"] !== $requiredRole) {
+        return null;
+    }
+
+    $_SESSION["auth_contexts"][$context] = $databaseAuth;
+
+    return $databaseAuth;
+}
+
 function sync_auth_context()
 {
     $context = auth_context_from_request();
 
-    if ($context !== "" && isset($_SESSION["auth_contexts"][$context])) {
-        apply_auth_context($context, $_SESSION["auth_contexts"][$context]);
-        return $context;
+    if ($context !== "") {
+        $auth = valid_auth_context($context);
+
+        if ($auth) {
+            apply_auth_context($context, $auth);
+            return $context;
+        }
     }
 
-    return $_SESSION["auth_context"] ?? "";
+    $activeContext = $_SESSION["auth_context"] ?? "";
+
+    if ($activeContext !== "") {
+        $auth = valid_auth_context($activeContext);
+
+        if ($auth) {
+            apply_auth_context($activeContext, $auth);
+            return $activeContext;
+        }
+
+        clear_auth_context($activeContext);
+    }
+
+    return "";
+}
+
+function refresh_current_session_from_database()
+{
+    $userId = (int) ($_SESSION["user_id"] ?? 0);
+
+    if ($userId <= 0) {
+        return null;
+    }
+
+    $databaseAuth = auth_user_from_database($userId);
+
+    if (!$databaseAuth) {
+        clear_auth_context($_SESSION["auth_context"] ?? "");
+        return null;
+    }
+
+    if (trim($_SESSION["role"] ?? "") !== $databaseAuth["role"]) {
+        clear_auth_context($_SESSION["auth_context"] ?? "");
+        return null;
+    }
+
+    $context = $_SESSION["auth_context"] ?? "";
+
+    if ($context !== "" && isset($_SESSION["auth_contexts"][$context])) {
+        $_SESSION["auth_contexts"][$context] = $databaseAuth;
+        apply_auth_context($context, $databaseAuth);
+    } else {
+        $_SESSION["user_id"] = (int) $databaseAuth["user_id"];
+        $_SESSION["full_name"] = $databaseAuth["full_name"];
+        $_SESSION["title"] = $databaseAuth["title"];
+        $_SESSION["position"] = $databaseAuth["position"];
+        $_SESSION["role"] = $databaseAuth["role"];
+    }
+
+    return $databaseAuth;
 }
 
 function create_auth_context($user)
@@ -54,13 +182,7 @@ function create_auth_context($user)
 
 function current_auth_context()
 {
-    $context = auth_context_from_request();
-
-    if ($context !== "") {
-        return $context;
-    }
-
-    return $_SESSION["auth_context"] ?? "";
+    return sync_auth_context();
 }
 
 function select_auth_context_for_role($role)
@@ -70,8 +192,10 @@ function select_auth_context_for_role($role)
     }
 
     foreach ($_SESSION["auth_contexts"] as $context => $auth) {
-        if (($auth["role"] ?? "") === $role) {
-            apply_auth_context($context, $auth);
+        $databaseAuth = valid_auth_context($context, $role);
+
+        if ($databaseAuth) {
+            apply_auth_context($context, $databaseAuth);
             return $context;
         }
     }
@@ -253,14 +377,17 @@ function render_theme_assets()
 function require_role($role)
 {
     sync_auth_context();
+    $currentAuth = refresh_current_session_from_database();
 
-    if (!isset($_SESSION["user_id"]) || ($_SESSION["role"] ?? "") !== $role) {
-        if (select_auth_context_for_role($role) !== "") {
-            return;
-        }
-
-        redirect_with_context("auth/login.php");
+    if ($currentAuth && $currentAuth["role"] === $role) {
+        return;
     }
+
+    if (select_auth_context_for_role($role) !== "") {
+        return;
+    }
+
+    redirect_with_context("auth/login.php");
 }
 
 function set_flash($type, $message)
