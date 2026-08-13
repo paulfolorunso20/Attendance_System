@@ -188,7 +188,7 @@ if (!$createdSession && !isset($_POST["create"])) {
         <div class="venue-location-card">
             <div>
                 <strong>Lecture Venue GPS</strong>
-                <span id="venueLocationStatus">Capture your current location before generating the QR code.</span>
+                <span id="venueLocationStatus" aria-live="polite">Capture your current location before generating the QR code.</span>
             </div>
             <button type="button" class="secondary-button" id="useLocation">Capture Venue GPS</button>
         </div>
@@ -207,7 +207,7 @@ if (!$createdSession && !isset($_POST["create"])) {
         <input type="number" name="radius_meters" min="10" max="300" step="1" value="100" required autocomplete="off">
         <p class="helper-text">Set the maximum distance students can be from the lecture venue. Choose between 10m and 300m. Smaller radii require better GPS accuracy.</p>
 
-        <button type="submit" name="create" id="generateQrButton" disabled>Generate QR Code</button>
+        <button type="submit" name="create" id="generateQrButton" class="qr-submit-button is-waiting" disabled>Capture GPS to Continue</button>
 
     </form>
     <?php } ?>
@@ -321,17 +321,37 @@ function selectedRadiusMeters() {
     return Number.isInteger(radius) ? radius : 100;
 }
 
+function setGenerateButtonState(state) {
+    if (!generateQrButton) {
+        return;
+    }
+
+    const labels = {
+        waiting: "Capture GPS to Continue",
+        blocked: "Improve GPS to Continue",
+        ready: "Ready - Generate QR Code"
+    };
+
+    generateQrButton.disabled = state !== "ready";
+    generateQrButton.textContent = labels[state] || labels.waiting;
+    generateQrButton.classList.toggle("is-ready", state === "ready");
+    generateQrButton.classList.toggle("is-blocked", state === "blocked");
+    generateQrButton.classList.toggle("is-waiting", state === "waiting");
+    generateQrButton.setAttribute("aria-disabled", state === "ready" ? "false" : "true");
+}
+
 function validateVenueAccuracy() {
     if (!venueAccuracy || !locationConfirmed || !generateQrButton || !venueLocationStatus) {
         return;
     }
 
     if (manualLocation && manualLocation.value === "1") {
-        generateQrButton.disabled = false;
+        setGenerateButtonState("ready");
         return;
     }
 
     if (locationConfirmed.value !== "1" || venueAccuracy.value === "") {
+        setGenerateButtonState("waiting");
         return;
     }
 
@@ -339,12 +359,12 @@ function validateVenueAccuracy() {
     const radius = selectedRadiusMeters();
 
     if (accuracy > radius) {
-        generateQrButton.disabled = true;
+        setGenerateButtonState("blocked");
         venueLocationStatus.textContent = "Venue GPS captured, but accuracy is about " + Math.round(accuracy) + "m. That is too weak for a " + radius + "m radius. Retry in a more open area or choose a larger radius.";
         return;
     }
 
-    generateQrButton.disabled = false;
+    setGenerateButtonState("ready");
     venueLocationStatus.textContent = "Venue captured. Accuracy: about " + Math.round(accuracy) + " meters.";
 }
 
@@ -360,6 +380,7 @@ useLocationButton.addEventListener("click", function () {
     }
 
     venueLocationStatus.textContent = "Capturing the best venue GPS reading. Keep location on and stay near a window or open area...";
+    setGenerateButtonState("waiting");
     useLocationButton.disabled = true;
 
     captureBestPosition(function (position) {
@@ -374,7 +395,7 @@ useLocationButton.addEventListener("click", function () {
         validateVenueAccuracy();
     }, function (error) {
         locationConfirmed.value = "0";
-        generateQrButton.disabled = true;
+        setGenerateButtonState("waiting");
         useLocationButton.disabled = false;
 
         if (error.code === error.PERMISSION_DENIED) {
@@ -406,10 +427,12 @@ if (manualLocationButton) {
         venueAccuracy.value = 0;
         locationConfirmed.value = "1";
         manualLocation.value = "1";
-        generateQrButton.disabled = false;
+        setGenerateButtonState("ready");
         venueLocationStatus.textContent = "Manual coordinate mode enabled. Use coordinates from Google Maps at the lecture venue.";
     });
 }
+
+setGenerateButtonState("waiting");
 
 function captureBestPosition(onSuccess, onError) {
     let bestPosition = null;
