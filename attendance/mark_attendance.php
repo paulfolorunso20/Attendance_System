@@ -354,39 +354,127 @@ if (isset($_POST['mark']) && $profileComplete && $faceEnrolled) {
         <span class="verification-chip">Live verification</span>
         <p>Complete the face scan and GPS check before submitting.</p>
     </div>
-    <form method="POST" id="attendanceForm">
+    <form method="POST" id="attendanceForm" class="attendance-wizard-form">
         <?php render_csrf_input(); ?>
-        <div class="verification-card">
-        <div class="verification-grid">
-            <div class="face-scan-panel">
-                <div class="face-camera-frame">
-                    <video id="camera" autoplay playsinline></video>
-                    <canvas id="snapshotCanvas" width="480" height="360"></canvas>
-                    <div class="face-scan-guide">
-                        <span></span>
+        <div class="attendance-wizard-card">
+            <ol class="attendance-wizard-steps" aria-label="Attendance verification steps">
+                <li class="attendance-wizard-step is-active is-complete" data-wizard-indicator="qr">
+                    <span>1</span>
+                    <div>
+                        <strong>QR</strong>
+                        <small>Session verified</small>
                     </div>
-                    <div class="face-scan-line"></div>
-                    <div class="camera-mode-badge" id="cameraMode">Starting camera</div>
-                </div>
-                <input type="file" id="attendancePhotoInput" accept="image/*" capture="user" class="camera-file-input">
-                <div class="face-action-row">
-                    <button type="button" class="secondary-button face-capture-button primary-scan-action" id="captureFace">Run Live Face Scan</button>
-                    <button type="button" class="secondary-button face-capture-button fallback-scan-action" id="openAttendanceCamera">Photo Fallback</button>
-                </div>
-                <p id="faceStatus" class="status-text">Keep your face inside the frame and use Live Face Scan first.</p>
-            </div>
+                </li>
+                <li class="attendance-wizard-step" data-wizard-indicator="face">
+                    <span>2</span>
+                    <div>
+                        <strong>Face</strong>
+                        <small>Live scan</small>
+                    </div>
+                </li>
+                <li class="attendance-wizard-step" data-wizard-indicator="location">
+                    <span>3</span>
+                    <div>
+                        <strong>GPS</strong>
+                        <small>Classroom check</small>
+                    </div>
+                </li>
+                <li class="attendance-wizard-step" data-wizard-indicator="confirm">
+                    <span>4</span>
+                    <div>
+                        <strong>Submit</strong>
+                        <small>Final check</small>
+                    </div>
+                </li>
+            </ol>
 
-            <div class="verification-panel">
-                <span class="verification-panel-label">Session check</span>
-                <h3><?php echo e($session["course_code"]); ?></h3>
-                <div class="session-check-list">
-                    <p><strong>Expires</strong><span><?php echo e($session["expires_at"]); ?></span></p>
-                    <p><strong>Allowed radius</strong><span><?php echo e($session["radius_meters"]); ?> meters</span></p>
-                </div>
-                <p id="locationStatus" class="status-text">Waiting for GPS location.</p>
-                <button type="button" class="secondary-button compact-button" id="retryLocation">Retry GPS</button>
+            <div class="attendance-wizard-body">
+                <section class="attendance-wizard-panel is-active" data-wizard-panel="qr">
+                    <div class="wizard-panel-copy">
+                        <span class="wizard-kicker">Step 1 of 4</span>
+                        <h3>QR session confirmed</h3>
+                        <p>You scanned a valid attendance session. Continue with face and GPS verification to complete your attendance.</p>
+                    </div>
+                    <div class="wizard-session-card">
+                        <p><strong><?php echo e($session["course_code"]); ?></strong><span><?php echo e($session["course_title"]); ?></span></p>
+                        <p><strong>Expires</strong><span><?php echo e($session["expires_at"]); ?></span></p>
+                    </div>
+                    <div class="wizard-panel-actions">
+                        <button type="button" class="wizard-primary-button" id="continueToFace">Continue to Face Scan</button>
+                    </div>
+                </section>
+
+                <section class="attendance-wizard-panel" data-wizard-panel="face" hidden>
+                    <div class="wizard-face-layout">
+                        <div class="face-scan-panel">
+                            <div class="face-camera-frame">
+                                <video id="camera" autoplay playsinline></video>
+                                <canvas id="snapshotCanvas" width="480" height="360"></canvas>
+                                <div class="face-scan-guide">
+                                    <span></span>
+                                </div>
+                                <div class="face-scan-line"></div>
+                                <div class="camera-mode-badge" id="cameraMode">Starting camera</div>
+                            </div>
+                            <input type="file" id="attendancePhotoInput" accept="image/*" capture="user" class="camera-file-input">
+                            <div class="face-action-row">
+                                <button type="button" class="secondary-button face-capture-button primary-scan-action" id="captureFace">Run Live Face Scan</button>
+                                <button type="button" class="secondary-button face-capture-button fallback-scan-action" id="openAttendanceCamera">Photo Fallback</button>
+                            </div>
+                            <p id="faceStatus" class="status-text">Keep your face inside the frame and use Live Face Scan first.</p>
+                        </div>
+
+                        <div class="verification-panel wizard-instruction-panel">
+                            <span class="verification-panel-label">Face verification</span>
+                            <h3>Scan your face</h3>
+                            <p>Use the live scan first. Photo Fallback is only available if your browser cannot complete the live camera scan.</p>
+                            <div class="verification-steps">
+                                <span>1. Center face</span>
+                                <span>2. Run scan</span>
+                                <span>3. Continue to GPS</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="wizard-panel-actions">
+                        <button type="button" class="wizard-primary-button" id="continueToLocation" disabled>Continue to GPS Check</button>
+                    </div>
+                </section>
+
+                <section class="attendance-wizard-panel" data-wizard-panel="location" hidden>
+                    <div class="verification-panel wizard-location-card">
+                        <span class="verification-panel-label">Session check</span>
+                        <h3><?php echo e($session["course_code"]); ?></h3>
+                        <div class="session-check-list">
+                            <p><strong>Expires</strong><span><?php echo e($session["expires_at"]); ?></span></p>
+                            <p><strong>Allowed radius</strong><span><?php echo e($session["radius_meters"]); ?> meters</span></p>
+                        </div>
+                        <p id="locationStatus" class="status-text">Waiting for GPS location.</p>
+                        <button type="button" class="secondary-button compact-button" id="retryLocation">Retry GPS</button>
+                    </div>
+                    <div class="wizard-panel-actions">
+                        <button type="button" class="wizard-primary-button" id="continueToConfirmation" disabled>Review and Submit</button>
+                    </div>
+                </section>
+
+                <section class="attendance-wizard-panel" data-wizard-panel="confirm" hidden>
+                    <div class="wizard-panel-copy">
+                        <span class="wizard-kicker">Step 4 of 4</span>
+                        <h3>Review verification</h3>
+                        <p id="confirmSubmitHint">Face scan and GPS check must both be complete before submitting.</p>
+                    </div>
+                    <div class="wizard-review-grid">
+                        <div class="wizard-review-item">
+                            <span>Face verification</span>
+                            <strong id="confirmFaceState">Pending</strong>
+                        </div>
+                        <div class="wizard-review-item">
+                            <span>GPS verification</span>
+                            <strong id="confirmLocationState">Pending</strong>
+                        </div>
+                    </div>
+                    <button type="submit" name="mark" id="submitAttendance" class="attendance-final-submit" disabled>Submit Verified Attendance</button>
+                </section>
             </div>
-        </div>
 
         <input type="hidden" name="latitude" id="latitude">
         <input type="hidden" name="longitude" id="longitude">
@@ -394,8 +482,6 @@ if (isset($_POST['mark']) && $profileComplete && $faceEnrolled) {
         <input type="hidden" name="face_snapshot" id="faceSnapshot">
         <input type="hidden" name="face_confirmed" id="faceConfirmed" value="0">
         <input type="hidden" name="captured_face_descriptor" id="capturedFaceDescriptor">
-
-        <button type="submit" name="mark" id="submitAttendance" disabled>Submit Verified Attendance</button>
         </div>
     </form>
     <?php } ?>
@@ -429,9 +515,18 @@ const cameraMode = document.getElementById("cameraMode");
 const enrollCameraMode = document.getElementById("enrollCameraMode");
 const openAttendanceCamera = document.getElementById("openAttendanceCamera");
 const openEnrollCamera = document.getElementById("openEnrollCamera");
+const wizardPanels = document.querySelectorAll("[data-wizard-panel]");
+const wizardIndicators = document.querySelectorAll("[data-wizard-indicator]");
+const continueToFace = document.getElementById("continueToFace");
+const continueToLocation = document.getElementById("continueToLocation");
+const continueToConfirmation = document.getElementById("continueToConfirmation");
+const confirmFaceState = document.getElementById("confirmFaceState");
+const confirmLocationState = document.getElementById("confirmLocationState");
+const confirmSubmitHint = document.getElementById("confirmSubmitHint");
 
 let hasLocation = false;
 let hasFace = false;
+let locationRequested = false;
 let cameraStreamReady = false;
 let enrollCameraStreamReady = false;
 const sessionRadiusMeters = <?php echo json_encode((float) $session["radius_meters"]); ?>;
@@ -440,6 +535,70 @@ const maxAllowedAccuracy = sessionRadiusMeters;
 function updateSubmitState() {
     if (submitButton) {
         submitButton.disabled = !(hasLocation && hasFace);
+    }
+    syncWizardState();
+}
+
+function setWizardPanel(step) {
+    if (!wizardPanels.length) {
+        return;
+    }
+
+    const order = ["qr", "face", "location", "confirm"];
+    const activeIndex = order.indexOf(step);
+
+    wizardPanels.forEach((panel) => {
+        const isActive = panel.dataset.wizardPanel === step;
+        panel.hidden = !isActive;
+        panel.classList.toggle("is-active", isActive);
+    });
+
+    wizardIndicators.forEach((indicator) => {
+        const name = indicator.dataset.wizardIndicator;
+        const index = order.indexOf(name);
+        const isComplete = name === "qr"
+            || (name === "face" && hasFace)
+            || (name === "location" && hasLocation)
+            || (name === "confirm" && hasFace && hasLocation)
+            || (activeIndex !== -1 && index !== -1 && index < activeIndex);
+
+        indicator.classList.toggle("is-active", name === step);
+        indicator.classList.toggle("is-complete", isComplete);
+    });
+
+    if (step === "location" && !locationRequested) {
+        locationRequested = true;
+        getLocation();
+    }
+
+    if (step === "confirm") {
+        syncWizardState();
+    }
+}
+
+function syncWizardState() {
+    if (continueToLocation) {
+        continueToLocation.disabled = !hasFace;
+    }
+
+    if (continueToConfirmation) {
+        continueToConfirmation.disabled = !hasLocation;
+    }
+
+    if (confirmFaceState) {
+        confirmFaceState.textContent = hasFace ? "Passed" : "Pending";
+        confirmFaceState.classList.toggle("is-passed", hasFace);
+    }
+
+    if (confirmLocationState) {
+        confirmLocationState.textContent = hasLocation ? "Passed" : "Pending";
+        confirmLocationState.classList.toggle("is-passed", hasLocation);
+    }
+
+    if (confirmSubmitHint) {
+        confirmSubmitHint.textContent = hasFace && hasLocation
+            ? "All checks are complete. You can now submit your attendance."
+            : "Face scan and GPS check must both be complete before submitting.";
     }
 }
 
@@ -764,11 +923,38 @@ if (enrollVideo) {
     });
 }
 
-if (retryLocation) {
-    retryLocation.addEventListener("click", getLocation);
+if (continueToFace) {
+    continueToFace.addEventListener("click", () => setWizardPanel("face"));
 }
 
-getLocation();
+if (continueToLocation) {
+    continueToLocation.addEventListener("click", () => {
+        if (hasFace) {
+            setWizardPanel("location");
+        }
+    });
+}
+
+if (continueToConfirmation) {
+    continueToConfirmation.addEventListener("click", () => {
+        if (hasLocation) {
+            setWizardPanel("confirm");
+        }
+    });
+}
+
+if (retryLocation) {
+    retryLocation.addEventListener("click", () => {
+        locationRequested = true;
+        getLocation();
+    });
+}
+
+if (!wizardPanels.length) {
+    getLocation();
+}
+
+syncWizardState();
 </script>
 <script src="../assets/js/matric-format.js?v=1"></script>
 
