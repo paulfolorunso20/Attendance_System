@@ -42,7 +42,8 @@ if (isset($_POST['create'])) {
     $longitude = (float) $_POST['longitude'];
     $locationConfirmed = ($_POST["location_confirmed"] ?? "0") === "1";
     $venueAccuracy = filter_input(INPUT_POST, "venue_accuracy", FILTER_VALIDATE_FLOAT);
-    $radius = (int) ($_POST['radius_meters'] ?? 100);
+    $radiusInput = trim((string) ($_POST['radius_meters'] ?? ""));
+    $radius = $radiusInput === "" ? 100 : filter_var($radiusInput, FILTER_VALIDATE_INT);
     $token = random_token(24);
     $expires_at = date("Y-m-d H:i:s", strtotime("+{$duration} minutes"));
 
@@ -54,7 +55,7 @@ if (isset($_POST['create'])) {
 
     $manualLocation = ($_POST["manual_location"] ?? "0") === "1";
 
-    if ($radius < 10 || $radius > 300) {
+    if ($radius === false || $radius < 10 || $radius > 300) {
         $error = "Allowed radius must be between 10 meters and 300 meters.";
     } elseif (!$locationConfirmed || $venueAccuracy === false || $venueAccuracy === null) {
         $error = "Please capture the lecturer venue GPS before generating the QR code.";
@@ -298,13 +299,16 @@ const latitudeInput = document.getElementById("latitude");
 const longitudeInput = document.getElementById("longitude");
 const radiusInput = document.querySelector("input[name='radius_meters']");
 const sessionForm = document.querySelector(".session-form-card");
+const MIN_RADIUS_METERS = 10;
+const MAX_RADIUS_METERS = 300;
+const DEFAULT_RADIUS_METERS = 100;
 
 if (sessionForm && radiusInput) {
     sessionForm.addEventListener("submit", function (event) {
-        const radius = parseInt(radiusInput.value || "0", 10);
+        applyDefaultRadiusIfEmpty();
         radiusInput.setCustomValidity("");
 
-        if (!Number.isInteger(radius) || radius < 10 || radius > 300) {
+        if (!radiusIsValid()) {
             event.preventDefault();
             radiusInput.setCustomValidity("Allowed radius must be between 10 meters and 300 meters.");
             radiusInput.reportValidity();
@@ -312,13 +316,58 @@ if (sessionForm && radiusInput) {
     });
 }
 
-function selectedRadiusMeters() {
+function applyDefaultRadiusIfEmpty() {
+    if (radiusInput && radiusInput.value.trim() === "") {
+        radiusInput.value = String(DEFAULT_RADIUS_METERS);
+    }
+}
+
+function resetOutOfRangeRadius() {
     if (!radiusInput) {
-        return 100;
+        return;
     }
 
-    const radius = parseInt(radiusInput.value || "100", 10);
-    return Number.isInteger(radius) ? radius : 100;
+    const radius = currentRadiusValue();
+    if (!Number.isInteger(radius) || radius < MIN_RADIUS_METERS || radius > MAX_RADIUS_METERS) {
+        radiusInput.value = String(DEFAULT_RADIUS_METERS);
+    }
+}
+
+function currentRadiusValue() {
+    if (!radiusInput) {
+        return DEFAULT_RADIUS_METERS;
+    }
+
+    const rawValue = radiusInput.value.trim();
+    if (rawValue === "") {
+        return DEFAULT_RADIUS_METERS;
+    }
+
+    const radius = Number(rawValue);
+    return Number.isInteger(radius) ? radius : NaN;
+}
+
+function radiusIsValid() {
+    if (!radiusInput) {
+        return true;
+    }
+
+    const radius = currentRadiusValue();
+    return Number.isInteger(radius) && radius >= MIN_RADIUS_METERS && radius <= MAX_RADIUS_METERS;
+}
+
+function selectedRadiusMeters() {
+    if (!radiusInput) {
+        return DEFAULT_RADIUS_METERS;
+    }
+
+    const radius = currentRadiusValue();
+
+    if (!Number.isInteger(radius)) {
+        return DEFAULT_RADIUS_METERS;
+    }
+
+    return Math.min(MAX_RADIUS_METERS, Math.max(MIN_RADIUS_METERS, radius));
 }
 
 function setGenerateButtonState(state) {
@@ -329,6 +378,7 @@ function setGenerateButtonState(state) {
     const labels = {
         waiting: "Capture GPS to Continue",
         blocked: "Improve GPS to Continue",
+        invalid: "Set Radius 10-300m",
         ready: "Ready - Generate QR Code"
     };
 
@@ -336,7 +386,7 @@ function setGenerateButtonState(state) {
     generateQrButton.textContent = labels[state] || labels.waiting;
     generateQrButton.classList.toggle("is-ready", state === "ready");
     generateQrButton.classList.toggle("is-blocked", state === "blocked");
-    generateQrButton.classList.toggle("is-waiting", state === "waiting");
+    generateQrButton.classList.toggle("is-waiting", state === "waiting" || state === "invalid");
     generateQrButton.setAttribute("aria-disabled", state === "ready" ? "false" : "true");
 }
 
@@ -346,7 +396,19 @@ function validateVenueAccuracy() {
     }
 
     if (manualLocation && manualLocation.value === "1") {
+        if (!radiusIsValid()) {
+            setGenerateButtonState("invalid");
+            venueLocationStatus.textContent = "Allowed radius must be between 10m and 300m.";
+            return;
+        }
+
         setGenerateButtonState("ready");
+        return;
+    }
+
+    if (!radiusIsValid()) {
+        setGenerateButtonState("invalid");
+        venueLocationStatus.textContent = "Allowed radius must be between 10m and 300m.";
         return;
     }
 
@@ -370,6 +432,10 @@ function validateVenueAccuracy() {
 
 if (radiusInput) {
     radiusInput.addEventListener("input", validateVenueAccuracy);
+    radiusInput.addEventListener("blur", function () {
+        applyDefaultRadiusIfEmpty();
+        validateVenueAccuracy();
+    });
 }
 
 if (useLocationButton) {
@@ -380,6 +446,8 @@ useLocationButton.addEventListener("click", function () {
     }
 
     venueLocationStatus.textContent = "Capturing the best venue GPS reading. Keep location on and stay near a window or open area...";
+    applyDefaultRadiusIfEmpty();
+    resetOutOfRangeRadius();
     setGenerateButtonState("waiting");
     useLocationButton.disabled = true;
 
@@ -392,6 +460,7 @@ useLocationButton.addEventListener("click", function () {
         manualLocation.value = "0";
         useLocationButton.textContent = "Retry Venue GPS";
         useLocationButton.disabled = false;
+        applyDefaultRadiusIfEmpty();
         validateVenueAccuracy();
     }, function (error) {
         locationConfirmed.value = "0";
@@ -420,6 +489,8 @@ useLocationButton.addEventListener("click", function () {
 
 if (manualLocationButton) {
     manualLocationButton.addEventListener("click", function () {
+        applyDefaultRadiusIfEmpty();
+        resetOutOfRangeRadius();
         latitudeInput.readOnly = false;
         longitudeInput.readOnly = false;
         latitudeInput.placeholder = "Example: 7.7670178";
@@ -427,12 +498,13 @@ if (manualLocationButton) {
         venueAccuracy.value = 0;
         locationConfirmed.value = "1";
         manualLocation.value = "1";
-        setGenerateButtonState("ready");
+        validateVenueAccuracy();
         venueLocationStatus.textContent = "Manual coordinate mode enabled. Use coordinates from Google Maps at the lecture venue.";
     });
 }
 
-setGenerateButtonState("waiting");
+applyDefaultRadiusIfEmpty();
+validateVenueAccuracy();
 
 function captureBestPosition(onSuccess, onError) {
     let bestPosition = null;
