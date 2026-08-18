@@ -232,6 +232,25 @@ if (isset($_POST['mark']) && $profileComplete && $faceEnrolled) {
         }
     }
 }
+
+$verificationAlertTitle = "Verification needed";
+if ($error) {
+    $normalizedError = strtolower($error);
+
+    if (strpos($normalizedError, "face") !== false) {
+        $verificationAlertTitle = "Face verification needed";
+    } elseif (
+        strpos($normalizedError, "gps") !== false ||
+        strpos($normalizedError, "location") !== false ||
+        strpos($normalizedError, "lecture area") !== false ||
+        strpos($normalizedError, "radius") !== false ||
+        strpos($normalizedError, "distance") !== false
+    ) {
+        $verificationAlertTitle = "Location verification needed";
+    } elseif (strpos($normalizedError, "expired") !== false || strpos($normalizedError, "closed") !== false) {
+        $verificationAlertTitle = "Session unavailable";
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -270,7 +289,7 @@ if (isset($_POST['mark']) && $profileComplete && $faceEnrolled) {
                 </svg>
             </span>
             <span>
-                <strong>Location verification needed</strong>
+                <strong><?php echo e($verificationAlertTitle); ?></strong>
                 <small><?php echo e($error); ?></small>
             </span>
         </div>

@@ -779,7 +779,18 @@ function descriptor_distance($first, $second)
 
 function face_descriptor_matches($registeredDescriptor, $capturedDescriptor)
 {
-    return descriptor_distance($registeredDescriptor, $capturedDescriptor) <= 95;
+    return descriptor_distance($registeredDescriptor, $capturedDescriptor) <= face_match_threshold();
+}
+
+function face_match_threshold()
+{
+    $threshold = filter_var(getenv("FACE_MATCH_THRESHOLD"), FILTER_VALIDATE_INT);
+
+    if ($threshold === false || $threshold === null) {
+        return 128;
+    }
+
+    return max(80, min(180, $threshold));
 }
 
 function cloudinary_configured()
