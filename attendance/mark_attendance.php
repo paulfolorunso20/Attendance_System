@@ -238,7 +238,7 @@ if (isset($_POST['mark']) && $profileComplete && $faceEnrolled) {
 <html>
 <head>
     <title>Mark Attendance</title>
-    <link rel="stylesheet" href="../assets/css/style.css?v=attendance-verify-1">
+    <link rel="stylesheet" href="../assets/css/style.css?v=attendance-verify-2">
 </head>
 <body class="attendance-page">
 
@@ -389,7 +389,7 @@ if (isset($_POST['mark']) && $profileComplete && $faceEnrolled) {
             </ol>
 
             <div class="attendance-wizard-body">
-                <section class="attendance-wizard-panel is-active" data-wizard-panel="qr">
+                    <section class="attendance-wizard-panel wizard-qr-panel is-active" data-wizard-panel="qr">
                     <div class="wizard-panel-copy">
                         <span class="wizard-kicker">Step 1 of 4</span>
                         <h3>QR session confirmed</h3>
@@ -404,12 +404,17 @@ if (isset($_POST['mark']) && $profileComplete && $faceEnrolled) {
                     </div>
                 </section>
 
-                <section class="attendance-wizard-panel" data-wizard-panel="face" hidden>
-                    <div class="wizard-face-layout">
-                        <div class="face-scan-panel">
-                            <div class="face-camera-frame">
-                                <video id="camera" autoplay playsinline></video>
-                                <canvas id="snapshotCanvas" width="480" height="360"></canvas>
+                    <section class="attendance-wizard-panel wizard-face-panel" data-wizard-panel="face" hidden>
+                        <div class="wizard-panel-copy wizard-step-heading">
+                            <span class="wizard-kicker">Face verification</span>
+                            <h3>Verify your identity</h3>
+                            <p>Center your face inside the guide, keep it clearly visible, then run the live scan.</p>
+                        </div>
+                        <div class="wizard-face-layout">
+                            <div class="face-scan-panel wizard-face-camera-panel">
+                                <div class="face-camera-frame">
+                                    <video id="camera" autoplay playsinline></video>
+                                    <canvas id="snapshotCanvas" width="480" height="360"></canvas>
                                 <div class="face-scan-guide">
                                     <span></span>
                                 </div>
@@ -424,23 +429,23 @@ if (isset($_POST['mark']) && $profileComplete && $faceEnrolled) {
                             <p id="faceStatus" class="status-text">Keep your face inside the frame and use Live Face Scan first.</p>
                         </div>
 
-                        <div class="verification-panel wizard-instruction-panel">
-                            <span class="verification-panel-label">Face verification</span>
-                            <h3>Scan your face</h3>
-                            <p>Use the live scan first. Photo Fallback is only available if your browser cannot complete the live camera scan.</p>
-                            <div class="verification-steps">
-                                <span>1. Center face</span>
-                                <span>2. Run scan</span>
-                                <span>3. Continue to GPS</span>
+                            <div class="verification-panel wizard-instruction-panel wizard-face-instructions">
+                                <span class="verification-panel-label">How to verify</span>
+                                <h3>Live face scan</h3>
+                                <p>Live scanning is the preferred method. Use Photo Fallback only if your browser cannot complete the scan.</p>
+                                <div class="verification-steps">
+                                    <span>Center your face inside the guide</span>
+                                    <span>Keep your face clearly visible</span>
+                                    <span>Tap Run Live Face Scan</span>
+                                </div>
                             </div>
                         </div>
-                    </div>
                     <div class="wizard-panel-actions">
                         <button type="button" class="wizard-primary-button" id="continueToLocation" disabled>Continue to GPS Check</button>
                     </div>
                 </section>
 
-                <section class="attendance-wizard-panel" data-wizard-panel="location" hidden>
+                    <section class="attendance-wizard-panel wizard-location-panel" data-wizard-panel="location" hidden>
                     <div class="verification-panel wizard-location-card">
                         <span class="verification-panel-label">Session check</span>
                         <h3><?php echo e($session["course_code"]); ?></h3>
@@ -456,7 +461,7 @@ if (isset($_POST['mark']) && $profileComplete && $faceEnrolled) {
                     </div>
                 </section>
 
-                <section class="attendance-wizard-panel" data-wizard-panel="confirm" hidden>
+                    <section class="attendance-wizard-panel wizard-confirm-panel" data-wizard-panel="confirm" hidden>
                     <div class="wizard-panel-copy">
                         <span class="wizard-kicker">Step 4 of 4</span>
                         <h3>Review verification</h3>
